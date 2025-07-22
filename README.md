@@ -35,9 +35,9 @@ Auto Memory Saver es un filtro avanzado para OpenWebUI que gestiona automáticam
 
 - **Inyección Automática de Memorias**: Carga automáticamente memorias relevantes al inicio de nuevas conversaciones
 - **Guardado Automático**: Almacena las respuestas del asistente como memorias sin intervención manual
-- **Consulta de Memorias**: Comando `/memories` para ver todas las memorias almacenadas
+- **16 Comandos Interactivos**: Suite completa de comandos para gestión avanzada de memorias
+- **24 Válvulas Configurables**: Control granular sobre todos los aspectos del sistema
 - **Sistema de Caché**: Optimización de rendimiento con caché inteligente con expiración
-- **Logging Avanzado**: Sistema de registro detallado para monitoreo y depuración
 - **Manejo Robusto de Errores**: Validaciones exhaustivas y recuperación de errores
 - **Tipado Fuerte**: Tipos personalizados para mayor seguridad y mantenibilidad
 
@@ -45,17 +45,28 @@ Auto Memory Saver es un filtro avanzado para OpenWebUI que gestiona automáticam
 
 ### Requisitos Previos
 
-- Python 3.8+
-- OpenWebUI instalado y configurado
-- EasyPanel (para despliegue en VPS)
+- **OpenWebUI** instalado y funcionando (cualquier versión compatible)
+- **Python 3.8+** (incluido en la mayoría de instalaciones de OpenWebUI)
+- **Entorno compatible**: Local, VPS, Docker, Kubernetes, etc.
 
 ### Instalación en OpenWebUI
 
-1. Copia el archivo `frAuto_Memory_Saver_OpenWebUI_Adds_the_assistant_message_to_users_memories.py` a tu directorio de filtros de OpenWebUI.
+#### Método 1: Desde el Panel de Administración (Recomendado)
 
-2. Reinicia OpenWebUI para cargar el nuevo filtro.
+1. **Accede al panel de administración** de OpenWebUI
+2. **Ve a la pestaña "Funciones"** (Functions)
+3. **Haz clic en "+"** para crear una nueva función
+4. **Copia y pega** el código completo del archivo `frAuto_Memory_Saver_OpenWebUI_Adds_the_assistant_message_to_users_memories.py`
+5. **Asigna un nombre**: "Auto Memory Saver Enhanced"
+6. **Añade descripción**: "Sistema avanzado de gestión automática de memorias con 16 comandos interactivos"
+7. **Guarda la función**
+8. **Configura las opciones** haciendo clic en la rueda dentada (⚙️) de la función
 
-3. Activa el filtro en la configuración de OpenWebUI.
+#### Método 2: Instalación Manual de Archivos
+
+1. Copia el archivo `frAuto_Memory_Saver_OpenWebUI_Adds_the_assistant_message_to_users_memories.py` a tu directorio de filtros de OpenWebUI
+2. Reinicia OpenWebUI para cargar el nuevo filtro
+3. Activa el filtro en la configuración de OpenWebUI
 
 ## ⚙️ Configuración
 
@@ -340,16 +351,6 @@ async def test_inlet_with_valid_user():
 - Tiempo de respuesta promedio
 - Errores por minuto
 - Uso de caché (hit/miss ratio)
-
-### Logging
-
-```python
-# Configuración de logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-```
 
 ## 🔮 Roadmap
 
