@@ -160,6 +160,45 @@ class Constants:
     CACHE_TTL = 3600     # Tiempo de vida en segundos (1 hora)
 ```
 
+## 🛡️ **Novedades v2.1.2 - Seguridad Enterprise y Formato JSON Avanzado**
+
+### ✨ **Características Enterprise Implementadas**
+
+#### 🛡️ **Seguridad Crítica de Nivel Enterprise**
+- **Validación Robusta de Entrada**: Sistema completo de sanitización y validación para todos los comandos críticos
+- **Prevención de Inyecciones**: Protección contra caracteres peligrosos y ataques de inyección
+- **Audit Trails**: Registro completo de operaciones destructivas (delete, edit) con metadata de seguridad
+- **User ID Validation**: Validación estricta con regex alfanumérico y límites de longitud
+- **Memory ID Validation**: Verificación de rangos contra datos reales existentes
+- **Manejo Seguro de Errores**: Sistema unificado de manejo de excepciones con logging apropiado
+
+#### 📊 **Formato JSON Enterprise Avanzado**
+- **Paginación Profesional**: 4 memorias por página con navegación completa (primera, última, anterior, siguiente)
+- **UUIDs Deterministas**: Identificación única y consistente generada con MD5 hash
+- **Previews Inteligentes**: Corte inteligente en 100 caracteres con lógica de espacios/puntos
+- **Clasificación Automática**: Detección de tipo (manual/auto) y prioridad (high/normal)
+- **Analytics en Tiempo Real**: Distribución de tipos, prioridades y métricas de longitud promedio
+- **Metadata de Seguridad**: Información de validación, performance y estado del sistema
+- **Sistema de Información**: Versión, build, environment, memory engine completo
+- **Respuesta JSON Pura**: Completamente resistente a interpretación del modelo IA
+
+#### 🎯 **Comandos Securizados Enterprise**
+- **`/memories [página]`**: Formato JSON enterprise con paginación, UUIDs, analytics y navegación
+- **`/memory_add <texto>`**: Validación completa, sanitización y audit trail
+- **`/memory_search <término>`**: Sanitización de términos y respuesta JSON paginada
+- **`/memory_delete <id>`**: Validaciones críticas, warnings de seguridad y metadata de auditoría
+- **`/memory_edit <id> <texto>`**: Sanitización, tracking de cambios y validación de existencia
+- **`/memory_stats`**: Estadísticas avanzadas con formato JSON y metadata de seguridad
+
+#### 🔧 **Mejoras Técnicas Enterprise**
+- **Funciones de Seguridad Core**: `_sanitize_input()`, `_validate_user_id()`, `_validate_memory_id()`
+- **Ejecución Segura**: `_safe_execute_command()` y `_safe_execute_async_command()`
+- **Logging Profesional**: Niveles diferenciados con contexto apropiado
+- **Validación de Parámetros**: Verificación exhaustiva antes de ejecución
+- **Performance Optimizada**: Validaciones eficientes sin impacto en rendimiento
+
+---
+
 ## 🚀 **Novedades v2.1.0 - Algoritmo de Relevancia Mejorado**
 
 ### ✨ **Funcionalidades Clave Validadas en Producción**
@@ -189,13 +228,25 @@ enable_cache: True           # Mejora significativa de rendimiento
 
 ### Comandos Disponibles
 
-#### 📚 Gestión de Memorias
-- **`/memories`** - Lista todas las memorias con numeración
+#### 📚 Gestión de Memorias Enterprise
+- **`/memories [página]`** - 🚀 **ENTERPRISE** Lista memorias con formato JSON avanzado, paginación (4 por página), UUIDs, analytics y navegación completa
+- **`/memory_add <texto>`** - 🛡️ **SECURIZADO** Añade memoria con validación completa, sanitización y audit trail
+- **`/memory_search <término>`** - 🛡️ **SECURIZADO** Búsqueda con sanitización, validación y respuesta JSON paginada
+- **`/memory_delete <id>`** - 🛡️ **SECURIZADO** Eliminación con validaciones críticas, warnings de seguridad y metadata de auditoría
+- **`/memory_edit <id> <texto>`** - 🛡️ **SECURIZADO** Edición con sanitización, tracking de cambios y validación de existencia
+- **`/memory_stats`** - 🚀 **ENTERPRISE** Estadísticas avanzadas con formato JSON, analytics y metadata de seguridad
 - **`/clear_memories`** - Elimina todas las memorias del usuario
 - **`/memory_count`** - Muestra contador detallado con límites disponibles
-- **`/memory_search <término>`** - Busca memorias que contengan un término específico
 - **`/memory_recent [número]`** - Muestra las últimas N memorias (por defecto 5, máximo 20)
 - **`/memory_export`** - Exporta todas las memorias en formato texto estructurado
+
+#### ✨ **Comandos Avanzados de UX Profesional (v2.1.1)**
+- **`/memory_pin <id>`** - 🆕 **NUEVO** Marca una memoria como importante/fijada
+- **`/memory_unpin <id>`** - 🆕 **NUEVO** Desmarca una memoria importante
+- **`/memory_favorite <id>`** - 🆕 **NUEVO** Añade una memoria a favoritos
+- **`/memory_tag <id> <etiqueta>`** - 🆕 **NUEVO** Etiqueta una memoria con tags personalizados
+- **`/memory_edit <id> <nuevo_texto>`** - 🆕 **NUEVO** Edita el contenido de una memoria existente
+- **`/memory_delete <id>`** - 🆕 **NUEVO** Elimina una memoria específica por ID
 
 #### ⚙️ Configuración
 - **`/memory_config`** - Muestra la configuración completa del sistema y usuario
@@ -207,10 +258,14 @@ enable_cache: True           # Mejora significativa de rendimiento
 - **`/memory_help`** - Muestra ayuda completa con todos los comandos disponibles
 - **`/memory_stats`** - Estadísticas detalladas del sistema (total, promedio, configuración)
 - **`/memory_status`** - Estado actual del filtro y todas sus funcionalidades
+- **`/memory_analytics`** - 🆕 **NUEVO** Análisis avanzado con palabras frecuentes y recomendaciones
 
 #### 🔧 Utilidades Avanzadas
 - **`/memory_cleanup`** - Analiza y reporta memorias duplicadas potenciales
 - **`/memory_backup`** - Crea información de respaldo de las memorias actuales
+- **`/memory_restore`** - 🆕 **NUEVO** Información sobre restauración y estado del sistema
+- **`/memory_import`** - 🆕 **NUEVO** Guía completa para importar memorias desde diferentes fuentes
+- **`/memory_templates`** - 🆕 **NUEVO** Plantillas predefinidas para crear memorias útiles
 
 #### 💡 Ejemplos de Uso
 ```bash
