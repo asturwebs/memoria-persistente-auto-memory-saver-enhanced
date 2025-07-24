@@ -5,7 +5,7 @@
 [![OpenWebUI](https://img.shields.io/badge/OpenWebUI-Compatible-green.svg)](https://github.com/open-webui/open-webui)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-red.svg)](https://fastapi.tiangolo.com/)
 [![Pydantic](https://img.shields.io/badge/Pydantic-2.5+-purple.svg)](https://pydantic.dev/)
-[![Version](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
+[![Version](https://img.shields.io/badge/version-2.1.2-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced/graphs/commit-activity)
 [![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/AsturWebs)
 
@@ -24,6 +24,7 @@
 ### Version History
 - **v1.0 (Original):** Basic memory saving functionality by @linbanana
 - **v2.0 (Enhanced):** Complete system with granular configuration, interactive commands, professional architecture, and comprehensive documentation by Pedro Luis Cuevas Villarrubia
+- **v2.1.2 (Enterprise Security & JSON Format):** Critical enterprise security with input validation, advanced JSON format with pagination, audit trails, and production-validated system with 122+ memories
 - **v2.1.0 (Memory Optimization):** Improved memory management with contextual relevance, optimized token usage, enhanced relevance algorithm, intelligent memory injection (recent vs relevant), and comprehensive validation in production environments
 
 ---
@@ -84,7 +85,7 @@ class Valves:
     inject_memories: bool = True  # Inyecta memorias en conversaciones
     max_memories_to_inject: int = 5  # Máximo de memorias por conversación (1-20)
     
-    # ===== ALGORITMO DE RELEVANCIA (NUEVO v2.1.0) =====
+    # ===== ALGORITMO DE RELEVANCIA (MEJORADO v2.1.2) =====
     relevance_threshold: float = 0.05  # Umbral de relevancia (0.0-1.0) - ¡VALIDADO EN PRODUCCIÓN!
     
     # ===== CONTROL DE GUARDADO =====
@@ -199,7 +200,7 @@ class Constants:
 
 ---
 
-## 🚀 **Novedades v2.1.0 - Algoritmo de Relevancia Mejorado**
+## 🚀 **Novedades v2.1.2 - Seguridad Enterprise y Formato JSON Avanzado**
 
 ### ✨ **Funcionalidades Clave Validadas en Producción**
 
@@ -493,6 +494,17 @@ async def test_inlet_with_valid_user():
 - Mantener cobertura de pruebas > 80%
 
 ## 📝 Changelog
+
+### [2.1.2] - 2025-07-24
+#### Añadido
+- 🛡️ **Seguridad Crítica Enterprise**: Funciones core de validación y sanitización
+- 📊 **Formato JSON Enterprise Avanzado**: Paginación, UUIDs, analytics y metadata
+- 🔒 **Comandos Securizados**: `/memory_add`, `/memory_search`, `/memory_delete`, `/memory_edit` con validación robusta
+- 📋 **Audit Trails**: Registro completo para operaciones destructivas
+- 🎯 **Respuestas Resistentes a IA**: JSON puro sin interpretación del modelo
+- 📈 **Analytics en Tiempo Real**: Distribución de tipos, prioridades y métricas
+- 🆔 **UUIDs Deterministas**: Identificación única y consistente de memorias
+- 🔧 **Manejo Seguro de Errores**: Funciones unificadas con logging profesional
 
 ### [2.1.0] - 2025-07-22
 #### Mejorado
