@@ -33,15 +33,15 @@ try:
         logger.error(f"Error al importar dependencias de OpenWebUI: {e}")
 
         # Definir clases base mínimas para evitar errores en tiempo de importación
-        class Users:
+        class Users:  # type: ignore[no-redef]
             @staticmethod
-            def get_user_by_id(user_id: str):
+            def get_user_by_id(user_id: str) -> Dict[str, str]:
                 return {"id": user_id}
 
-        class MemoryModel:
+        class MemoryModel:  # type: ignore[no-redef]
             pass
 
-        class Memories:
+        class Memories:  # type: ignore[no-redef]
             @staticmethod
             def delete_memories_by_user_id(user_id: str) -> int:
                 return 0
@@ -91,12 +91,13 @@ try:
                             return f"TestMemory(id={self.id}, content='{self.content[:30]}...', created_at={self.created_at})"
 
                     # Calcular fecha de creación
-                    if data["days_ago"] == 0:
+                    from typing import cast
+
+                    days_ago = cast(int, data["days_ago"])  # Cast explícito para MyPy
+                    if days_ago == 0:
                         created_at = (base_date - timedelta(hours=2)).isoformat()
                     else:
-                        created_at = (
-                            base_date - timedelta(days=data["days_ago"])
-                        ).isoformat()
+                        created_at = (base_date - timedelta(days=days_ago)).isoformat()
 
                     test_memories.append(
                         TestMemory(
@@ -119,8 +120,8 @@ try:
         def add_memory(*args, **kwargs):
             pass
 
-        class AddMemoryForm:
-            def __init__(self, content: str):
+        class AddMemoryForm:  # type: ignore[no-redef]
+            def __init__(self, content: str) -> None:
                 self.content = content
 
         logger.warning(
@@ -1154,7 +1155,9 @@ class Filter:
                 ]
 
                 if user_messages:
-                    current_user_input = user_messages[-1]  # Último mensaje del usuario
+                    current_user_input = str(
+                        user_messages[-1]
+                    )  # Último mensaje del usuario
 
                     memories_to_inject = await self._get_relevant_memories(
                         user_id=user_id,
@@ -2592,7 +2595,7 @@ class Filter:
 
             # Análisis de palabras clave
             all_text = " ".join(memories).lower()
-            common_words = {}
+            common_words: Dict[str, int] = {}
             for word in all_text.split():
                 if len(word) > 3:  # Solo palabras de más de 3 caracteres
                     common_words[word] = common_words.get(word, 0) + 1
