@@ -5,7 +5,7 @@
 [![OpenWebUI](https://img.shields.io/badge/OpenWebUI-Compatible-green.svg)](https://github.com/open-webui/open-webui)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-red.svg)](https://fastapi.tiangolo.com/)
 [![Pydantic](https://img.shields.io/badge/Pydantic-2.5+-purple.svg)](https://pydantic.dev/)
-[![Version](https://img.shields.io/badge/version-2.0.0-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
+[![Version](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced/graphs/commit-activity)
 [![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/AsturWebs)
 
@@ -24,6 +24,7 @@
 ### Version History
 - **v1.0 (Original):** Basic memory saving functionality by @linbanana
 - **v2.0 (Enhanced):** Complete system with granular configuration, interactive commands, professional architecture, and comprehensive documentation by Pedro Luis Cuevas Villarrubia
+- **v2.1.0 (Memory Optimization):** Improved memory management with contextual relevance, optimized token usage, enhanced relevance algorithm, intelligent memory injection (recent vs relevant), and comprehensive validation in production environments
 
 ---
 
@@ -33,7 +34,9 @@ Auto Memory Saver es un filtro avanzado para OpenWebUI que gestiona automáticam
 
 ## 🚀 Características Principales
 
-- **Inyección Automática de Memorias**: Carga automáticamente memorias relevantes al inicio de nuevas conversaciones
+- **Inyección Inteligente de Memorias**: Inyecta solo las memorias más relevantes al contexto de la conversación actual
+- **Optimización de Tokens**: Filtra automáticamente el razonamiento intermedio en modelos avanzados
+- **Continuidad Contextual**: Prioriza la continuidad entre sesiones de chat
 - **Guardado Automático**: Almacena las respuestas del asistente como memorias sin intervención manual
 - **16 Comandos Interactivos**: Suite completa de comandos para gestión avanzada de memorias
 - **24 Válvulas Configurables**: Control granular sobre todos los aspectos del sistema
@@ -387,6 +390,16 @@ async def test_inlet_with_valid_user():
 - Mantener cobertura de pruebas > 80%
 
 ## 📝 Changelog
+
+### [2.1.0] - 2025-07-22
+#### Mejorado
+- Renombrado el archivo principal a `Auto_Memory_Saver_Enhanced.py` para mayor claridad
+- Implementado sistema de inyección de memorias basado en relevancia contextual
+- Optimizado el uso de tokens al ignorar razonamientos intermedios en modelos avanzados
+- Mejorada la continuidad entre sesiones de chat
+- Actualizada documentación para reflejar los cambios
+
+### [2.0.0] - 2025-07-22
 
 ### v2.0.0 (Actual)
 - ✅ Sistema de caché avanzado

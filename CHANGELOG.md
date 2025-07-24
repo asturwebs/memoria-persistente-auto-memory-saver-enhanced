@@ -5,6 +5,33 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2025-07-24
+
+### 🚀 Mejorado
+- **Algoritmo de Relevancia Rediseñado**: Completamente reescrito para ser más efectivo y permisivo en casos reales
+- **Inyección Inteligente de Memorias**: Lógica dual - memorias recientes en primer mensaje vs memorias relevantes en mensajes posteriores
+- **Optimización de Tokens**: Eliminado log verboso que desperdiciaba tokens, mejorando eficiencia y privacidad
+- **Umbral de Relevancia Configurable**: Valor óptimo validado (0.05) para balance perfecto entre relevancia y permisividad
+- **Logs de Diagnóstico Mejorados**: Sistema completo de logging para monitoreo y depuración en producción
+- **Gestión de Memoria Mejorada**: Se ha rediseñado el sistema de inyección de memorias para priorizar la relevancia contextual
+- **Renombrado de Archivo**: El archivo principal ha sido renombrado a `Auto_Memory_Saver_Enhanced.py` para mayor claridad
+- **Continuidad Mejorada**: Se ha mejorado la continuidad entre sesiones de chat
+- **Documentación Actualizada**: Se han actualizado el README y la documentación para reflejar los cambios
+
+### ✅ Validado
+- **Funcionamiento en Producción**: Validación exhaustiva en entorno real con casos de uso reales
+- **Algoritmo de Relevancia**: 16 de 16 memorias procesadas correctamente con input real
+- **Límites Configurables**: Sistema respeta correctamente max_memories_to_inject
+- **Guardado Automático**: Incremento correcto de memorias (19→20) validado
+
+### 🔧 Corregido
+- **Algoritmo de Relevancia Demasiado Estricto**: Reemplazado índice de Jaccard complejo por sistema de coincidencias directas + substring matching
+- **Filtros Excesivos**: Eliminado filtro de longitud mínima que bloqueaba términos importantes como "IA", "BytIA"
+- **Logs Verbosos**: Eliminado log que mostraba contenido completo de memorias, optimizando gasto de tokens
+- **Método Faltante**: Corregido error silencioso en _calculate_phrase_similarity
+- Se ha corregido un problema donde el prefijo 'fr' en el nombre del archivo podía causar confusión
+- Mejorado el manejo de memoria para evitar pérdida de contexto en conversaciones largas
+
 ## [2.0.0] - 2025-01-22
 
 ### 🎉 Versión Enhanced - Reescritura Completa

@@ -1,0 +1,61 @@
+name: 🔍 Validate Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, "3.10", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install flake8 black mypy
+    
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
+    - name: Check code formatting with black
+      run: |
+        black --check --diff .
+    
+    - name: Type check with mypy
+      run: |
+        mypy Auto_Memory_Saver_Enhanced.py --ignore-missing-imports
+    
+    - name: Validate file structure
+      run: |
+        echo "Validating project structure..."
+        test -f Auto_Memory_Saver_Enhanced.py
+        test -f README.md
+        test -f LICENSE
+        test -f requirements.txt
+        test -f CHANGELOG.md
+        test -f CONTRIBUTING.md
+        test -f SECURITY.md
+        echo "✅ All required files present"
+    
+    - name: Check for sensitive information
+      run: |
+        echo "Checking for potential sensitive information..."
+        ! grep -r "password\|secret\|key\|token" --include="*.py" --include="*.md" . || echo "⚠️ Potential sensitive info found"
+        echo "✅ Security check completed"

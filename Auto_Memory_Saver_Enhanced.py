@@ -46,7 +46,49 @@ try:
                 
             @staticmethod
             def get_memories_by_user_id(user_id: str) -> list:
-                return []
+                # MEJORA BYTIA: Fallback con datos de prueba para testing de ordenación
+                from datetime import datetime, timedelta
+                
+                # Crear memorias de prueba con fechas diferentes para testear ordenación
+                test_memories = []
+                base_date = datetime.now()
+                
+                # Simular memorias con diferentes fechas (más antigua a más reciente)
+                test_data = [
+                    {"id": "mem_001", "content": "Memoria más antigua - hace 5 días", "days_ago": 5},
+                    {"id": "mem_002", "content": "Memoria intermedia - hace 3 días", "days_ago": 3},
+                    {"id": "mem_003", "content": "Memoria reciente - hace 1 día", "days_ago": 1},
+                    {"id": "mem_004", "content": "Memoria más reciente - hace 2 horas", "days_ago": 0},
+                ]
+                
+                for data in test_data:
+                    # Crear objeto simulado con estructura similar a MemoryModel
+                    class TestMemory:
+                        def __init__(self, id, content, created_at):
+                            self.id = id
+                            self.content = content
+                            self.created_at = created_at
+                        
+                        def __str__(self):
+                            return f"TestMemory(id={self.id}, content='{self.content[:30]}...', created_at={self.created_at})"
+                    
+                    # Calcular fecha de creación
+                    if data["days_ago"] == 0:
+                        created_at = (base_date - timedelta(hours=2)).isoformat()
+                    else:
+                        created_at = (base_date - timedelta(days=data["days_ago"])).isoformat()
+                    
+                    test_memories.append(TestMemory(
+                        id=data["id"],
+                        content=data["content"],
+                        created_at=created_at
+                    ))
+                
+                print(f"[MEMORIA-DEBUG] 🧪 Fallback devolviendo {len(test_memories)} memorias de prueba")
+                logger.info(f"[MEMORIA-DEBUG] 🧪 Fallback devolviendo {len(test_memories)} memorias de prueba")
+                
+                # Devolver en orden de BD (normalmente por ID = más antiguas primero)
+                return test_memories
         
         def add_memory(*args, **kwargs):
             pass
@@ -218,6 +260,13 @@ class Filter:
             description="Habilita comandos como /memories, /clear_memories"
         )
         
+        # Configuración de relevancia (NUEVA - sugerencia de auditoría)
+        relevance_threshold: float = Field(
+            default=0.05,
+            description="Umbral de relevancia (0.0-1.0) para inyectar memorias en contexto",
+            ge=0.0, le=1.0
+        )
+        
         # Configuración de logging
         debug_mode: bool = Field(
             default=False,
@@ -284,6 +333,359 @@ class Filter:
         )
         logger.info("Filtro de memoria inicializado con caché")
 
+    # === MÉTODOS AUXILIARES PARA LÓGICA DE INYECCIÓN ===
+    
+    def _is_first_message(self, messages: List[dict]) -> bool:
+        """
+        Determina si es el primer mensaje de una nueva sesión de chat.
+        
+        Args:
+            messages: Lista de mensajes de la conversación actual
+            
+        Returns:
+            bool: True si es el primer mensaje, False en caso contrario
+        """
+        if not messages or not isinstance(messages, list):
+            return True
+            
+        # Contar mensajes del usuario (excluyendo mensajes del sistema)
+        user_messages = [
+            msg for msg in messages 
+            if isinstance(msg, dict) and msg.get("role") == "user"
+        ]
+        
+        # Es el primer mensaje si hay 1 o menos mensajes del usuario
+        # (el mensaje actual se cuenta como el primero)
+        is_first = len(user_messages) <= 1
+        
+        if self.valves.debug_mode:
+            logger.debug(f"Detección primer mensaje: {is_first} (mensajes usuario: {len(user_messages)})")
+            
+        return is_first
+    
+    async def _get_recent_memories(self, user_id: str, limit: int) -> List[str]:
+        """
+        Obtiene las memorias más recientes de un usuario, ordenadas por fecha.
+        
+        Args:
+            user_id: ID del usuario
+            limit: Número máximo de memorias a obtener
+            
+        Returns:
+            List[str]: Lista de memorias formateadas, ordenadas de más reciente a más antigua
+        """
+        try:
+            print(f"[MEMORIA-DEBUG] 🔍 Obteniendo {limit} memorias más recientes para usuario {user_id}")
+            logger.info(f"[MEMORIA-DEBUG] 🔍 Obteniendo {limit} memorias más recientes para usuario {user_id}")
+            
+            if self.valves.debug_mode:
+                logger.debug(f"Obteniendo {limit} memorias más recientes para usuario {user_id}")
+            
+            # Obtener memorias sin procesar (EXPLÍCITAMENTE ordenadas por fecha descendente)
+            raw_memories = await self.get_raw_existing_memories(user_id, order_by="created_at DESC")
+            if not raw_memories:
+                print(f"[MEMORIA-DEBUG] ⚠️ No se encontraron memorias para el usuario")
+                logger.info(f"[MEMORIA-DEBUG] ⚠️ No se encontraron memorias para el usuario")
+                if self.valves.debug_mode:
+                    logger.debug("No se encontraron memorias para el usuario")
+                return []
+            
+            print(f"[MEMORIA-DEBUG] 📊 Total memorias encontradas: {len(raw_memories)}")
+            logger.info(f"[MEMORIA-DEBUG] 📊 Total memorias encontradas: {len(raw_memories)}")
+            
+            # Inspeccionar las primeras memorias para ver su estructura
+            for i, mem in enumerate(raw_memories[:3]):
+                created_at = getattr(mem, 'created_at', 'NO_DATE')
+                mem_id = getattr(mem, 'id', 'NO_ID')
+                content_preview = str(mem)[:50] if hasattr(mem, '__str__') else 'NO_CONTENT'
+                print(f"[MEMORIA-DEBUG] Memoria {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}...")
+                logger.info(f"[MEMORIA-DEBUG] Memoria {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}...")
+            
+            # Ordenar por fecha de creación (más reciente primero)
+            print(f"[MEMORIA-DEBUG] 🔄 Ordenando memorias por fecha (más reciente primero)")
+            logger.info(f"[MEMORIA-DEBUG] 🔄 Ordenando memorias por fecha (más reciente primero)")
+            
+            sorted_memories = sorted(
+                raw_memories,
+                key=lambda x: getattr(x, 'created_at', '1970-01-01T00:00:00'),
+                reverse=True
+            )
+            
+            # Mostrar las primeras memorias después del ordenamiento
+            print(f"[MEMORIA-DEBUG] 🏆 Después del ordenamiento (primeras 3):")
+            logger.info(f"[MEMORIA-DEBUG] 🏆 Después del ordenamiento (primeras 3):")
+            for i, mem in enumerate(sorted_memories[:3]):
+                created_at = getattr(mem, 'created_at', 'NO_DATE')
+                mem_id = getattr(mem, 'id', 'NO_ID')
+                content_preview = str(mem)[:50] if hasattr(mem, '__str__') else 'NO_CONTENT'
+                print(f"[MEMORIA-DEBUG] Posición {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}...")
+                logger.info(f"[MEMORIA-DEBUG] Posición {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}...")
+            
+            # Limitar al número solicitado
+            limited_memories = sorted_memories[:limit]
+            
+            # Formatear las memorias
+            formatted_memories = []
+            for mem in limited_memories:
+                try:
+                    if isinstance(mem, MemoryModel):
+                        content = f"[Id: {mem.id}, Content: {mem.content}]"
+                    elif hasattr(mem, "content"):
+                        content = f"[Id: {getattr(mem, 'id', 'N/A')}, Content: {mem.content}]"
+                    else:
+                        content = str(mem)
+                    
+                    formatted_memories.append(content)
+                except Exception as e:
+                    if self.valves.debug_mode:
+                        logger.warning(f"Error al formatear memoria: {e}")
+                    continue
+            
+            if self.valves.debug_mode:
+                logger.debug(f"Obtenidas {len(formatted_memories)} memorias recientes")
+            
+            return formatted_memories
+            
+        except Exception as e:
+            logger.error(f"Error al obtener memorias recientes: {e}")
+            return []
+    
+    def _calculate_relevance_score(self, memory_content: str, user_input: str) -> float:
+        """
+        Calcula un puntaje de relevancia entre una memoria y el input del usuario.
+        Algoritmo simplificado y más efectivo.
+        
+        Args:
+            memory_content: Contenido de la memoria
+            user_input: Input actual del usuario
+            
+        Returns:
+            float: Puntaje de relevancia entre 0.0 y 1.0
+        """
+        if not memory_content or not user_input:
+            return 0.0
+            
+        # Convertir a minúsculas para comparación
+        memory_lower = memory_content.lower()
+        input_lower = user_input.lower()
+        
+        # Dividir en palabras (sin filtrar por longitud para capturar "IA", "AI", etc.)
+        memory_words = set(memory_lower.split())
+        input_words = set(input_lower.split())
+        
+        # Calcular coincidencias exactas de palabras
+        word_matches = memory_words.intersection(input_words)
+        word_score = len(word_matches) / len(input_words) if input_words else 0.0
+        
+        # Bonus por palabras clave importantes (case-insensitive substring matching)
+        substring_score = 0.0
+        important_terms = [word for word in input_words if len(word) >= 3]
+        
+        for term in important_terms:
+            if term in memory_lower:
+                substring_score += 1.0
+        
+        substring_score = substring_score / len(important_terms) if important_terms else 0.0
+        
+        # Puntaje final: 60% coincidencias exactas + 40% substring matching
+        final_score = (word_score * 0.6) + (substring_score * 0.4)
+        
+        # Debug logging si está habilitado
+        if self.valves.debug_mode and final_score > 0:
+            logger.debug(f"Relevancia calculada: {final_score:.3f} - Coincidencias: {word_matches}")
+        
+        return min(final_score, 1.0)
+    
+    def _calculate_phrase_similarity(self, text1: str, text2: str) -> float:
+        """
+        Calcula similitud basada en frases comunes de 2+ palabras.
+        
+        Args:
+            text1: Primer texto
+            text2: Segundo texto
+            
+        Returns:
+            float: Puntaje de similitud de frases entre 0.0 y 1.0
+        """
+        # Generar bigramas (frases de 2 palabras)
+        words1 = text1.split()
+        words2 = text2.split()
+        
+        if len(words1) < 2 or len(words2) < 2:
+            return 0.0
+            
+        bigrams1 = {f"{words1[i]} {words1[i+1]}" for i in range(len(words1)-1)}
+        bigrams2 = {f"{words2[i]} {words2[i+1]}" for i in range(len(words2)-1)}
+        
+        if not bigrams1 or not bigrams2:
+            return 0.0
+            
+        intersection = bigrams1.intersection(bigrams2)
+        union = bigrams1.union(bigrams2)
+        
+        return len(intersection) / len(union) if union else 0.0
+    
+    async def _get_relevant_memories(self, user_id: str, user_input: str, max_memories: int = 5) -> List[str]:
+        """
+        Obtiene las memorias más relevantes para el input del usuario.
+        
+        Args:
+            user_id: ID del usuario
+            user_input: Input actual del usuario
+            max_memories: Número máximo de memorias relevantes a devolver
+            
+        Returns:
+            List[str]: Lista de memorias relevantes formateadas
+        """
+        try:
+            print(f"[MEMORIA-DEBUG] 🔍 Buscando memorias relevantes para: '{user_input[:50]}...'")
+            logger.info(f"[MEMORIA-DEBUG] 🔍 Buscando memorias relevantes para: '{user_input[:50]}...'")
+            if self.valves.debug_mode:
+                logger.debug(f"Buscando memorias relevantes para: '{user_input[:50]}...'")
+            
+            # Obtener todas las memorias del usuario (orden no crítico para relevancia, pero mantenemos consistencia)
+            raw_memories = await self.get_raw_existing_memories(user_id, order_by="created_at DESC")
+            if not raw_memories:
+                return []
+            
+            # Calcular relevancia para cada memoria
+            memories_with_scores = []
+            for mem in raw_memories:
+                try:
+                    content = mem.content if hasattr(mem, 'content') else str(mem)
+                    score = self._calculate_relevance_score(content, user_input)
+                    
+                    if score > 0:  # Solo considerar memorias con alguna relevancia
+                        memories_with_scores.append({
+                            'memory': mem,
+                            'content': content,
+                            'score': score
+                        })
+                except Exception as e:
+                    if self.valves.debug_mode:
+                        logger.warning(f"Error al calcular relevancia: {e}")
+                    continue
+            
+            print(f"[MEMORIA-DEBUG] ⚖️ Usando umbral de relevancia: {self.valves.relevance_threshold}")
+            logger.info(f"[MEMORIA-DEBUG] ⚖️ Usando umbral de relevancia: {self.valves.relevance_threshold}")
+            
+            relevant_memories = [
+                mem for mem in memories_with_scores 
+                if mem['score'] >= self.valves.relevance_threshold
+            ]
+            
+            print(f"[MEMORIA-DEBUG] 📊 Memorias que superan umbral: {len(relevant_memories)} de {len(memories_with_scores)}")
+            logger.info(f"[MEMORIA-DEBUG] 📊 Memorias que superan umbral: {len(relevant_memories)} de {len(memories_with_scores)}")
+            
+            if self.valves.debug_mode:
+                logger.debug(f"Usando umbral de relevancia: {self.valves.relevance_threshold}")
+            
+            if not relevant_memories:
+                print(f"[MEMORIA-DEBUG] ❌ No se encontraron memorias relevantes")
+                logger.info(f"[MEMORIA-DEBUG] ❌ No se encontraron memorias relevantes")
+                if self.valves.debug_mode:
+                    logger.debug("No se encontraron memorias relevantes")
+                return []
+            
+            # Ordenar por relevancia (mayor a menor)
+            relevant_memories.sort(key=lambda x: x['score'], reverse=True)
+            
+            # Limitar al número máximo
+            selected_memories = relevant_memories[:max_memories]
+            
+            # Formatear las memorias seleccionadas
+            formatted_memories = []
+            for mem_data in selected_memories:
+                try:
+                    mem = mem_data['memory']
+                    score = mem_data['score']
+                    
+                    if isinstance(mem, MemoryModel):
+                        content = f"[Relevancia: {score:.2f}] [Id: {mem.id}, Content: {mem.content}]"
+                    elif hasattr(mem, "content"):
+                        content = f"[Relevancia: {score:.2f}] [Id: {getattr(mem, 'id', 'N/A')}, Content: {mem.content}]"
+                    else:
+                        content = f"[Relevancia: {score:.2f}] {str(mem)}"
+                    
+                    formatted_memories.append(content)
+                except Exception as e:
+                    if self.valves.debug_mode:
+                        logger.warning(f"Error al formatear memoria relevante: {e}")
+                    continue
+            
+            if self.valves.debug_mode:
+                logger.debug(f"Encontradas {len(formatted_memories)} memorias relevantes")
+                for i, mem in enumerate(formatted_memories[:3]):  # Mostrar solo las 3 primeras en debug
+                    logger.debug(f"  {i+1}. {mem[:100]}...")
+            
+            return formatted_memories
+            
+        except Exception as e:
+            logger.error(f"Error al obtener memorias relevantes: {e}")
+            return []
+    
+    async def _inject_memories_into_conversation(
+        self,
+        body: dict,
+        memories: List[str],
+        user_valves: Any,
+        user_id: str,
+        is_first_message: bool,
+        __event_emitter__=None
+    ) -> None:
+        """
+        Inyecta las memorias seleccionadas en la conversación.
+        
+        Args:
+            body: Cuerpo de la petición
+            memories: Lista de memorias formateadas para inyectar
+            user_valves: Configuración del usuario
+            user_id: ID del usuario
+            is_first_message: Si es el primer mensaje de la sesión
+            __event_emitter__: Emisor de eventos (opcional)
+        """
+        if not memories or "messages" not in body:
+            return
+        
+        try:
+            # Usar prefijo personalizado si está configurado
+            if user_valves and hasattr(user_valves, 'custom_memory_prefix') and user_valves.custom_memory_prefix:
+                memory_prefix = user_valves.custom_memory_prefix
+            else:
+                memory_prefix = Constants.MEMORY_PREFIX
+            
+            # Añadir información sobre el tipo de inyección
+            if is_first_message:
+                context_header = f"{memory_prefix}\n[Memorias recientes para continuidad de contexto]\n"
+            else:
+                context_header = f"{memory_prefix}\n[Memorias relevantes al contexto actual]\n"
+            
+            # Crear el mensaje de contexto
+            context_string = context_header + "\n".join(memories)
+            system_msg = {"role": "system", "content": context_string}
+            
+            # Insertar al principio de la conversación
+            body["messages"].insert(0, system_msg)
+            
+            # Mostrar notificación al usuario si está habilitado
+            if user_valves and hasattr(user_valves, 'show_memory_count') and user_valves.show_memory_count and __event_emitter__:
+                memory_type = "recientes" if is_first_message else "relevantes"
+                await __event_emitter__({
+                    "type": "status",
+                    "data": {
+                        "description": f"📘 {len(memories)} memorias {memory_type} cargadas",
+                        "done": True
+                    }
+                })
+            
+            if self.valves.debug_mode:
+                memory_type = "recientes" if is_first_message else "relevantes"
+                logger.info(f"Inyectadas {len(memories)} memorias {memory_type} para usuario {user_id}")
+                logger.debug(f"Contexto inyectado (primeros 300 chars): {context_string[:300]}...")
+                
+        except Exception as e:
+            logger.error(f"Error al inyectar memorias: {e}", exc_info=True)
+    
     # ✅ 注入記憶到新對話中 | Inyectar memoria en nuevas conversaciones
     async def inlet(
         self,
@@ -294,7 +696,10 @@ class Filter:
     ) -> dict:
         """
         Método que se ejecuta al inicio de una conversación.
-        Inyecta las memorias relevantes al contexto de la conversación.
+        
+        NUEVA LÓGICA INTELIGENTE:
+        - Primer mensaje: Inyecta las X memorias más recientes (continuidad de contexto)
+        - Mensajes posteriores: Inyecta solo memorias relevantes al input actual, o ninguna
         
         Args:
             body: Diccionario con el cuerpo de la petición
@@ -330,48 +735,82 @@ class Filter:
 
         try:
             user_id = __user__["id"]
-            logger.debug(f"Procesando memorias para el usuario: {user_id}")
+            messages = body.get("messages", [])
             
-            try:
-                processed_memories = await self.get_processed_memory_strings(user_id)
-            except Exception as e:
+            # LOGS DE DIAGNÓSTICO VISIBLES (SIEMPRE ACTIVOS)
+            print(f"[NUEVA-LOGICA] 🔍 INLET ejecutándose para usuario: {user_id}")
+            logger.info(f"[NUEVA-LOGICA] 🔍 INLET ejecutándose para usuario: {user_id}")
+            
+            # PASO 1: Determinar si es el primer mensaje de la sesión
+            is_first_message = self._is_first_message(messages)
+            
+            # LOG VISIBLE DEL RESULTADO
+            print(f"[NUEVA-LOGICA] 🎯 Primer mensaje detectado: {is_first_message}")
+            logger.info(f"[NUEVA-LOGICA] 🎯 Primer mensaje detectado: {is_first_message}")
+            
+            if self.valves.debug_mode:
+                logger.debug(f"Procesando memorias para usuario {user_id} - Primer mensaje: {is_first_message}")
+            
+            # PASO 2: Obtener memorias según la estrategia
+            memories_to_inject = []
+            
+            if is_first_message:
+                # ESTRATEGIA 1: Primer mensaje - Inyectar memorias más recientes
+                print(f"[NUEVA-LOGICA] 🔄 Ejecutando estrategia PRIMER MENSAJE - obteniendo memorias recientes")
+                logger.info(f"[NUEVA-LOGICA] 🔄 Ejecutando estrategia PRIMER MENSAJE - obteniendo memorias recientes")
+                
+                memories_to_inject = await self._get_recent_memories(
+                    user_id=user_id,
+                    limit=self.valves.max_memories_to_inject
+                )
+                
+                print(f"[NUEVA-LOGICA] ✅ Primer mensaje: obtenidas {len(memories_to_inject)} memorias recientes")
+                logger.info(f"[NUEVA-LOGICA] ✅ Primer mensaje: obtenidas {len(memories_to_inject)} memorias recientes")
+                
                 if self.valves.debug_mode:
-                    logger.error(f"Error al obtener memorias: {e}")
-                return body
-
-            if processed_memories:
-                # Limitar número de memorias según configuración
-                max_memories = self.valves.max_memories_to_inject
-                limited_memories = processed_memories[:max_memories]
-                
-                # Usar prefijo personalizado si está configurado
-                user_valves = __user__.get("valves")
-                if user_valves and hasattr(user_valves, 'custom_memory_prefix') and user_valves.custom_memory_prefix:
-                    memory_prefix = user_valves.custom_memory_prefix
-                else:
-                    memory_prefix = Constants.MEMORY_PREFIX
-                
-                context_string = memory_prefix + "\n".join(limited_memories)
-                system_msg = {"role": "system", "content": context_string}
-                
-                if "messages" in body:
-                    body["messages"].insert(0, system_msg)
+                    logger.debug(f"Primer mensaje: obtenidas {len(memories_to_inject)} memorias recientes")
                     
-                    # Mostrar contador de memorias si está habilitado
-                    if user_valves and hasattr(user_valves, 'show_memory_count') and user_valves.show_memory_count and __event_emitter__:
-                        await __event_emitter__({
-                            "type": "status",
-                            "data": {
-                                "description": f"📘 {len(limited_memories)} memorias inyectadas",
-                                "done": True
-                            }
-                        })
+            else:
+                # ESTRATEGIA 2: Mensajes posteriores - Solo memorias relevantes
+                # Extraer el input del usuario actual
+                user_messages = [
+                    msg.get("content", "") 
+                    for msg in messages 
+                    if isinstance(msg, dict) and msg.get("role") == "user"
+                ]
+                
+                if user_messages:
+                    current_user_input = user_messages[-1]  # Último mensaje del usuario
+                    
+                    memories_to_inject = await self._get_relevant_memories(
+                        user_id=user_id,
+                        user_input=current_user_input,
+                        max_memories=self.valves.max_memories_to_inject
+                    )
                     
                     if self.valves.debug_mode:
-                        logger.debug(f"Inyectadas {len(limited_memories)} memorias para usuario {user_id}")
+                        if memories_to_inject:
+                            logger.debug(f"Mensaje posterior: obtenidas {len(memories_to_inject)} memorias relevantes")
+                        else:
+                            logger.debug("Mensaje posterior: no se encontraron memorias relevantes")
+            
+            # PASO 3: Inyectar memorias si las hay
+            if memories_to_inject:
+                await self._inject_memories_into_conversation(
+                    body=body,
+                    memories=memories_to_inject,
+                    user_valves=user_valves,
+                    user_id=user_id,
+                    is_first_message=is_first_message,
+                    __event_emitter__=__event_emitter__
+                )
+            else:
+                if self.valves.debug_mode:
+                    logger.debug("No se inyectaron memorias (no hay memorias disponibles o relevantes)")
 
         except Exception as e:
-            print(f"Error injecting memory into new conversation: {e}")
+            logger.error(f"Error en el método inlet: {e}", exc_info=True)
+            # Continuar sin fallar la petición
 
         return body
 
@@ -985,22 +1424,52 @@ class Filter:
             await self.clear_user_memory(user_id)
 
     # ✅ 查詢 raw 記憶 | Consultar memoria en bruto
-    async def get_raw_existing_memories(self, user_id: str) -> List[Any]:
+    async def get_raw_existing_memories(self, user_id: str, order_by: str = "created_at DESC") -> List[Any]:
         """
-        Obtiene las memorias sin procesar de un usuario.
+        Obtiene las memorias sin procesar de un usuario, ordenadas por fecha.
+        
+        MEJORA SUGERIDA POR BYTIA: Intentar ordenación en la consulta de base de datos.
         
         Args:
             user_id: Identificador único del usuario
+            order_by: Criterio de ordenación (por defecto: created_at DESC para más recientes primero)
             
         Returns:
-            List[Any]: Lista de objetos de memoria sin procesar
+            List[Any]: Lista de objetos de memoria sin procesar, ordenados por fecha
         """
         try:
-            existing_memories = Memories.get_memories_by_user_id(user_id=str(user_id))
-            print(f"[Memory] Raw existing memories: {existing_memories}\n")
+            print(f"[MEMORIA-DEBUG] 🔍 Obteniendo memorias para usuario {user_id} con orden: {order_by}")
+            logger.info(f"[MEMORIA-DEBUG] 🔍 Obteniendo memorias para usuario {user_id} con orden: {order_by}")
+            
+            # ESTRATEGIA 1: Intentar obtener memorias ordenadas desde la base de datos
+            try:
+                # Verificar si el método acepta parámetros de ordenación
+                if hasattr(Memories, 'get_memories_by_user_id_ordered'):
+                    existing_memories = Memories.get_memories_by_user_id_ordered(
+                        user_id=str(user_id), 
+                        order_by=order_by
+                    )
+                    print(f"[MEMORIA-DEBUG] ✅ Memorias obtenidas con ordenación desde BD")
+                    logger.info(f"[MEMORIA-DEBUG] ✅ Memorias obtenidas con ordenación desde BD")
+                else:
+                    # Método estándar sin ordenación
+                    existing_memories = Memories.get_memories_by_user_id(user_id=str(user_id))
+                    print(f"[MEMORIA-DEBUG] ⚠️ Memorias obtenidas SIN ordenación desde BD")
+                    logger.info(f"[MEMORIA-DEBUG] ⚠️ Memorias obtenidas SIN ordenación desde BD")
+                    
+            except Exception as db_error:
+                print(f"[MEMORIA-DEBUG] ❌ Error en consulta BD: {db_error}")
+                logger.warning(f"[MEMORIA-DEBUG] ❌ Error en consulta BD: {db_error}")
+                existing_memories = []
+            
+            print(f"[MEMORIA-DEBUG] 📊 Total memorias obtenidas: {len(existing_memories or [])}")
+            logger.info(f"[MEMORIA-DEBUG] 📊 Total memorias obtenidas: {len(existing_memories or [])}")
+            
             return existing_memories or []
+            
         except Exception as e:
-            print(f"Error retrieving raw memories: {e}")
+            print(f"[MEMORIA-DEBUG] ❌ Error general al obtener memorias: {e}")
+            logger.error(f"Error retrieving raw memories: {e}")
             return []
 
     # ✅ 查詢文字格式記憶 | Consultar memoria en formato de texto
@@ -1015,7 +1484,7 @@ class Filter:
             List[str]: Lista de cadenas formateadas con las memorias
         """
         try:
-            existing_memories = await self.get_raw_existing_memories(user_id)
+            existing_memories = await self.get_raw_existing_memories(user_id, order_by="created_at DESC")
             memory_contents = []
 
             for mem in existing_memories:
@@ -1033,7 +1502,8 @@ class Filter:
                 except Exception as e:
                     print(f"Error formatting memory: {e}")
 
-            print(f"[Memory] Processed memory contents: {memory_contents}\n")
+            if self.valves.debug_mode:
+                logger.debug(f"[MEMORIA-DEBUG] 📋 Procesadas {len(memory_contents)} memorias para usuario {user_id}")
             return memory_contents
 
         except Exception as e:
