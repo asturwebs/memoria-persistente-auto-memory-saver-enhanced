@@ -741,9 +741,72 @@ class Filter:
             print(f"[NUEVA-LOGICA] 🔍 INLET ejecutándose para usuario: {user_id}")
             logger.info(f"[NUEVA-LOGICA] 🔍 INLET ejecutándose para usuario: {user_id}")
             
+            # PASO 0: PROCESAR SLASH COMMANDS PRIMERO (NUEVA FUNCIONALIDAD)
+            if self.valves.enable_memory_commands and messages:
+                try:
+                    # Obtener el último mensaje del usuario
+                    user_messages = [
+                        msg for msg in messages 
+                        if isinstance(msg, dict) and msg.get("role") == "user" 
+                        and isinstance(msg.get("content"), str)
+                    ]
+                    
+                    if user_messages:
+                        last_user_msg = user_messages[-1]["content"].strip()
+                        
+                        # LOG DE DIAGNÓSTICO PARA COMANDOS
+                        print(f"[SLASH-COMMANDS] 🎯 Último mensaje del usuario: '{last_user_msg[:50]}...'")
+                        logger.info(f"[SLASH-COMMANDS] 🎯 Último mensaje del usuario detectado")
+                        
+                        # Verificar si es un slash command
+                        if last_user_msg.startswith("/"):
+                            print(f"[SLASH-COMMANDS] ⚡ COMANDO DETECTADO: {last_user_msg}")
+                            logger.info(f"[SLASH-COMMANDS] ⚡ COMANDO DETECTADO: {last_user_msg}")
+                            
+                            # Obtener información del usuario
+                            try:
+                                user = Users.get_user_by_id(user_id)
+                                if not user:
+                                    print(f"[SLASH-COMMANDS] ❌ Usuario no encontrado: {user_id}")
+                                    logger.error(f"Usuario no encontrado: {user_id}")
+                                else:
+                                    user_valves = __user__.get("valves") or self.UserValves()
+                                    
+                                    # Procesar el comando
+                                    command_response = await self._process_memory_command(last_user_msg, user, user_valves)
+                                    
+                                    if command_response:
+                                        print(f"[SLASH-COMMANDS] ✅ COMANDO PROCESADO EXITOSAMENTE")
+                                        logger.info(f"[SLASH-COMMANDS] ✅ COMANDO PROCESADO EXITOSAMENTE")
+                                        
+                                        # Reemplazar el mensaje del usuario con la respuesta del comando
+                                        body["messages"] = messages[:-1] + [{
+                                            "role": "assistant",
+                                            "content": command_response
+                                        }]
+                                        
+                                        # Notificar al usuario si está configurado
+                                        if __event_emitter__ and hasattr(user_valves, 'show_status') and user_valves.show_status:
+                                            await __event_emitter__({
+                                                "type": "status",
+                                                "data": {"description": "Comando ejecutado correctamente"}
+                                            })
+                                        
+                                        return body
+                                    else:
+                                        print(f"[SLASH-COMMANDS] ⚠️ Comando no reconocido: {last_user_msg}")
+                                        logger.warning(f"[SLASH-COMMANDS] ⚠️ Comando no reconocido: {last_user_msg}")
+                            except Exception as e:
+                                print(f"[SLASH-COMMANDS] ❌ Error procesando comando: {e}")
+                                logger.error(f"[SLASH-COMMANDS] ❌ Error procesando comando: {e}")
+                                
+                except Exception as e:
+                    print(f"[SLASH-COMMANDS] ❌ Error en detección de comandos: {e}")
+                    logger.error(f"[SLASH-COMMANDS] ❌ Error en detección de comandos: {e}")
+            
             # PASO 1: Determinar si es el primer mensaje de la sesión
             is_first_message = self._is_first_message(messages)
-            
+                
             # LOG VISIBLE DEL RESULTADO
             print(f"[NUEVA-LOGICA] 🎯 Primer mensaje detectado: {is_first_message}")
             logger.info(f"[NUEVA-LOGICA] 🎯 Primer mensaje detectado: {is_first_message}")
@@ -886,25 +949,8 @@ class Filter:
                 logger.error(f"Error al obtener información del usuario: {e}")
                 return body
 
-            # Manejo de comandos de memoria (si están habilitados)
-            if self.valves.enable_memory_commands:
-                try:
-                    user_messages = [m for m in body.get("messages", []) 
-                                  if isinstance(m, dict) and m.get("role") == "user" 
-                                  and isinstance(m.get("content"), str)]
-                    
-                    if user_messages:
-                        last_user_msg = user_messages[-1]["content"].strip().lower()
-                        
-                        # Procesar comandos disponibles
-                        response = await self._process_memory_command(last_user_msg, user, user_valves)
-                        if response:
-                            body["messages"].append({"role": "assistant", "content": response})
-                            return body
-                except Exception as e:
-                    if self.valves.debug_mode:
-                        logger.error(f"Error al procesar mensajes de usuario: {e}")
-                    # Continuamos con el flujo normal en caso de error
+            # NOTA: Los comandos de memoria ahora se procesan en inlet() para mejor UX
+            # Esta sección se mantiene como comentario para referencia histórica
 
             # Guardar última respuesta del asistente (si está habilitado)
             assistant_messages = [

@@ -3,7 +3,37 @@
 Todos los cambios notables de este proyecto serán documentados en este archivo.
 
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
-y este proyecto adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.0.html).
+y este proyecto adhiere al [Versionado Semántico](https://semver.org/lang/es/).
+
+## [2.1.1] - 2024-01-XX
+
+### 🔧 Correcciones Críticas
+- **SOLUCIONADO**: Slash commands no funcionaban debido a procesamiento incorrecto en `outlet`
+- **MEJORADO**: Slash commands ahora se procesan correctamente en `inlet` para mejor UX
+- **AÑADIDO**: Logging exhaustivo de diagnóstico para slash commands
+- **ELIMINADO**: Procesamiento duplicado y problemático en `outlet`
+
+### 📊 Mejoras Técnicas
+- Detección robusta de comandos que empiecen con `/`
+- Manejo de errores mejorado en procesamiento de comandos
+- Notificaciones de estado para comandos ejecutados
+- Logs visibles para debugging y monitoreo
+
+### 📝 Comandos Validados
+- `/memories` - Lista todas las memorias
+- `/clear_memories` - Elimina todas las memorias
+- `/memory_count` - Contador detallado
+- `/memory_search <término>` - Búsqueda de memorias
+- `/memory_recent [número]` - Memorias recientes
+- `/memory_export` - Exportación completa
+- `/memory_config` - Configuración del sistema
+- `/private_mode on|off` - Control de privacidad
+- `/memory_help` - Ayuda completa
+- `/memory_stats` - Estadísticas detalladas
+- `/memory_status` - Estado del filtro
+- `/memory_cleanup` - Limpieza de duplicados
+- `/memory_backup` - Respaldo de memorias
+- Y más...
 
 ## [2.1.0] - 2025-07-24
 
