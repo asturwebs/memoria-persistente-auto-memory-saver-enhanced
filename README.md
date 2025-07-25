@@ -92,8 +92,12 @@ class Valves:
     
     # Control de memorias
     max_memories_to_inject: int = 5             # Máximo de memorias por conversación
-    max_memories_per_user: int = 100            # Límite por usuario
+    max_memories_per_user: int = 100            # Límite por usuario (0 = ilimitado)
     relevance_threshold: float = 0.05           # Umbral de relevancia (0.0-1.0)
+    
+    # Control de longitud de respuestas
+    min_response_length: int = 20               # Longitud mínima para guardar
+    max_response_length: int = 2000             # Longitud máxima para guardar
     
     # Sistema de caché
     enable_cache: bool = True                   # Habilita caché para rendimiento
@@ -101,7 +105,7 @@ class Valves:
     
     # Filtrado inteligente
     filter_duplicates: bool = True              # Filtra memorias duplicadas
-    filter_short_responses: bool = True         # Filtra respuestas muy cortas
+    similarity_threshold: float = 0.8           # Umbral de similitud (0.0-1.0)
     
     # Comandos y notificaciones
     enable_memory_commands: bool = True         # Habilita comandos interactivos
