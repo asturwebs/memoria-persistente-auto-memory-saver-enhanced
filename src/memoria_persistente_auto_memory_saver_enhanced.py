@@ -1867,7 +1867,7 @@ class Filter:
                     },
                 },
                 "system": {
-                    "version": "Auto Memory Saver Enhanced v2.2.0",
+                    "version": "Auto Memory Saver Enhanced v2.3.0",
                     "build": "enterprise",
                     "environment": "production",
                     "memory_engine": "BytIA v4.3 Persistent Memory v2.1",
@@ -2321,7 +2321,7 @@ class Filter:
                     },
                 },
                 "metadata": {
-                    "version": "Auto Memory Saver Enhanced v2.2.0",
+                    "version": "Auto Memory Saver Enhanced v2.3.0",
                     "build": "enterprise",
                     "environment": "production",
                     "user_id": user_id[:8] + "...",
