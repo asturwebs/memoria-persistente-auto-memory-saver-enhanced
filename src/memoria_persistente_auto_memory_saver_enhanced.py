@@ -1960,7 +1960,7 @@ class Filter:
                 response += f"• Límite configurado: {max_limit}\n"
                 response += f"• Espacio disponible: {max_limit - count}\n"
             else:
-                response += f"• Límite: Ilimitado\n"
+                response += f"• Límite: Ilimitado (actual: {count})\n"
 
             return response
         except Exception as e:
@@ -2941,14 +2941,20 @@ class Filter:
                 order_by = "created_at DESC"  # Fallback seguro
                 print(f"[SECURITY] ⚠️ order_by inválido, usando fallback seguro")
 
-            # Determinar límite efectivo
-            effective_limit = limit or self.valves.max_memories_per_user or 100
+            # Determinar límite efectivo (0 = ilimitado, no convertir a 100)
+            if limit is not None:
+                effective_limit = limit
+            elif self.valves.max_memories_per_user > 0:
+                effective_limit = self.valves.max_memories_per_user
+            else:
+                effective_limit = None  # None = verdaderamente ilimitado
 
+            limit_text = "ilimitado" if effective_limit is None else str(effective_limit)
             print(
-                f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {effective_limit} memorias para usuario {user_id} con orden: {order_by}"
+                f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {limit_text} memorias para usuario {user_id} con orden: {order_by}"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {effective_limit} memorias para usuario {user_id}"
+                f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {limit_text} memorias para usuario {user_id}"
             )
 
             # ESTRATEGIA 1: Intentar obtener memorias ordenadas desde la base de datos
@@ -2981,8 +2987,8 @@ class Filter:
                 logger.warning(f"[MEMORIA-DEBUG] ❌ Error en consulta BD: {db_error}")
                 existing_memories = []
 
-            # PRODUCTION FIX: Aplicar límite para prevenir memory leaks
-            if existing_memories and len(existing_memories) > effective_limit:
+            # PRODUCTION FIX: Aplicar límite para prevenir memory leaks (solo si no es ilimitado)
+            if existing_memories and effective_limit is not None and len(existing_memories) > effective_limit:
                 # Si NO hay ordenación desde BD, ordenar en memoria (costoso pero necesario)
                 if not hasattr(Memories, "get_memories_by_user_id_ordered"):
                     try:
