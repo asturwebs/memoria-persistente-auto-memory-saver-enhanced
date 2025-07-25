@@ -9,7 +9,7 @@ conversaciones relevantes, mejorando la memoria contextual de los modelos de IA.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub: https://github.com/AsturWebs/auto-memory-saver-enhanced
-Versión: 2.1.2 Enterprise
+Versión: 2.2.0 Production Security
 Licencia: MIT
 
 Características principales:
@@ -26,7 +26,7 @@ Para soporte o colaboraciones, contacta con:
 """
 
 __author__ = "AsturWebs"
-__version__ = "2.1.2"
+__version__ = "2.2.0"
 __license__ = "MIT"
 
 # Configuración de logging
@@ -44,6 +44,7 @@ from dataclasses import dataclass, field
 from functools import lru_cache
 from typing import Optional, List, Any, Dict, TypedDict, Union, Callable, Awaitable
 from datetime import datetime
+import threading
 
 # Importaciones con manejo de dependencias
 try:
@@ -205,39 +206,61 @@ class CacheEntry:
 
 
 class MemoryCache:
-    """Caché simple con expiración para almacenar en memoria."""
+    """Caché thread-safe con expiración para almacenar en memoria."""
 
     def __init__(self, max_size: int = 100, ttl: int = 3600):
         self._cache: Dict[str, CacheEntry] = {}
         self.max_size = max_size
         self.ttl = ttl
+        self._lock = threading.RLock()  # ReentrantLock para thread safety
 
     def get(self, key: str) -> Any:
-        """Obtiene un valor de la caché si existe y no ha expirado."""
-        if key not in self._cache:
-            return None
+        """Obtiene un valor de la caché si existe y no ha expirado. Thread-safe."""
+        with self._lock:
+            if key not in self._cache:
+                return None
 
-        entry = self._cache[key]
-        if datetime.now().timestamp() > entry.expiry_time:
-            del self._cache[key]
-            return None
+            entry = self._cache[key]
+            current_time = datetime.now().timestamp()
+            
+            if current_time > entry.expiry_time:
+                del self._cache[key]
+                return None
 
-        return entry.data
+            return entry.data
 
     def set(self, key: str, value: Any) -> None:
-        """Establece un valor en la caché con tiempo de expiración."""
-        if len(self._cache) >= self.max_size:
-            # Eliminar la entrada más antigua (FIFO)
-            oldest_key = next(iter(self._cache))
-            del self._cache[oldest_key]
+        """Establece un valor en la caché con tiempo de expiración. Thread-safe."""
+        with self._lock:
+            current_time = datetime.now().timestamp()
+            
+            # Limpiar entradas expiradas antes de añadir nueva
+            expired_keys = [
+                k for k, v in self._cache.items() 
+                if current_time > v.expiry_time
+            ]
+            for expired_key in expired_keys:
+                del self._cache[expired_key]
+            
+            # Si aún estamos al límite, eliminar la más antigua
+            if len(self._cache) >= self.max_size:
+                # Eliminar la entrada más antigua (FIFO)
+                oldest_key = next(iter(self._cache))
+                del self._cache[oldest_key]
 
-        self._cache[key] = CacheEntry(
-            data=value, expiry_time=datetime.now().timestamp() + self.ttl
-        )
+            self._cache[key] = CacheEntry(
+                data=value, expiry_time=current_time + self.ttl
+            )
 
     def clear(self) -> None:
-        """Limpia toda la caché."""
-        self._cache.clear()
+        """Limpia toda la caché. Thread-safe."""
+        with self._lock:
+            self._cache.clear()
+    
+    def size(self) -> int:
+        """Retorna el tamaño actual del caché. Thread-safe."""
+        with self._lock:
+            return len(self._cache)
 
 
 class Filter:
@@ -1105,6 +1128,9 @@ class Filter:
                                                 }
                                             )
 
+                                        # MARCAR QUE FUE UN COMANDO PARA EVITAR GUARDADO EN OUTLET
+                                        body["_memory_command_processed"] = True
+                                        
                                         # RETORNAR INMEDIATAMENTE - NO CONTINUAR CON INYECCIÓN DE MEMORIAS
                                         print(
                                             f"[SLASH-COMMANDS] 🎯 Comando procesado, retornando respuesta"
@@ -1267,6 +1293,14 @@ class Filter:
                 logger.warning("Formato de petición no válido")
             return body
 
+        # FIX #12: Verificar si se procesó un comando en inlet() - NO guardar
+        if body.get("_memory_command_processed", False):
+            if self.valves.debug_mode:
+                logger.debug("Comando ya procesado en inlet(), omitiendo guardado en outlet()")
+            # Limpiar el flag antes de retornar
+            body.pop("_memory_command_processed", None)
+            return body
+
         if not self.valves.enabled or not self.valves.auto_save_responses:
             if self.valves.debug_mode:
                 logger.debug("Guardado automático deshabilitado")
@@ -1311,23 +1345,73 @@ class Filter:
             # NOTA: Los comandos de memoria ahora se procesan en inlet() para mejor UX
             # Esta sección se mantiene como comentario para referencia histórica
 
-            # Guardar última respuesta del asistente (si está habilitado)
-            assistant_messages = [
-                m
-                for m in body.get("messages", [])
-                if isinstance(m, dict)
-                and m.get("role") == "assistant"
-                and isinstance(m.get("content"), str)
+            # PRODUCTION FIX: Guardar AMBOS - input usuario + response asistente (conversación completa)
+            messages = body.get("messages", [])
+            
+            # Obtener último mensaje del usuario (input)
+            user_messages = [
+                m for m in messages 
+                if isinstance(m, dict) and m.get("role") == "user" and isinstance(m.get("content"), str)
             ]
+            
+            # Obtener última respuesta del asistente (output)
+            assistant_messages = [
+                m for m in messages
+                if isinstance(m, dict) and m.get("role") == "assistant" and isinstance(m.get("content"), str)
+            ]
+            
             if not assistant_messages:
                 if self.valves.debug_mode:
-                    logger.debug(
-                        "No se encontraron mensajes del asistente para guardar"
-                    )
+                    logger.debug("No se encontraron mensajes del asistente para guardar")
                 return body
 
+            # Construir conversación completa (User + Assistant)
+            last_user_message = user_messages[-1] if user_messages else None
             last_assistant_message = assistant_messages[-1]
-            message_content = last_assistant_message.get("content", "").strip()
+            
+            # Formatear como conversación completa
+            if last_user_message:
+                user_content = last_user_message.get("content", "").strip()
+                assistant_content = last_assistant_message.get("content", "").strip()
+                
+                # PRODUCTION FIX: Seguridad adicional - NO guardar comandos técnicos como memoria
+                # NOTA: Este filtro es redundante con el flag pero se mantiene como safety net
+                if user_content.startswith('/'):
+                    if self.valves.debug_mode:
+                        logger.debug(f"Comando detectado como fallback, NO guardando: {user_content.split()[0].lower()}")
+                    return body
+                
+                # PRODUCTION FIX: NO guardar conversaciones sobre memoria (filtro inteligente)
+                import re
+                user_content_lower = user_content.lower()
+                
+                # Patrones que indican conversación sobre memoria/sistema
+                memory_conversation_patterns = [
+                    r'\b(mostrar|ver|enseñar|muestra|enséñame)\b.*\b(memoria|memorias)\b',
+                    r'\b(página|pagina|siguiente|anterior|más|mas)\b.*\b(memoria|memorias)\b',
+                    r'\b(cuántas|cuantas|cuántos|cuantos)\b.*\b(memoria|memorias)\b',
+                    r'\bmemoria\b.*\b(completa|entera|total|íntegra|integra)\b',
+                    r'\b(buscar|búsqueda|busca)\b.*\b(memoria|memorias)\b',
+                    r'\b(última|ultimo|reciente|nueva)\b.*\b(memoria|memorias)\b',
+                    r'\b(borrar|eliminar|delete)\b.*\b(memoria|memorias)\b',
+                    r'\bmás reciente\b',
+                    r'\bno está completa\b',
+                    r'\bfalta.*\b(parte|asistente|respuesta)\b',
+                    r'\bpuedes.*\b(mostrar|ver|enseñar)\b',
+                    r'\bquiero.*\b(ver|memoria|memorias)\b'
+                ]
+                
+                for pattern in memory_conversation_patterns:
+                    if re.search(pattern, user_content_lower):
+                        if self.valves.debug_mode:
+                            logger.debug(f"Conversación sobre memoria detectada, NO guardando: {pattern}")
+                        return body
+                
+                # Formato conversacional
+                message_content = f"Usuario: {user_content}\n\nAsistente: {assistant_content}"
+            else:
+                # Fallback: solo respuesta del asistente
+                message_content = last_assistant_message.get("content", "").strip()
 
             # Validar longitud del mensaje según configuración
             if not message_content:
@@ -1430,8 +1514,33 @@ class Filter:
             str: Respuesta del comando o None si no es un comando válido
         """
         try:
+            # SECURITY FIX: Input sanitization real
+            if not command or not isinstance(command, str):
+                logger.warning(f"[SECURITY] Comando inválido: {type(command)}")
+                return None
+                
+            # Sanitizar comando: limitar longitud y caracteres peligrosos
+            import re
+            sanitized_command = command.strip()[:1000]  # Máximo 1000 caracteres
+            
+            # Detectar y bloquear patrones peligrosos
+            dangerous_patterns = [
+                r'[;<>&|`$]',  # Caracteres de shell injection
+                r'\.\./',      # Path traversal
+                r'rm\s+',      # Comandos destructivos
+                r'del\s+',     # Comandos destructivos Windows  
+                r'DROP\s+',    # SQL destructivo
+                r'DELETE\s+',  # SQL destructivo
+                r'<script',    # XSS básico
+            ]
+            
+            for pattern in dangerous_patterns:
+                if re.search(pattern, sanitized_command, re.IGNORECASE):
+                    logger.error(f"[SECURITY] Patrón peligroso detectado en comando: {pattern}")
+                    return "❌ Comando bloqueado por seguridad"
+            
             # Dividir comando y argumentos
-            parts = command.split()
+            parts = sanitized_command.split()
             cmd = parts[0].lower()
             args = parts[1:] if len(parts) > 1 else []
 
@@ -1511,11 +1620,7 @@ class Filter:
 
             # === COMANDOS AVANZADOS DE UX PROFESIONAL (NUEVOS v2.1.1) ===
 
-            elif cmd == "/memory_add":
-                if len(parts) < 2:
-                    return "❌ Uso: /memory_add <texto de la memoria>"
-                memory_text = " ".join(parts[1:])
-                return await self._cmd_add_memory_manual(user.id, memory_text)
+            # REMOVED: /memory_add (usar /add_memory nativo de OpenWebUI)
 
             elif cmd == "/memory_pin":
                 if not args or not args[0].isdigit():
@@ -1609,12 +1714,12 @@ class Filter:
                         "pagination": {
                             "current_page": 1,
                             "total_pages": 0,
-                            "per_page": 4,
+                            "per_page": 10,
                             "showing": "0 de 0",
                         },
                     },
                     "system": {
-                        "version": "Auto Memory Saver Enhanced v2.1.1",
+                        "version": "Auto Memory Saver Enhanced v2.2.0",
                         "build": "enterprise",
                         "environment": "production",
                     },
@@ -1639,7 +1744,7 @@ class Filter:
                 )
 
             # FORMATO JSON ENTERPRISE AVANZADO CON CARACTERÍSTICAS OBSERVADAS
-            per_page = 4  # Como observado en la memoria del usuario
+            per_page = 10  # Optimal UX: más memorias por página, menos navegación
             total_memories = len(processed_memories)
             total_pages = (total_memories + per_page - 1) // per_page
             current_page = min(page, total_pages) if total_pages > 0 else 1
@@ -1741,7 +1846,7 @@ class Filter:
                     },
                 },
                 "system": {
-                    "version": "Auto Memory Saver Enhanced v2.1.1",
+                    "version": "Auto Memory Saver Enhanced v2.2.0",
                     "build": "enterprise",
                     "environment": "production",
                     "memory_engine": "BytIA v4.3 Persistent Memory v2.1",
@@ -2186,7 +2291,7 @@ class Filter:
                     },
                 },
                 "metadata": {
-                    "version": "Auto Memory Saver Enhanced v2.1.1",
+                    "version": "Auto Memory Saver Enhanced v2.2.0",
                     "build": "enterprise",
                     "environment": "production",
                     "user_id": user_id[:8] + "...",
@@ -2315,69 +2420,7 @@ class Filter:
 
     # === IMPLEMENTACIONES DE COMANDOS AVANZADOS DE UX PROFESIONAL ===
 
-    async def _cmd_add_memory_manual(self, user_id: str, memory_text: str) -> str:
-        """Añade una memoria manualmente desde el chat con validaciones de seguridad."""
-
-        async def _execute_add_memory():
-            # Validar y sanitizar inputs usando funciones de seguridad
-            validated_user_id = self._validate_user_id(user_id)
-            sanitized_memory = self._sanitize_input(memory_text, max_length=1000)
-
-            # Validación adicional de longitud mínima
-            if len(sanitized_memory) < 5:
-                raise ValueError(
-                    "La memoria debe tener al menos 5 caracteres después de sanitización"
-                )
-
-            # Crear memoria con metadatos
-            memory_content = f"📝 [Memoria Manual] {sanitized_memory}"
-
-            # Guardar usando el sistema correcto de memorias
-            if hasattr(self, "Memories") and self.Memories:
-                await self.Memories.add_memory_to_user(
-                    user_id=validated_user_id,
-                    memory=memory_content,
-                    source="manual_command",
-                )
-            else:
-                # Fallback usando el sistema estándar
-                logger.info(
-                    f"[MANUAL_MEMORY] Usuario {validated_user_id}: {memory_content}"
-                )
-
-            # Respuesta JSON enterprise
-            from datetime import datetime
-            import json
-
-            response_data = {
-                "command": "/memory_add",
-                "status": "SUCCESS",
-                "timestamp": datetime.now().isoformat() + "Z",
-                "data": {
-                    "memory_added": sanitized_memory[:100]
-                    + ("..." if len(sanitized_memory) > 100 else ""),
-                    "original_length": len(memory_text),
-                    "sanitized_length": len(sanitized_memory),
-                    "source": "manual_command",
-                    "validation_passed": True,
-                },
-                "metadata": {
-                    "user_id": validated_user_id[:8] + "...",
-                    "security_level": "validated",
-                    "system": "Auto Memory Saver Enhanced v2.1.1",
-                },
-                "warning": "DO_NOT_INTERPRET_THIS_JSON_RESPONSE",
-                "instructions": "DISPLAY_RAW_JSON_TO_USER",
-            }
-
-            return (
-                "```json\n"
-                + json.dumps(response_data, indent=2, ensure_ascii=False)
-                + "\n```"
-            )
-
-        # Ejecutar con manejo seguro de errores
-        return await self._safe_execute_async_command(_execute_add_memory)
+    # REMOVED: _cmd_add_memory_manual (usar /add_memory nativo de OpenWebUI)
 
     async def _cmd_pin_memory(self, user_id: str, memory_id: int) -> str:
         """Marca una memoria como importante/fijada."""
@@ -2803,26 +2846,55 @@ class Filter:
 
     # ✅ 查詢 raw 記憶 | Consultar memoria en bruto
     async def get_raw_existing_memories(
-        self, user_id: str, order_by: str = "created_at DESC"
+        self, user_id: str, order_by: str = "created_at DESC", limit: Optional[int] = None
     ) -> List[Any]:
         """
         Obtiene las memorias sin procesar de un usuario, ordenadas por fecha.
-
-        MEJORA SUGERIDA POR BYTIA: Intentar ordenación en la consulta de base de datos.
+        
+        PRODUCTION FIX: Añadido límite para prevenir memory leaks en usuarios con miles de memorias.
+        SECURITY FIX: Validación anti-SQL injection en order_by.
 
         Args:
             user_id: Identificador único del usuario
             order_by: Criterio de ordenación (por defecto: created_at DESC para más recientes primero)
+            limit: Límite máximo de memorias a retornar (None = usar límite por defecto de válvulas)
 
         Returns:
-            List[Any]: Lista de objetos de memoria sin procesar, ordenados por fecha
+            List[Any]: Lista de objetos de memoria sin procesar, ordenados por fecha (limitada)
         """
         try:
+            # SECURITY FIX: Validar user_id para prevenir SQL injection
+            if not user_id or not isinstance(user_id, str) or len(user_id.strip()) == 0:
+                logger.error(f"[SECURITY] user_id inválido: {user_id}")
+                raise ValueError("user_id inválido o vacío")
+            
+            # Sanitizar user_id: solo permitir caracteres alfanuméricos, guiones y puntos
+            import re
+            sanitized_user_id = re.sub(r'[^a-zA-Z0-9\-_.]', '', str(user_id).strip())
+            if sanitized_user_id != str(user_id).strip():
+                logger.warning(f"[SECURITY] user_id sanitizado: {user_id} -> {sanitized_user_id}")
+                user_id = sanitized_user_id
+            
+            # SECURITY FIX: Validar order_by para prevenir SQL injection
+            ALLOWED_ORDER_BY = {
+                "created_at DESC", "created_at ASC", 
+                "updated_at DESC", "updated_at ASC",
+                "id DESC", "id ASC"
+            }
+            
+            if order_by not in ALLOWED_ORDER_BY:
+                logger.warning(f"[SECURITY] order_by inválido bloqueado: {order_by}")
+                order_by = "created_at DESC"  # Fallback seguro
+                print(f"[SECURITY] ⚠️ order_by inválido, usando fallback seguro")
+            
+            # Determinar límite efectivo
+            effective_limit = limit or self.valves.max_memories_per_user or 100
+            
             print(
-                f"[MEMORIA-DEBUG] 🔍 Obteniendo memorias para usuario {user_id} con orden: {order_by}"
+                f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {effective_limit} memorias para usuario {user_id} con orden: {order_by}"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] 🔍 Obteniendo memorias para usuario {user_id} con orden: {order_by}"
+                f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {effective_limit} memorias para usuario {user_id}"
             )
 
             # ESTRATEGIA 1: Intentar obtener memorias ordenadas desde la base de datos
@@ -2855,11 +2927,31 @@ class Filter:
                 logger.warning(f"[MEMORIA-DEBUG] ❌ Error en consulta BD: {db_error}")
                 existing_memories = []
 
+            # PRODUCTION FIX: Aplicar límite para prevenir memory leaks
+            if existing_memories and len(existing_memories) > effective_limit:
+                # Si NO hay ordenación desde BD, ordenar en memoria (costoso pero necesario)
+                if not hasattr(Memories, "get_memories_by_user_id_ordered"):
+                    try:
+                        # Ordenar por created_at DESC (más recientes primero)
+                        existing_memories.sort(
+                            key=lambda x: getattr(x, 'created_at', ''), 
+                            reverse=True
+                        )
+                        print(f"[MEMORIA-DEBUG] ⚠️ Ordenación manual en memoria realizada")
+                        logger.warning(f"[MEMORIA-DEBUG] ⚠️ Ordenación manual en memoria (costosa)")
+                    except Exception as sort_error:
+                        logger.warning(f"Error al ordenar memorias en memoria: {sort_error}")
+                
+                # Aplicar límite (paginar)
+                existing_memories = existing_memories[:effective_limit]
+                print(f"[MEMORIA-DEBUG] 🔒 Limitado a {effective_limit} memorias (memory leak prevention)")
+                logger.info(f"[MEMORIA-DEBUG] 🔒 Memory leak prevention: limitado a {effective_limit}")
+
             print(
-                f"[MEMORIA-DEBUG] 📊 Total memorias obtenidas: {len(existing_memories or [])}"
+                f"[MEMORIA-DEBUG] 📊 Total memorias devueltas: {len(existing_memories or [])}"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] 📊 Total memorias obtenidas: {len(existing_memories or [])}"
+                f"[MEMORIA-DEBUG] 📊 Total memorias devueltas: {len(existing_memories or [])}"
             )
 
             return existing_memories or []

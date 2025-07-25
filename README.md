@@ -1,99 +1,79 @@
-# Memoria Persistente (Auto Memory Saver Enhanced) - Función para OpenWebUI
+# Memoria Persistente (Auto Memory Saver Enhanced)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![OpenWebUI](https://img.shields.io/badge/OpenWebUI-Compatible-green.svg)](https://github.com/open-webui/open-webui)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-red.svg)](https://fastapi.tiangolo.com/)
-[![Pydantic](https://img.shields.io/badge/Pydantic-2.5+-purple.svg)](https://pydantic.dev/)
-[![Version](https://img.shields.io/badge/version-2.1.2-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
+[![Version](https://img.shields.io/badge/version-2.2.0-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
+[![Security Rating](https://img.shields.io/badge/security-A+-brightgreen.svg)](docs/SECURITY.md)
+[![Docker](https://img.shields.io/badge/Docker-Compatible-2496ED?logo=docker&logoColor=white)](https://docker.com)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced/graphs/commit-activity)
-[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/AsturWebs)
 
 ## 👨‍💻 Autoría y Créditos
 
 **Enhanced Version by:** Pedro Luis Cuevas Villarrubia ([@AsturWebs](https://github.com/AsturWebs))  
 **Based on original work by:** [@linbanana](https://github.com/linbanana)  
-**Enhancement Date:** January 22, 2025  
 **Contact:** pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es  
-**Original Downloads:** 173+
 
 ### Credits & Attribution
 - **Original Concept:** @linbanana - Basic Auto Memory Saver functionality
-- **Enhanced Version:** Pedro Luis Cuevas Villarrubia - Complete system transformation with 24 configurable valves, 16 interactive commands, advanced caching, professional documentation, and enterprise-ready features
+- **Enhanced Version:** Pedro Luis Cuevas Villarrubia - Extended functionality with configurable options, interactive commands, caching, and documentation improvements
 
 ### Version History
 - **v1.0 (Original):** Basic memory saving functionality by @linbanana
-- **v2.0 (Enhanced):** Complete system with granular configuration, interactive commands, professional architecture, and comprehensive documentation by Pedro Luis Cuevas Villarrubia
-- **v2.1.2 (Enterprise Security & JSON Format):** Critical enterprise security with input validation, advanced JSON format with pagination, audit trails, and production-validated system with 122+ memories
-- **v2.1.0 (Memory Optimization):** Improved memory management with contextual relevance, optimized token usage, enhanced relevance algorithm, intelligent memory injection (recent vs relevant), and comprehensive validation in production environments
+- **v2.0 (Enhanced):** Extended system with configuration options, interactive commands, and improved documentation
+- **v2.1.2 (Security & JSON Format):** Input validation, JSON format with pagination, and system improvements
+- **v2.1.0 (Memory Optimization):** Improved memory management with contextual relevance and optimized performance
+- **v2.2.0 (Security & Performance):** Thread safety, SQL injection prevention, input sanitization, and memory leak protection
 
 ---
 
 ## 📋 Descripción
 
-Auto Memory Saver es un filtro avanzado para OpenWebUI que gestiona automáticamente las memorias de conversaciones. Este sistema permite inyectar memorias previas en nuevas conversaciones y guardar automáticamente las respuestas del asistente como memorias para uso futuro.
+Filtro para OpenWebUI que gestiona automáticamente las memorias de conversaciones. Inyecta memorias previas relevantes y guarda automáticamente las respuestas del asistente como memorias para uso futuro.
 
 ## 🚀 Características Principales
 
-- **Inyección Inteligente de Memorias**: Inyecta solo las memorias más relevantes al contexto de la conversación actual
-- **Optimización de Tokens**: Filtra automáticamente el razonamiento intermedio en modelos avanzados
-- **Continuidad Contextual**: Prioriza la continuidad entre sesiones de chat
-- **Guardado Automático**: Almacena las respuestas del asistente como memorias sin intervención manual
-- **16 Comandos Interactivos**: Suite completa de comandos para gestión avanzada de memorias
-- **24 Válvulas Configurables**: Control granular sobre todos los aspectos del sistema
-- **Sistema de Caché**: Optimización de rendimiento con caché inteligente con expiración
-- **Manejo Robusto de Errores**: Validaciones exhaustivas y recuperación de errores
-- **Tipado Fuerte**: Tipos personalizados para mayor seguridad y mantenibilidad
+- **Inyección de Memorias**: Inyecta memorias relevantes al contexto de la conversación actual
+- **Guardado Automático**: Almacena las respuestas del asistente como memorias
+- **Comandos Interactivos**: Comandos para gestión de memorias (`/memories`, `/memory_search`, etc.)
+- **Configuración Flexible**: Múltiples opciones configurables según necesidades
+- **Sistema de Caché**: Optimización de rendimiento con caché y expiración
+- **Validación de Entrada**: Sanitización de inputs y prevención de inyecciones
+- **Compatibilidad**: Integra con comandos nativos de OpenWebUI (`/add_memory`)
 
 ## 📁 Estructura del Proyecto
 
 ```
 auto-memory-saver-enhanced/
-├── src/                          # Código fuente
-│   ├── Auto_Memory_Saver_Enhanced.py    # Sistema principal
-│   ├── config_example.py               # Configuración ejemplo
-│   └── legacy/                         # Versión original
-│       ├── Auto_Memory_Saver.py        # v1.0.0 by @linbanana
-│       └── README_1.0.0.md            # Documentación original
-├── docs/                         # Documentación técnica
-│   ├── ARCHITECTURE.md           # Arquitectura del sistema
-│   ├── CONTRIBUTING.md           # Guía de contribución
-│   ├── SECURITY.md              # Política de seguridad
-│   ├── GIT_SETUP.md             # Configuración Git
-│   ├── release_notes_v2.1.0.md  # Notas de versión
-│   └── release_notes_v2.1.2.md  # Notas de versión
-├── README.md                     # Este archivo
-├── CHANGELOG.md                  # Historial de cambios
-├── LICENSE                       # Licencia MIT
-└── requirements.txt              # Dependencias Python
+├── src/
+│   ├── memoria_persistente_auto_memory_saver_enhanced.py  # Sistema principal
+│   └── legacy/
+│       └── Auto_Memory_Saver.py                          # v1.0.0 by @linbanana
+├── docs/                                                 # Documentación técnica
+│   ├── ARCHITECTURE.md
+│   ├── SECURITY.md
+│   └── release_notes_v*.md
+├── README.md
+├── CHANGELOG.md
+├── LICENSE
+└── requirements.txt
 ```
 
 ## 🛠 Instalación
 
 ### Requisitos Previos
-
-- **OpenWebUI** instalado y funcionando (cualquier versión compatible)
+- **OpenWebUI** instalado y funcionando
 - **Python 3.8+** (incluido en la mayoría de instalaciones de OpenWebUI)
-- **Entorno compatible**: Local, VPS, Docker, Kubernetes, etc.
 
 ### Instalación en OpenWebUI
 
-#### Método 1: Desde el Panel de Administración (Recomendado)
-
 1. **Accede al panel de administración** de OpenWebUI
-2. **Ve a la pestaña "Funciones"** (Functions)
+2. **Ve a la pestaña "Functions"**
 3. **Haz clic en "+"** para crear una nueva función
-4. **Copia y pega** el código completo del archivo `src/Auto_Memory_Saver_Enhanced.py`
+4. **Copia y pega** el código completo del archivo `src/memoria_persistente_auto_memory_saver_enhanced.py`
 5. **Asigna un nombre**: "Auto Memory Saver Enhanced"
-6. **Añade descripción**: "Sistema avanzado de gestión automática de memorias con 16 comandos interactivos"
-7. **Guarda la función**
-8. **Configura las opciones** haciendo clic en la rueda dentada (⚙️) de la función
-
-#### Método 2: Instalación Manual de Archivos
-
-1. Copia el archivo `src/Auto_Memory_Saver_Enhanced.py` a tu directorio de filtros de OpenWebUI
-2. Reinicia OpenWebUI para cargar el nuevo filtro
-3. Activa el filtro en la configuración de OpenWebUI
+6. **Guarda y activa la función**
 
 ## ⚙️ Configuración
 
@@ -101,510 +81,129 @@ auto-memory-saver-enhanced/
 
 ```python
 class Valves:
-    # ===== CONFIGURACIÓN PRINCIPAL =====
-    enabled: bool = True  # Habilita/deshabilita el sistema completo
+    # Configuración principal
+    enabled: bool = True                        # Habilita/deshabilita el sistema
+    inject_memories: bool = True                # Inyecta memorias en conversaciones
+    auto_save_responses: bool = True            # Guarda respuestas automáticamente
     
-    # ===== CONTROL DE INYECCIÓN DE MEMORIAS =====
-    inject_memories: bool = True  # Inyecta memorias en conversaciones
-    max_memories_to_inject: int = 5  # Máximo de memorias por conversación (1-20)
+    # Control de memorias
+    max_memories_to_inject: int = 5             # Máximo de memorias por conversación
+    max_memories_per_user: int = 100            # Límite por usuario
+    relevance_threshold: float = 0.05           # Umbral de relevancia (0.0-1.0)
     
-    # ===== ALGORITMO DE RELEVANCIA (MEJORADO v2.1.2) =====
-    relevance_threshold: float = 0.05  # Umbral de relevancia (0.0-1.0) - ¡VALIDADO EN PRODUCCIÓN!
+    # Sistema de caché
+    enable_cache: bool = True                   # Habilita caché para rendimiento
+    cache_ttl_minutes: int = 60                 # Tiempo de vida del caché
     
-    # ===== CONTROL DE GUARDADO =====
-    auto_save_responses: bool = True  # Guarda respuestas automáticamente
-    min_response_length: int = 10  # Longitud mínima para guardar (1-1000)
-    max_response_length: int = 2000  # Longitud máxima para guardar (100-10000)
+    # Filtrado inteligente
+    filter_duplicates: bool = True              # Filtra memorias duplicadas
+    filter_short_responses: bool = True         # Filtra respuestas muy cortas
     
-    # ===== SISTEMA DE CACHÉ =====
-    enable_cache: bool = True  # Habilita caché para rendimiento
-    cache_ttl_minutes: int = 60  # Tiempo de vida del caché (1-1440 min)
-    
-    # ===== LIMPIEZA AUTOMÁTICA =====
-    auto_cleanup: bool = False  # Limpia memorias antiguas automáticamente
-    max_memories_per_user: int = 100  # Límite por usuario (0 = ilimitado)
-    cleanup_threshold_days: int = 30  # Días antes de limpiar memorias antiguas
-    
-    # ===== FILTRADO INTELIGENTE =====
-    filter_duplicates: bool = True  # Filtra memorias duplicadas
-    similarity_threshold: float = 0.8  # Umbral de similitud para duplicados (0.0-1.0)
-    filter_short_responses: bool = True  # Filtra respuestas muy cortas
-    filter_system_messages: bool = True  # Filtra mensajes del sistema
-    
-    # ===== COMANDOS INTERACTIVOS =====
-    enable_memory_commands: bool = True  # Habilita comandos como /memories, /clear_memories
-    max_search_results: int = 10  # Máximo resultados en /memory_search (1-50)
-    max_recent_display: int = 20  # Máximo memorias en /memory_recent (1-50)
-    
-    # ===== NOTIFICACIONES Y FEEDBACK =====
-    show_injection_status: bool = True  # Muestra cuántas memorias se inyectaron
-    show_save_confirmations: bool = False  # Confirma cuando se guarda una memoria
-    notify_on_errors: bool = True  # Notifica errores al usuario
-    
-    # ===== OPTIMIZACIÓN DE RENDIMIENTO =====
-    batch_processing: bool = True  # Procesa memorias en lotes para mejor rendimiento
-    async_processing: bool = True  # Procesamiento asíncrono cuando sea posible
-    
-    # ===== SEGURIDAD Y PRIVACIDAD =====
-    respect_private_mode: bool = True  # Respeta el modo privado del usuario
-    sanitize_content: bool = True  # Sanitiza contenido antes de guardar
-    
-    # ===== DEPURACIÓN Y LOGGING =====
-    debug_mode: bool = False  # Logging detallado para desarrollo
-    verbose_logging: bool = False  # Logging extra detallado (solo para debugging)
-    log_performance_metrics: bool = False  # Registra métricas de rendimiento
+    # Comandos y notificaciones
+    enable_memory_commands: bool = True         # Habilita comandos interactivos
+    show_injection_status: bool = True          # Muestra estado de inyección
+    debug_mode: bool = False                    # Logging detallado
 ```
 
-### Válvulas de Usuario (UserValves)
+## 📖 Comandos Disponibles
 
-```python
-class UserValves:
-    # Visualización
-    show_status: bool = True  # Muestra estado durante guardado
-    show_memory_count: bool = True  # Muestra número de memorias inyectadas
-    show_save_confirmation: bool = False  # Confirma cuando se guarda
-    
-    # Notificaciones
-    notify_on_error: bool = True  # Notifica errores al usuario
-    notify_on_cleanup: bool = False  # Notifica limpiezas automáticas
-    
-    # Personalización
-    custom_memory_prefix: str = ""  # Prefijo personalizado (vacío = default)
-    max_personal_memories: int = 0  # Límite personal (0 = usar global)
-    
-    # Privacidad
-    private_mode: bool = False  # Modo privado: no guarda automáticamente
-```
+### Comandos Nativos OpenWebUI (Recomendados)
+- **`/add_memory <texto>`** - Añade memoria directamente al sistema (comando nativo)
 
-### Configuración de Caché
-
-```python
-class Constants:
-    CACHE_MAXSIZE = 128  # Número máximo de entradas en caché
-    CACHE_TTL = 3600     # Tiempo de vida en segundos (1 hora)
-```
-
-## 🛡️ **Novedades v2.1.2 - Seguridad Enterprise y Formato JSON Avanzado**
-
-### ✨ **Características Enterprise Implementadas**
-
-#### 🛡️ **Seguridad Crítica de Nivel Enterprise**
-- **Validación Robusta de Entrada**: Sistema completo de sanitización y validación para todos los comandos críticos
-- **Prevención de Inyecciones**: Protección contra caracteres peligrosos y ataques de inyección
-- **Audit Trails**: Registro completo de operaciones destructivas (delete, edit) con metadata de seguridad
-- **User ID Validation**: Validación estricta con regex alfanumérico y límites de longitud
-- **Memory ID Validation**: Verificación de rangos contra datos reales existentes
-- **Manejo Seguro de Errores**: Sistema unificado de manejo de excepciones con logging apropiado
-
-#### 📊 **Formato JSON Enterprise Avanzado**
-- **Paginación Profesional**: 4 memorias por página con navegación completa (primera, última, anterior, siguiente)
-- **UUIDs Deterministas**: Identificación única y consistente generada con MD5 hash
-- **Previews Inteligentes**: Corte inteligente en 100 caracteres con lógica de espacios/puntos
-- **Clasificación Automática**: Detección de tipo (manual/auto) y prioridad (high/normal)
-- **Analytics en Tiempo Real**: Distribución de tipos, prioridades y métricas de longitud promedio
-- **Metadata de Seguridad**: Información de validación, performance y estado del sistema
-- **Sistema de Información**: Versión, build, environment, memory engine completo
-- **Respuesta JSON Pura**: Completamente resistente a interpretación del modelo IA
-
-#### 🎯 **Comandos Securizados Enterprise**
-- **`/memories [página]`**: Formato JSON enterprise con paginación, UUIDs, analytics y navegación
-- **`/memory_add <texto>`**: Validación completa, sanitización y audit trail
-- **`/memory_search <término>`**: Sanitización de términos y respuesta JSON paginada
-- **`/memory_delete <id>`**: Validaciones críticas, warnings de seguridad y metadata de auditoría
-- **`/memory_edit <id> <texto>`**: Sanitización, tracking de cambios y validación de existencia
-- **`/memory_stats`**: Estadísticas avanzadas con formato JSON y metadata de seguridad
-
-#### 🔧 **Mejoras Técnicas Enterprise**
-- **Funciones de Seguridad Core**: `_sanitize_input()`, `_validate_user_id()`, `_validate_memory_id()`
-- **Ejecución Segura**: `_safe_execute_command()` y `_safe_execute_async_command()`
-- **Logging Profesional**: Niveles diferenciados con contexto apropiado
-- **Validación de Parámetros**: Verificación exhaustiva antes de ejecución
-- **Performance Optimizada**: Validaciones eficientes sin impacto en rendimiento
-
----
-
-## 🚀 **Novedades v2.1.2 - Seguridad Enterprise y Formato JSON Avanzado**
-
-### ✨ **Funcionalidades Clave Validadas en Producción**
-
-#### 🧠 **Inyección Inteligente de Memorias**
-- **Lógica Dual**: 
-  - **Primer mensaje**: Inyecta memorias más recientes para continuidad contextual
-  - **Mensajes posteriores**: Solo memorias relevantes al input actual
-- **Algoritmo de Relevancia Rediseñado**: Combinación de coincidencias exactas (60%) + substring matching (40%)
-- **Umbral Óptimo**: `relevance_threshold: 0.05` validado con 16/16 memorias procesadas correctamente
-
-#### 🔧 **Optimizaciones de Rendimiento**
-- **Eliminación de Logs Verbosos**: Optimizado para reducir gasto de tokens y mejorar privacidad
-- **Logs de Diagnóstico**: Sistema completo de logging para monitoreo en producción
-- **Guardado Automático Validado**: Incremento correcto de memorias confirmado en entorno real
-
-#### ⚙️ **Configuración Recomendada para Producción**
-```python
-# Configuración óptima validada
-relevance_threshold: 0.05    # Balance perfecto relevancia/permisividad
-max_memories_to_inject: 1-5  # Según necesidades específicas
-debug_mode: False            # Para producción (True solo para debugging)
-enable_cache: True           # Mejora significativa de rendimiento
-```
-
-## 📖 Uso
-
-### Comandos Disponibles
-
-#### 📚 Gestión de Memorias Enterprise
-- **`/memories [página]`** - 🚀 **ENTERPRISE** Lista memorias con formato JSON avanzado, paginación (4 por página), UUIDs, analytics y navegación completa
-- **`/memory_add <texto>`** - 🛡️ **SECURIZADO** Añade memoria con validación completa, sanitización y audit trail
-- **`/memory_search <término>`** - 🛡️ **SECURIZADO** Búsqueda con sanitización, validación y respuesta JSON paginada
-- **`/memory_delete <id>`** - 🛡️ **SECURIZADO** Eliminación con validaciones críticas, warnings de seguridad y metadata de auditoría
-- **`/memory_edit <id> <texto>`** - 🛡️ **SECURIZADO** Edición con sanitización, tracking de cambios y validación de existencia
-- **`/memory_stats`** - 🚀 **ENTERPRISE** Estadísticas avanzadas con formato JSON, analytics y metadata de seguridad
+### Comandos Personalizados
+- **`/memories [página]`** - Lista memorias con formato JSON, paginación (10 por página)
+- **`/memory_search <término>`** - Busca memorias que contengan el término
+- **`/memory_stats`** - Estadísticas del sistema con formato JSON
+- **`/memory_count`** - Contador de memorias del usuario
+- **`/memory_recent [número]`** - Muestra las últimas N memorias
 - **`/clear_memories`** - Elimina todas las memorias del usuario
-- **`/memory_count`** - Muestra contador detallado con límites disponibles
-- **`/memory_recent [número]`** - Muestra las últimas N memorias (por defecto 5, máximo 20)
-- **`/memory_export`** - Exporta todas las memorias en formato texto estructurado
 
-#### ✨ **Comandos Avanzados de UX Profesional (v2.1.1)**
-- **`/memory_pin <id>`** - 🆕 **NUEVO** Marca una memoria como importante/fijada
-- **`/memory_unpin <id>`** - 🆕 **NUEVO** Desmarca una memoria importante
-- **`/memory_favorite <id>`** - 🆕 **NUEVO** Añade una memoria a favoritos
-- **`/memory_tag <id> <etiqueta>`** - 🆕 **NUEVO** Etiqueta una memoria con tags personalizados
-- **`/memory_edit <id> <nuevo_texto>`** - 🆕 **NUEVO** Edita el contenido de una memoria existente
-- **`/memory_delete <id>`** - 🆕 **NUEVO** Elimina una memoria específica por ID
+### Comandos Avanzados
+- **`/memory_delete <id>`** - Elimina una memoria específica
+- **`/memory_edit <id> <texto>`** - Edita el contenido de una memoria
+- **`/memory_export`** - Exporta memorias en formato texto
+- **`/memory_config`** - Muestra configuración actual
 
-#### ⚙️ Configuración
-- **`/memory_config`** - Muestra la configuración completa del sistema y usuario
-- **`/private_mode on|off`** - Activa o desactiva el modo privado temporalmente
-- **`/memory_limit <número>`** - Establece límite personal de memorias (0 = ilimitado)
-- **`/memory_prefix <texto>`** - Configura un prefijo personalizado para las memorias
-
-#### 📊 Información y Estadísticas
-- **`/memory_help`** - Muestra ayuda completa con todos los comandos disponibles
-- **`/memory_stats`** - Estadísticas detalladas del sistema (total, promedio, configuración)
-- **`/memory_status`** - Estado actual del filtro y todas sus funcionalidades
-- **`/memory_analytics`** - 🆕 **NUEVO** Análisis avanzado con palabras frecuentes y recomendaciones
-
-#### 🔧 Utilidades Avanzadas
-- **`/memory_cleanup`** - Analiza y reporta memorias duplicadas potenciales
-- **`/memory_backup`** - Crea información de respaldo de las memorias actuales
-- **`/memory_restore`** - 🆕 **NUEVO** Información sobre restauración y estado del sistema
-- **`/memory_import`** - 🆕 **NUEVO** Guía completa para importar memorias desde diferentes fuentes
-- **`/memory_templates`** - 🆕 **NUEVO** Plantillas predefinidas para crear memorias útiles
-
-#### 💡 Ejemplos de Uso
+### Ejemplos de Uso
 ```bash
-# Buscar memorias sobre un tema específico
+# Buscar memorias sobre un tema
 /memory_search inteligencia artificial
 
-# Ver las últimas 3 memorias
-/memory_recent 3
+# Ver las últimas 5 memorias
+/memory_recent 5
 
-# Configurar un límite personal
-/memory_limit 50
-
-# Activar modo privado temporalmente
-/private_mode on
-
-# Ver estadísticas completas
+# Ver estadísticas
 /memory_stats
 ```
-
-### Nuevas Funcionalidades
-
-#### Control Granular de Inyección
-- **Límite configurable**: Controla cuántas memorias se inyectan por conversación
-- **Prefijos personalizados**: Cada usuario puede personalizar cómo se muestran sus memorias
-- **Contador visual**: Muestra cuántas memorias se inyectaron
-
-#### Filtrado Inteligente
-- **Validación de longitud**: Solo guarda respuestas dentro del rango configurado
-- **Detección de duplicados**: Evita guardar memorias similares o repetidas
-- **Truncado automático**: Mensajes largos se truncan automáticamente
-
-#### Modo Privado
-- **Privacidad total**: Los usuarios pueden desactivar el guardado automático
-- **Control individual**: Cada usuario controla su propia configuración
-
-#### Sistema de Caché Avanzado
-- **Rendimiento optimizado**: Caché con expiración automática
-- **Configuración flexible**: TTL ajustable según necesidades
-- **Limpieza automática**: Gestión inteligente de memoria
-
-### Funcionamiento Automático
-
-1. **Al iniciar una conversación**: El sistema inyecta automáticamente las memorias relevantes
-2. **Al finalizar una respuesta**: Guarda automáticamente la respuesta del asistente como memoria
-3. **Gestión de errores**: Maneja automáticamente errores y continúa funcionando
 
 ## 🏗 Arquitectura
 
 ### Componentes Principales
+- **Filter**: Clase principal que maneja inlet/outlet
+- **Valves**: Configuración global del sistema
+- **UserValves**: Configuración específica por usuario
+- **MemoryCache**: Sistema de caché con expiración TTL
+- **Security Functions**: Validación y sanitización de inputs
 
-```
-Filter
-├── Valves (Configuración global)
-├── UserValves (Configuración por usuario)
-├── MemoryCache (Sistema de caché)
-├── inlet() (Inyección de memorias)
-├── outlet() (Guardado de memorias)
-├── clear_user_memory() (Limpieza de memorias)
-└── get_processed_memory_strings() (Recuperación de memorias)
-```
-
-### Tipos Personalizados
-
-```python
-UserData: TypedDict  # Estructura de datos del usuario
-MessageDict: TypedDict  # Estructura de mensajes
-EventEmitter: Callable  # Emisor de eventos
-CacheEntry: dataclass  # Entrada de caché con expiración
-```
-
-## 🔧 Desarrollo
-
-### Estructura del Código
-
-```
-frAuto_Memory_Saver_OpenWebUI_Adds_the_assistant_message_to_users_memories.py
-├── Configuración de logging
-├── Importaciones con manejo de dependencias
-├── Tipos personalizados y constantes
-├── Sistema de caché
-└── Clase Filter principal
-```
-
-### Mejoras Implementadas
-
-- ✅ Sistema de logging avanzado
-- ✅ Manejo robusto de errores
-- ✅ Validación exhaustiva de datos
-- ✅ Sistema de caché con expiración
-- ✅ Tipos personalizados para mayor seguridad
-- ✅ Documentación bilingüe (chino/español)
-- ✅ Manejo de dependencias con fallbacks
-
-## 📊 Rendimiento
-
-### Optimizaciones Implementadas
-
-1. **Caché en Memoria**: Reduce consultas repetitivas a la base de datos
-2. **Validación Temprana**: Evita procesamiento innecesario
-3. **Manejo Asíncrono**: No bloquea el flujo principal de la aplicación
-4. **Limpieza Automática**: El caché se limpia automáticamente
-
-### Métricas de Rendimiento
-
-- **Tiempo de respuesta**: < 100ms para operaciones en caché
-- **Uso de memoria**: Limitado por `CACHE_MAXSIZE`
-- **Escalabilidad**: Soporta múltiples usuarios concurrentes
+### Funcionamiento
+1. **inlet()**: Inyecta memorias relevantes al inicio de conversaciones
+2. **outlet()**: Guarda respuestas del asistente como memorias
+3. **Comandos**: Procesamiento de comandos interactivos de gestión
 
 ## 🔒 Seguridad
 
-### Medidas Implementadas
+### Características de Seguridad v2.2.0
+- **Thread Safety**: Cache thread-safe con RLock
+- **SQL Injection Prevention**: Validación de parámetros order_by
+- **Input Sanitization**: Filtrado de comandos peligrosos
+- **Memory Leak Protection**: Paginación de consultas BD
+- **User ID Validation**: Sanitización con regex
+- **Command Filtering**: Bloqueo de conversaciones sobre memoria
 
-- **Validación de Entrada**: Todos los parámetros son validados
-- **Manejo Seguro de Errores**: No expone información sensible
-- **Tipado Fuerte**: Previene errores de tipo en tiempo de ejecución
-- **Logging Seguro**: No registra información sensible
+### Validaciones Implementadas
+- Sanitización de inputs con límites de longitud
+- Prevención de caracteres peligrosos (`;`, `&`, `|`, etc.)
+- Validación de user_id y memory_id
+- Manejo seguro de errores sin exposición de datos
 
-### Recomendaciones de Seguridad
+## 📊 Novedades v2.2.0
 
-- Implementar autenticación JWT
-- Añadir rate limiting
-- Configurar HTTPS en producción
-- Revisar logs regularmente
+### Mejoras de Seguridad y Rendimiento
+- **Thread Safety**: Cache concurrente seguro
+- **Memory Leak Prevention**: Límites automáticos en consultas
+- **SQL Injection Protection**: Whitelisting de parámetros
+- **Input Sanitization**: Filtrado inteligente de comandos
+- **Conversación Completa**: Guarda input del usuario + output de IA
+- **Filtro Anti-Meta**: No guarda conversaciones sobre memoria
+- **Paginación Mejorada**: 10 memorias por página (antes 4)
 
-## 🚀 Despliegue
-
-### Entorno de Producción (VPS + EasyPanel)
-
-1. **Preparación del Entorno**:
-   ```bash
-   # Instalar dependencias
-   pip install -r requirements.txt
-   
-   # Configurar variables de entorno
-   export LOG_LEVEL=INFO
-   export CACHE_TTL=3600
-   ```
-
-2. **Configuración en EasyPanel**:
-   - Subir el archivo del filtro
-   - Configurar variables de entorno
-   - Reiniciar el servicio OpenWebUI
-
-3. **Verificación**:
-   - Comprobar logs de inicio
-   - Probar funcionalidad básica
-   - Verificar rendimiento
-
-### Variables de Entorno Recomendadas
-
-```bash
-LOG_LEVEL=INFO
-CACHE_MAXSIZE=128
-CACHE_TTL=3600
-MEMORY_PREFIX="📘 Memoria previa:\n"
-```
-
-## 🧪 Pruebas
-
-### Pruebas Recomendadas
-
-```python
-# Ejemplo de prueba unitaria
-import pytest
-from unittest.mock import AsyncMock
-
-@pytest.mark.asyncio
-async def test_inlet_with_valid_user():
-    filter_instance = Filter()
-    body = {"messages": []}
-    user = {"id": "test_user"}
-    
-    result = await filter_instance.inlet(body, None, user, None)
-    assert isinstance(result, dict)
-```
-
-### Cobertura de Pruebas
-
-- [ ] Pruebas unitarias para cada método
-- [ ] Pruebas de integración con base de datos
-- [ ] Pruebas de rendimiento
-- [ ] Pruebas de seguridad
-
-## 📈 Monitoreo
-
-### Métricas Clave
-
-- Número de memorias procesadas
-- Tiempo de respuesta promedio
-- Errores por minuto
-- Uso de caché (hit/miss ratio)
-
-## 🔮 Roadmap
-
-### Próximas Mejoras
-
-1. **Caché Distribuido**: Implementar Redis para entornos distribuidos
-2. **Métricas Avanzadas**: Integración con Prometheus
-3. **Interfaz Web**: Panel de administración para gestión de memorias
-4. **IA Mejorada**: Clasificación inteligente de memorias
-5. **Exportación**: Funcionalidad de exportar/importar memorias
-
-### Mejoras de Rendimiento
-
-1. **Compresión**: Comprimir memorias grandes
-2. **Paginación**: Implementar paginación para listas largas
-3. **Índices**: Optimizar consultas de base de datos
-4. **Clustering**: Agrupar memorias similares
+### Compatibilidad
+- Integración con comando nativo `/add_memory` de OpenWebUI
+- Mantiene compatibilidad con todas las versiones anteriores
+- Sin cambios breaking en la API
 
 ## 🤝 Contribución
 
-### Cómo Contribuir
-
 1. Fork del repositorio
-2. Crear rama de feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit de cambios (`git commit -am 'Añadir nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crear Pull Request
+2. Crear rama de feature
+3. Commit de cambios
+4. Crear Pull Request
 
-### Estándares de Código
-
+### Estándares
 - Seguir PEP 8
-- Documentar todas las funciones
+- Documentar funciones
 - Añadir pruebas para nuevas funcionalidades
-- Mantener cobertura de pruebas > 80%
-
-## 📝 Changelog
-
-### [2.1.2] - 2025-07-24
-#### Añadido
-- 🛡️ **Seguridad Crítica Enterprise**: Funciones core de validación y sanitización
-- 📊 **Formato JSON Enterprise Avanzado**: Paginación, UUIDs, analytics y metadata
-- 🔒 **Comandos Securizados**: `/memory_add`, `/memory_search`, `/memory_delete`, `/memory_edit` con validación robusta
-- 📋 **Audit Trails**: Registro completo para operaciones destructivas
-- 🎯 **Respuestas Resistentes a IA**: JSON puro sin interpretación del modelo
-- 📈 **Analytics en Tiempo Real**: Distribución de tipos, prioridades y métricas
-- 🆔 **UUIDs Deterministas**: Identificación única y consistente de memorias
-- 🔧 **Manejo Seguro de Errores**: Funciones unificadas con logging profesional
-
-### [2.1.0] - 2025-07-22
-#### Mejorado
-- Renombrado el archivo principal a `Auto_Memory_Saver_Enhanced.py` para mayor claridad
-- Implementado sistema de inyección de memorias basado en relevancia contextual
-- Optimizado el uso de tokens al ignorar razonamientos intermedios en modelos avanzados
-- Mejorada la continuidad entre sesiones de chat
-- Actualizada documentación para reflejar los cambios
-
-### [2.0.0] - 2025-07-22
-
-### v2.0.0 (Actual)
-- ✅ Sistema de caché avanzado
-- ✅ Tipos personalizados
-- ✅ Logging mejorado
-- ✅ Manejo robusto de errores
-- ✅ Documentación bilingüe
-
-### v1.0.0 (Original)
-- ✅ Funcionalidad básica de memorias
-- ✅ Comandos de consulta
-- ✅ Integración con OpenWebUI
-
-## 🐛 Problemas Conocidos
-
-- Ninguno reportado actualmente
-
-## 📞 Soporte
-
-Para reportar problemas o solicitar funcionalidades:
-
-1. Revisar la documentación
-2. Comprobar logs de error
-3. Crear issue con detalles completos
-4. Incluir pasos para reproducir el problema
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
 
 ## 🙏 Agradecimientos
 
-- Equipo de OpenWebUI por la plataforma base
-- @linbanana por el concepto original y la base del proyecto
-- Comunidad de desarrolladores por feedback y contribuciones
-- Usuarios beta por las pruebas y reportes
-
-## 📄 Licencia
-
-Este proyecto está licenciado bajo la **MIT License**.
-
-```
-MIT License
-
-Copyright (c) 2025 Pedro Luis Cuevas Villarrubia
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
-Ver el archivo [LICENSE](LICENSE) para más detalles.
+- **OpenWebUI team** por la plataforma base
+- **@linbanana** por el concepto original
+- **Comunidad** por feedback y contribuciones
 
 ---
 
-**Nota**: Este README se actualiza regularmente. Para la versión más reciente, consulta el repositorio principal.
+**Nota**: Para la documentación técnica completa, ver la carpeta `docs/`
