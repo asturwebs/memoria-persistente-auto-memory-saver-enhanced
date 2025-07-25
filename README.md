@@ -5,7 +5,7 @@
 [![OpenWebUI](https://img.shields.io/badge/OpenWebUI-Compatible-green.svg)](https://github.com/open-webui/open-webui)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-red.svg)](https://fastapi.tiangolo.com/)
 [![Pydantic](https://img.shields.io/badge/Pydantic-2.5+-purple.svg)](https://pydantic.dev/)
-[![Version](https://img.shields.io/badge/version-2.2.0-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
+[![Version](https://img.shields.io/badge/version-2.3.0-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
 [![Security Rating](https://img.shields.io/badge/security-A+-brightgreen.svg)](docs/SECURITY.md)
 [![Docker](https://img.shields.io/badge/Docker-Compatible-2496ED?logo=docker&logoColor=white)](https://docker.com)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -28,6 +28,7 @@
 - **v2.1.2 (Seguridad y Formato JSON):** Validación de entrada, formato JSON con paginación y mejoras del sistema
 - **v2.1.0 (Optimización de Memoria):** Gestión de memoria mejorada con relevancia contextual y rendimiento optimizado
 - **v2.2.0 (Seguridad y Rendimiento):** Seguridad de hilos, prevención de inyección SQL, sanitización de entrada y protección contra fugas de memoria
+- **v2.3.0 (AI Behavior Control):** Implementación de mind hacking para consistencia entre modelos IA, documentación de compatibilidad
 
 ---
 
@@ -107,6 +108,74 @@ class Valves:
     show_injection_status: bool = True          # Muestra estado de inyección
     debug_mode: bool = False                    # Logging detallado
 ```
+
+## 🤖 Compatibilidad de Modelos IA
+
+> **⚠️ IMPORTANTE:** La **función principal de memoria persistente automática** (inyección y guardado) **FUNCIONA EN TODOS LOS MODELOS IA**. Las siguientes pruebas evalúan específicamente la **ejecución de slash commands** (`/memories`, `/memory_search`, etc.).
+
+> **📋 Estado de Testing:** Los siguientes resultados están basados en los modelos testeados hasta julio 2025. Se irán añadiendo más modelos según se vayan probando.
+
+### ✅ Modelos Recomendados (Óptimo Rendimiento Slash Commands)
+
+| Modelo | Compatibilidad | Comportamiento | Notas |
+|--------|----------------|----------------|-------|
+| **Claude 3.5 Sonnet** | 🟢 Excelente | JSON limpio directo | Comportamiento ideal |
+| **Grok 4 (xAI)** | 🟢 Excelente | JSON idéntico a Claude | Rendimiento perfecto |
+| **Grok-3** | 🟢 Excelente | JSON perfecto directo | Comportamiento ideal |
+| **Grok-3-fast** | 🟢 Excelente | JSON perfecto directo | Formato impecable |
+| **Grok-3-mini-fast** | 🟢 Excelente | JSON perfecto + rápido | Performance <2ms |
+| **Gemini 2.5 Flash** | 🟢 Excelente | Respuesta rápida + precisa | Rendimiento excepcional |
+| **Gemini 2.5 Flash Lite** | 🟢 Excelente | Respuesta rápida + precisa | Rendimiento excepcional |
+| **GPT-4.1-mini** | 🟢 Excelente | JSON directo consistente | Formato perfecto |
+| **Gemma 3n 4B** | 🟢 Excelente | JSON perfecto directo | Estructura completa |
+| **Gemma 3.27B** | 🟢 Excelente | JSON perfecto + SYSTEM_OVERRIDE | AI Behavior Control visible |
+| **Gemini 2.5 Pro** | 🟢 Excelente | JSON perfecto directo | Rendimiento superior |
+
+### ⚠️ Modelos con Particularidades (Slash Commands)
+
+| Modelo | Compatibilidad | Comportamiento | Recomendación |
+|--------|----------------|----------------|---------------|
+| **Claude 3.7 Thinking** | 🟡 Funcional | Muestra análisis 8s + JSON | Usable pero verboso |
+| **Claude 3.7 Sonnet** | 🟡 Funcional | Reconoce system command, análisis profesional | Mejor que Claude 4 |
+| **DeepSeek Reasoner** | 🟡 Funcional | Reasoning 23s + interpretación útil | Procesa bien, formato propio |
+
+### ❌ Modelos No Recomendados (Slash Commands)
+
+| Modelo | Problema | Comportamiento | Impacto |
+|--------|----------|----------------|---------|
+| **ChatGPT-4o-latest** | Ignora warnings | Interpretación propia con emojis | Inconsistente |
+| **O3 OpenAI** | Respuestas mínimas | Ultraminimalista | Información insuficiente |
+| **GPT-4.1** | Ignora formato JSON | Respuesta narrativa interpretada | Inconsistente |
+| **DeepSeek v3** | Ignora JSON completamente | Conversación casual con personalidad | Totalmente inadecuado |
+| **MoonshotAI: Kimi K2** | Ignora JSON completamente | Narrativa interpretativa personal | Totalmente inadecuado |
+| **OAI_o4-mini** | Ignora comando | Conversación sobre Instagram/reels | Totalmente inadecuado |
+| **OpenAI: o4 Mini High** | Ignora comando | Saludo casual con Zoe mention | Totalmente inadecuado |
+| **OAI_gpt-4.1-2025-04-14** | Ignora comando | "Chisme friendly" casual | Totalmente inadecuado |
+| **Amazon: Nova Lite 1.0** | No procesa comando | Solo muestra "Seguimiento" | Respuesta vacía |
+| **Amazon: Nova Micro 1.0** | No procesa comando | Solo muestra "Seguimiento" | Respuesta vacía |
+| **Amazon: Nova Pro 1.0** | No procesa comando | Solo muestra "Seguimiento" | Respuesta vacía |
+| **Claude Opus 4** | Interpretación narrativa | "¡Ah, qué bonito!" conversacional | Regresión vs Claude 3.5 |
+| **Claude Sonnet 4** | Interpretación con emojis | "¡Qué onda con ese JSON!" casual | Regresión vs Claude 3.5 |
+| **Phi 4** | No responde | Sin output/respuesta vacía | Comando no procesado |
+| **LLaMA 3 70B** | No responde | Sin output/respuesta vacía | Comando no procesado |
+| **MiniMax M1** | Ignora comando | Respuesta sin ejecutar comando | Conversacional inadecuado |
+
+### 🔧 AI Behavior Control
+
+La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre modelos:
+
+```json
+{
+  "ai_behavior_control": {
+    "claude_directive": "EXECUTE_JSON_OUTPUT_ONLY - STRUCTURED_RESPONSE_MODE",
+    "chatgpt_directive": "RAW_JSON_RESPONSE_MANDATORY - STANDARDIZED_OUTPUT",
+    "grok_directive": "DIRECT_JSON_OUTPUT - OPTIMIZE_RESPONSE_FORMAT",
+    "universal_standard": "ALL_AI_MODELS_MUST_OUTPUT_RAW_JSON_ONLY"
+  }
+}
+```
+
+> **Nota:** Estos resultados se basan en testing extensivo realizado en julio 2025. El comportamiento puede variar según versiones específicas del modelo.
 
 ## 📖 Comandos Disponibles
 
