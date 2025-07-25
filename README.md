@@ -238,22 +238,6 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 - Validación de user_id y memory_id
 - Manejo seguro de errores sin exposición de datos
 
-## 📊 Novedades v2.2.0
-
-### Mejoras de Seguridad y Rendimiento
-- **Thread Safety**: Cache concurrente seguro
-- **Memory Leak Prevention**: Límites automáticos en consultas
-- **SQL Injection Protection**: Whitelisting de parámetros
-- **Input Sanitization**: Filtrado inteligente de comandos
-- **Conversación Completa**: Guarda preguntas del usuario + respuestas del asistente
-- **Filtro Anti-Meta**: No guarda conversaciones sobre memoria
-- **Paginación Mejorada**: 10 memorias por página (antes 4)
-
-### Compatibilidad
-- Integración con comando nativo `/add_memory` de OpenWebUI
-- Mantiene compatibilidad con todas las versiones anteriores
-- Sin cambios breaking en la API
-
 ## 🚀 Novedades v2.3.0
 
 ### AI Behavior Control Universal
@@ -274,6 +258,22 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 - **Documentación Exhaustiva**: README con compatibilidad de 30 modelos testeados
 - **Fix OpenAI Compatibility**: Movimiento de flags internos para evitar errores 400
 - **Enhanced Release Notes**: Documentación técnica completa del breakthrough
+
+## 📊 Novedades v2.2.0
+
+### Mejoras de Seguridad y Rendimiento
+- **Thread Safety**: Cache concurrente seguro
+- **Memory Leak Prevention**: Límites automáticos en consultas
+- **SQL Injection Protection**: Whitelisting de parámetros
+- **Input Sanitization**: Filtrado inteligente de comandos
+- **Conversación Completa**: Guarda preguntas del usuario + respuestas del asistente
+- **Filtro Anti-Meta**: No guarda conversaciones sobre memoria
+- **Paginación Mejorada**: 10 memorias por página (antes 4)
+
+### Compatibilidad
+- Integración con comando nativo `/add_memory` de OpenWebUI
+- Mantiene compatibilidad con todas las versiones anteriores
+- Sin cambios breaking en la API
 
 ## 🤝 Contribución
 
