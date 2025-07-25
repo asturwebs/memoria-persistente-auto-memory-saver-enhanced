@@ -45,6 +45,29 @@ Auto Memory Saver es un filtro avanzado para OpenWebUI que gestiona automáticam
 - **Manejo Robusto de Errores**: Validaciones exhaustivas y recuperación de errores
 - **Tipado Fuerte**: Tipos personalizados para mayor seguridad y mantenibilidad
 
+## 📁 Estructura del Proyecto
+
+```
+auto-memory-saver-enhanced/
+├── src/                          # Código fuente
+│   ├── Auto_Memory_Saver_Enhanced.py    # Sistema principal
+│   ├── config_example.py               # Configuración ejemplo
+│   └── legacy/                         # Versión original
+│       ├── Auto_Memory_Saver.py        # v1.0.0 by @linbanana
+│       └── README_1.0.0.md            # Documentación original
+├── docs/                         # Documentación técnica
+│   ├── ARCHITECTURE.md           # Arquitectura del sistema
+│   ├── CONTRIBUTING.md           # Guía de contribución
+│   ├── SECURITY.md              # Política de seguridad
+│   ├── GIT_SETUP.md             # Configuración Git
+│   ├── release_notes_v2.1.0.md  # Notas de versión
+│   └── release_notes_v2.1.2.md  # Notas de versión
+├── README.md                     # Este archivo
+├── CHANGELOG.md                  # Historial de cambios
+├── LICENSE                       # Licencia MIT
+└── requirements.txt              # Dependencias Python
+```
+
 ## 🛠 Instalación
 
 ### Requisitos Previos
@@ -60,7 +83,7 @@ Auto Memory Saver es un filtro avanzado para OpenWebUI que gestiona automáticam
 1. **Accede al panel de administración** de OpenWebUI
 2. **Ve a la pestaña "Funciones"** (Functions)
 3. **Haz clic en "+"** para crear una nueva función
-4. **Copia y pega** el código completo del archivo `frAuto_Memory_Saver_OpenWebUI_Adds_the_assistant_message_to_users_memories.py`
+4. **Copia y pega** el código completo del archivo `src/Auto_Memory_Saver_Enhanced.py`
 5. **Asigna un nombre**: "Auto Memory Saver Enhanced"
 6. **Añade descripción**: "Sistema avanzado de gestión automática de memorias con 16 comandos interactivos"
 7. **Guarda la función**
@@ -68,7 +91,7 @@ Auto Memory Saver es un filtro avanzado para OpenWebUI que gestiona automáticam
 
 #### Método 2: Instalación Manual de Archivos
 
-1. Copia el archivo `frAuto_Memory_Saver_OpenWebUI_Adds_the_assistant_message_to_users_memories.py` a tu directorio de filtros de OpenWebUI
+1. Copia el archivo `src/Auto_Memory_Saver_Enhanced.py` a tu directorio de filtros de OpenWebUI
 2. Reinicia OpenWebUI para cargar el nuevo filtro
 3. Activa el filtro en la configuración de OpenWebUI
 
