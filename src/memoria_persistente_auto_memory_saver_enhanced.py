@@ -8,7 +8,7 @@ Una potente extensión para OpenWebUI que permite guardar y recuperar automátic
 conversaciones relevantes, mejorando la memoria contextual de los modelos de IA.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
-GitHub: https://github.com/AsturWebs/auto-memory-saver-enhanced
+GitHub: https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
 Versión: 2.3.0 AI Mind Hacking
 Licencia: MIT
 
