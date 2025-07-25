@@ -1,18 +1,18 @@
-# 🛡️ Release Notes v2.1.2 - Seguridad Enterprise y Formato JSON Avanzado
+# 🛡️ Notas de Versión v2.1.2 - Seguridad y Formato JSON Avanzado
 
 **Fecha de Lanzamiento**: 24 de Julio, 2025  
-**Tipo de Release**: Mejoras Enterprise - Seguridad Crítica y Formato JSON Avanzado  
+**Tipo de Release**: Mejoras de Seguridad - Validación y Formato JSON Avanzado  
 **Compatibilidad**: Totalmente compatible con versiones anteriores  
 
 ---
 
-## 🎯 **Resumen Ejecutivo**
+## 🎯 **Resumen**
 
-La versión 2.1.2 introduce **mejoras enterprise críticas** centradas en seguridad robusta y formato JSON avanzado. Esta actualización transforma los comandos slash más importantes en herramientas de nivel enterprise con validaciones exhaustivas, audit trails y respuestas JSON profesionales resistentes a interpretación de modelos IA.
+La versión 2.1.2 introduce **mejoras críticas de seguridad** centradas en validación robusta y formato JSON avanzado. Esta actualización mejora los comandos slash más importantes con validaciones exhaustivas, registros de auditoría y respuestas JSON profesionales resistentes a interpretación de modelos IA.
 
 ---
 
-## 🛡️ **Seguridad Crítica de Nivel Enterprise**
+## 🛡️ **Seguridad Crítica**
 
 ### ✅ **Funciones de Seguridad Core Implementadas**
 
