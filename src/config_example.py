@@ -18,7 +18,9 @@ FUNCIONALIDAD DUAL v2.3.0:
 - Slash Commands: Funcionan perfectamente en 11 modelos excelentes
 
 MODELOS EXCELENTES (Slash Commands):
-- Claude 3.5 Sonnet, Grok familia, Gemini familia, GPT-4.1-mini, Gemma familia
+- Claude 3.5 Sonnet, Grok familia, GPT-4.1-mini
+- Gemini familia, Gemma familia (SOLO vía OpenRouter/APIs intermedias)
+- IMPORTANTE: Google API directa tiene bugs con slash commands
 """
 
 # =============================================================================

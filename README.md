@@ -119,6 +119,8 @@ class Valves:
 
 > **📋 Estado de Testing:** Los siguientes resultados están basados en los modelos testeados hasta julio 2025. Se irán añadiendo más modelos según se vayan probando.
 
+> **🚨 IMPORTANTE - Google API Directa:** Los modelos Google/Gemini **SOLO funcionan correctamente** vía **OpenRouter u otras APIs intermedias**. **Google API directa** tiene bugs conocidos con slash commands (no responde en primera instancia, respuestas inconsistentes). **Recomendación: Usar OpenRouter para acceder a modelos Google.**
+
 ### ✅ Modelos Recomendados (Óptimo Rendimiento Slash Commands)
 
 | Modelo | Compatibilidad | Comportamiento | Notas |
@@ -128,12 +130,12 @@ class Valves:
 | **Grok-3** | 🟢 Excelente | JSON perfecto directo | Comportamiento ideal |
 | **Grok-3-fast** | 🟢 Excelente | JSON perfecto directo | Formato impecable |
 | **Grok-3-mini-fast** | 🟢 Excelente | JSON perfecto + rápido | Performance <2ms |
-| **Gemini 2.5 Flash** | 🟢 Excelente | Respuesta rápida + precisa | Rendimiento excepcional |
-| **Gemini 2.5 Flash Lite** | 🟢 Excelente | Respuesta rápida + precisa | Rendimiento excepcional |
+| **Gemini 2.5 Flash** | 🟢 Excelente | Respuesta rápida + precisa | Vía OpenRouter/APIs intermedias |
+| **Gemini 2.5 Flash Lite** | 🟢 Excelente | Respuesta rápida + precisa | Vía OpenRouter/APIs intermedias |
 | **GPT-4.1-mini** | 🟢 Excelente | JSON directo consistente | Formato perfecto |
-| **Gemma 3n 4B** | 🟢 Excelente | JSON perfecto directo | Estructura completa |
-| **Gemma 3.27B** | 🟢 Excelente | JSON perfecto + SYSTEM_OVERRIDE | AI Behavior Control visible |
-| **Gemini 2.5 Pro** | 🟢 Excelente | JSON perfecto directo | Rendimiento superior |
+| **Gemma 3n 4B** | 🟢 Excelente | JSON perfecto directo | Vía OpenRouter/APIs intermedias |
+| **Gemma 3.27B** | 🟢 Excelente | JSON perfecto + SYSTEM_OVERRIDE | Vía OpenRouter/APIs intermedias |
+| **Gemini 2.5 Pro** | 🟢 Excelente | JSON perfecto directo | Vía OpenRouter/APIs intermedias |
 
 ### ⚠️ Modelos con Particularidades (Slash Commands)
 

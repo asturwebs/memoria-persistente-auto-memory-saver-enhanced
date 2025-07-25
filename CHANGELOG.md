@@ -20,6 +20,7 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/lang/es/).
 - **Claude 4 Regresión**: Opus/Sonnet 4 peor rendimiento que Claude 3.5 Sonnet para comandos sistema
 - **Grok Familia Perfecta**: 100% compatibilidad en todas las variantes (Grok 4, Grok-3, Grok-3-fast, Grok-3-mini-fast)
 - **OpenAI Fragmentación**: GPT-4.1-mini excelente, versiones completas fallan consistentemente
+- **Google API Directa Bug**: Modelos Google/Gemini solo funcionan vía OpenRouter/APIs intermedias, API directa tiene bugs con slash commands
 - **Amazon Nova Fallo Total**: Toda la familia Nova no procesa comandos
 
 #### 🔧 **AI Behavior Control Implementado**

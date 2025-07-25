@@ -68,10 +68,11 @@
 
 ## 🏆 Revelaciones Técnicas Clave
 
-### Google/Gemini: Liderazgo Absoluto
+### Google/Gemini: Liderazgo Absoluto (vía OpenRouter)
 - **5 de 11 modelos excelentes** pertenecen a la familia Google
 - **Consistencia perfecta** en AI Behavior Control
 - **Rango completo**: Desde Gemma 3.27B hasta Gemini 2.5 Pro
+- **⚠️ IMPORTANTE**: Solo funciona vía OpenRouter/APIs intermedias, Google API directa tiene bugs
 
 ### Claude 4: Regresión Inesperada  
 - **Claude 4 Opus/Sonnet**: Peor rendimiento que Claude 3.5 Sonnet
@@ -87,6 +88,12 @@
 - **GPT-4.1-mini**: Excelente performance  
 - **Versiones completas**: Fallan consistentemente
 - **Patrón identificado**: Mini variants > Full variants para comandos
+
+### Google API Directa: Bug Crítico Identificado
+- **Síntomas**: Slash commands no responden en primera instancia
+- **Comportamiento**: Tras múltiples intentos, respuestas genéricas ignorando comandos
+- **Solución**: Usar OpenRouter u otras APIs intermedias para acceder a modelos Google
+- **Impacto**: Afecta a todos los modelos Google/Gemini vía API directa
 
 ---
 
