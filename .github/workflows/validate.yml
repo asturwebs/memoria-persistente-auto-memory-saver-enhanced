@@ -40,18 +40,18 @@ jobs:
     
     - name: Type check with mypy
       run: |
-        mypy Auto_Memory_Saver_Enhanced.py --ignore-missing-imports
+        mypy src/memoria_persistente_auto_memory_saver_enhanced.py --ignore-missing-imports
     
     - name: Validate file structure
       run: |
         echo "Validating project structure..."
-        test -f Auto_Memory_Saver_Enhanced.py
+        test -f src/memoria_persistente_auto_memory_saver_enhanced.py
         test -f README.md
         test -f LICENSE
         test -f requirements.txt
         test -f CHANGELOG.md
-        test -f CONTRIBUTING.md
-        test -f SECURITY.md
+        test -f docs/CONTRIBUTING.md
+        test -f docs/SECURITY.md
         echo "✅ All required files present"
     
     - name: Check for sensitive information
