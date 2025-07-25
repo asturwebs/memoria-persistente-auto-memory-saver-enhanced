@@ -1,15 +1,24 @@
-# Archivo de Configuración de Ejemplo para Auto Memory Saver
+# Archivo de Configuración de Ejemplo para Auto Memory Saver Enhanced v2.3.0
 # Copia este archivo y ajusta los valores según tus necesidades
 
 """
-CONFIGURACIÓN DE EJEMPLO PARA AUTO MEMORY SAVER
-===============================================
+CONFIGURACIÓN DE EJEMPLO PARA AUTO MEMORY SAVER ENHANCED v2.3.0
+===============================================================
+
+Con AI Behavior Control Universal y compatibilidad con 30+ modelos IA.
 
 Este archivo contiene ejemplos de configuración para diferentes escenarios de uso.
 Copia las configuraciones que necesites y ajústalas según tu entorno.
 
 IMPORTANTE: Este es solo un archivo de ejemplo. Las configuraciones reales
 se realizan a través de las válvulas en la interfaz de OpenWebUI.
+
+FUNCIONALIDAD DUAL v2.3.0:
+- Memoria Persistente Automática: FUNCIONA EN TODOS LOS MODELOS IA
+- Slash Commands: Funcionan perfectamente en 11 modelos excelentes
+
+MODELOS EXCELENTES (Slash Commands):
+- Claude 3.5 Sonnet, Grok familia, Gemini familia, GPT-4.1-mini, Gemma familia
 """
 
 # =============================================================================
@@ -33,9 +42,10 @@ BASIC_CONFIG = {
         "enable_cache": True,
         "cache_ttl_minutes": 30,
         "filter_duplicates": True,
+        "filter_short_responses": True,
         "enable_memory_commands": True,
+        "show_injection_status": True,
         # Sin limpieza automática por seguridad
-        "auto_cleanup": False,
         "debug_mode": False,
     },
     "user_valves": {
