@@ -1,27 +1,42 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Memoria Persistente (Auto Memory Saver Enhanced)
-==============================================
+Memoria Persistente (Auto Memory Saver Enhanced) v2.3.0
+======================================================
 
-Una potente extensión para OpenWebUI que permite guardar y recuperar automáticamente
-conversaciones relevantes, mejorando la memoria contextual de los modelos de IA.
+🚀 BREAKTHROUGH HISTÓRICO: AI Behavior Control Universal + 30 Modelos Testeados
+
+Una potente extensión para OpenWebUI con el testing de compatibilidad más exhaustivo
+jamás realizado (30 modelos IA evaluados). Memoria persistente automática funciona
+universalmente, slash commands perfectos en 11 modelos excelentes.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub: https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
-Versión: 2.3.0 AI Behavior Control
+Versión: 2.3.0 - AI Behavior Control Universal
 Licencia: MIT
+Basado en: @linbanana Auto Memory Saver original
 
-Características principales:
-- Guardado automático de conversaciones relevantes
-- Búsqueda semántica de memorias
-- Integración con OpenWebUI
-- Compatible con múltiples modelos de IA
-- Interfaz de usuario intuitiva
-- Seguridad y privacidad mejoradas
+🎯 FUNCIONALIDAD DUAL v2.3.0:
+✅ Memoria Persistente Automática: FUNCIONA EN TODOS LOS 30 MODELOS TESTEADOS
+✅ Slash Commands JSON: Funciona perfectamente en 11 modelos excelentes
 
-Para soporte o colaboraciones, contacta con:
-- Email: asturwebs@gmail.com
+🏆 MODELOS EXCELENTES (JSON perfecto):
+- Claude 3.5 Sonnet (líder), Grok familia (4 variantes), Gemini familia (3 variantes)
+- GPT-4.1-mini, Gemma familia (2 variantes) - Google/Gemini dominan con 5/11
+
+🔧 AI BEHAVIOR CONTROL:
+- Sistema de directivas para consistencia entre modelos
+- Terminología enterprise-safe (eliminado "mind hacking")
+- Fix crítico OpenAI (error 400 resuelto)
+- Thread safety + SQL injection prevention
+
+📊 REVELACIONES TÉCNICAS:
+- Claude 4 regresión vs Claude 3.5 Sonnet
+- Amazon Nova familia falla completamente
+- OpenAI fragmentación: mini > full variants
+
+Para soporte o colaboraciones:
+- Email: pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es
 - GitHub: @AsturWebs
 """
 
