@@ -14,20 +14,20 @@
 
 ## 👨‍💻 Autoría y Créditos
 
-**Enhanced Version by:** Pedro Luis Cuevas Villarrubia ([@AsturWebs](https://github.com/AsturWebs))  
-**Based on original work by:** [@linbanana](https://github.com/linbanana)  
-**Contact:** pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es  
+**Versión Mejorada por:** Pedro Luis Cuevas Villarrubia ([@AsturWebs](https://github.com/AsturWebs))  
+**Basado en el trabajo original de:** [@linbanana](https://github.com/linbanana)  
+**Contacto:** pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es  
 
-### Credits & Attribution
-- **Original Concept:** @linbanana - Basic Auto Memory Saver functionality
-- **Enhanced Version:** Pedro Luis Cuevas Villarrubia - Extended functionality with configurable options, interactive commands, caching, and documentation improvements
+### Créditos y Atribución
+- **Concepto Original:** @linbanana - Funcionalidad básica de Auto Memory Saver
+- **Versión Mejorada:** Pedro Luis Cuevas Villarrubia - Funcionalidad extendida con opciones configurables, comandos interactivos, caché y mejoras de documentación
 
-### Version History
-- **v1.0 (Original):** Basic memory saving functionality by @linbanana
-- **v2.0 (Enhanced):** Extended system with configuration options, interactive commands, and improved documentation
-- **v2.1.2 (Security & JSON Format):** Input validation, JSON format with pagination, and system improvements
-- **v2.1.0 (Memory Optimization):** Improved memory management with contextual relevance and optimized performance
-- **v2.2.0 (Security & Performance):** Thread safety, SQL injection prevention, input sanitization, and memory leak protection
+### Historial de Versiones
+- **v1.0 (Original):** Funcionalidad básica de guardado de memorias por @linbanana
+- **v2.0 (Mejorada):** Sistema extendido con opciones de configuración, comandos interactivos y documentación mejorada
+- **v2.1.2 (Seguridad y Formato JSON):** Validación de entrada, formato JSON con paginación y mejoras del sistema
+- **v2.1.0 (Optimización de Memoria):** Gestión de memoria mejorada con relevancia contextual y rendimiento optimizado
+- **v2.2.0 (Seguridad y Rendimiento):** Seguridad de hilos, prevención de inyección SQL, sanitización de entrada y protección contra fugas de memoria
 
 ---
 
