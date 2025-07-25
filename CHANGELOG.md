@@ -21,6 +21,7 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/lang/es/).
 - **Grok Familia Perfecta**: 100% compatibilidad en todas las variantes (Grok 4, Grok-3, Grok-3-fast, Grok-3-mini-fast)
 - **OpenAI Fragmentación**: GPT-4.1-mini excelente, versiones completas fallan consistentemente
 - **Google API Directa Bug**: Modelos Google/Gemini solo funcionan vía OpenRouter/APIs intermedias, API directa tiene bugs con slash commands
+- **OpenRouter Effect Discovered**: Testing demuestra que OpenRouter mejora dramáticamente compatibilidad (ChatGPT-4o, GPT-4.1: problemático → perfecto)
 - **Amazon Nova Fallo Total**: Toda la familia Nova no procesa comandos
 
 #### 🔧 **AI Behavior Control Implementado**

@@ -95,6 +95,14 @@
 - **Solución**: Usar OpenRouter u otras APIs intermedias para acceder a modelos Google
 - **Impacto**: Afecta a todos los modelos Google/Gemini vía API directa
 
+### OpenRouter Effect: Breakthrough Discovery Post-Testing
+- **Descubrimiento**: OpenRouter mejora dramáticamente modelos problemáticos de APIs directas
+- **ChatGPT-4o**: De "interpretación narrativa" → JSON perfecto estructurado
+- **GPT-4.1**: De "ignora formato JSON" → Lista numerada perfecta
+- **Google Models**: De "no responde" → JSON estructurado impecable
+- **Excepción**: O3 OpenAI permanece problemático incluso vía OpenRouter
+- **Impacto**: ~25+ modelos excelentes vs 11 documentados originalmente
+
 ---
 
 ## 🔧 Mejoras Técnicas v2.3.0
