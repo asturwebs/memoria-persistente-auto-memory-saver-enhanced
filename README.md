@@ -238,21 +238,6 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 - Validación de user_id y memory_id
 - Manejo seguro de errores sin exposición de datos
 
-## 🚀 Novedades v2.3.0
-
-### AI Behavior Control Universal
-- **Mind Hacking Eliminado**: Renombrado a "AI Behavior Control" por seguridad empresarial
-- **30 Modelos Testeados**: Documentación exhaustiva de compatibilidad sin precedentes
-- **Google/Gemini Liderazgo**: 5 de 11 modelos excelentes son de la familia Google
-- **Funcionalidad Universal**: Memoria automática funciona en TODOS los modelos IA
-- **Slash Commands Selectivos**: Solo 11 modelos soportan comandos JSON perfectos
-
-### Revelaciones del Testing
-- **Claude 4 Regresión**: Peor rendimiento que Claude 3.5 Sonnet para comandos sistema
-- **Grok Familia Perfecta**: Todos los variantes Grok funcionan impecablemente
-- **Amazon Nova Falla**: Toda la familia Nova no procesa comandos
-- **OpenAI Inconsistente**: Mini funciona, versiones completas fallan
-
 ## 📊 Novedades v2.2.0
 
 ### Mejoras de Seguridad y Rendimiento
@@ -268,6 +253,27 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 - Integración con comando nativo `/add_memory` de OpenWebUI
 - Mantiene compatibilidad con todas las versiones anteriores
 - Sin cambios breaking en la API
+
+## 🚀 Novedades v2.3.0
+
+### AI Behavior Control Universal
+- **Mind Hacking Eliminado**: Renombrado a "AI Behavior Control" por seguridad empresarial
+- **30 Modelos Testeados**: Documentación exhaustiva de compatibilidad sin precedentes
+- **Google/Gemini Liderazgo**: 5 de 11 modelos excelentes son de la familia Google
+- **Funcionalidad Universal**: Memoria automática funciona en TODOS los modelos IA
+- **Slash Commands Selectivos**: Solo 11 modelos soportan comandos JSON perfectos
+
+### Revelaciones del Testing
+- **Claude 4 Regresión**: Peor rendimiento que Claude 3.5 Sonnet para comandos sistema
+- **Grok Familia Perfecta**: Todos los variantes Grok funcionan impecablemente
+- **Amazon Nova Falla**: Toda la familia Nova no procesa comandos
+- **OpenAI Inconsistente**: Mini funciona, versiones completas fallan
+
+### Mejoras Técnicas
+- **Terminología Segura**: Eliminación de referencias "mind hacking" para entornos empresariales
+- **Documentación Exhaustiva**: README con compatibilidad de 30 modelos testeados
+- **Fix OpenAI Compatibility**: Movimiento de flags internos para evitar errores 400
+- **Enhanced Release Notes**: Documentación técnica completa del breakthrough
 
 ## 🤝 Contribución
 
