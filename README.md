@@ -25,10 +25,10 @@
 ### Historial de Versiones
 - **v1.0 (Original):** Funcionalidad básica de guardado de memorias por @linbanana
 - **v2.0 (Mejorada):** Sistema extendido con opciones de configuración, comandos interactivos y documentación mejorada
-- **v2.1.2 (Seguridad y Formato JSON):** Validación de entrada, formato JSON con paginación y mejoras del sistema
 - **v2.1.0 (Optimización de Memoria):** Gestión de memoria mejorada con relevancia contextual y rendimiento optimizado
+- **v2.1.2 (Seguridad y Formato JSON):** Validación de entrada, formato JSON con paginación y mejoras del sistema
 - **v2.2.0 (Seguridad y Rendimiento):** Seguridad de hilos, prevención de inyección SQL, sanitización de entrada y protección contra fugas de memoria
-- **v2.3.0 (AI Behavior Control):** Implementación de AI Behavior Control para consistencia entre modelos IA, documentación exhaustiva de compatibilidad con 30 modelos testeados
+- **v2.3.0 (AI Behavior Control Universal):** Testing histórico de 30 modelos IA, funcionalidad dual (memoria universal + slash commands selectivos), Google/Gemini liderazgo, terminología enterprise-safe
 
 ---
 
