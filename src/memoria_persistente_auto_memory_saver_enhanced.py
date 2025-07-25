@@ -1295,7 +1295,9 @@ class Filter:
         # FIX #12: Verificar si se procesó un comando en inlet() - NO guardar
         if body.get("_memory_command_processed", False):
             print("[FIX-12] 🛑 Comando detectado, saltando outlet() - NO GUARDAR")
-            logger.info("FIX #12: Comando ya procesado en inlet(), omitiendo guardado en outlet()")
+            logger.info(
+                "FIX #12: Comando ya procesado en inlet(), omitiendo guardado en outlet()"
+            )
             # Limpiar el flag antes de retornar
             body.pop("_memory_command_processed", None)
             return body
