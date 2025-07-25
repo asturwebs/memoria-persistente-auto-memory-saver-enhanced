@@ -222,7 +222,7 @@ class MemoryCache:
 
             entry = self._cache[key]
             current_time = datetime.now().timestamp()
-            
+
             if current_time > entry.expiry_time:
                 del self._cache[key]
                 return None
@@ -233,15 +233,14 @@ class MemoryCache:
         """Establece un valor en la caché con tiempo de expiración. Thread-safe."""
         with self._lock:
             current_time = datetime.now().timestamp()
-            
+
             # Limpiar entradas expiradas antes de añadir nueva
             expired_keys = [
-                k for k, v in self._cache.items() 
-                if current_time > v.expiry_time
+                k for k, v in self._cache.items() if current_time > v.expiry_time
             ]
             for expired_key in expired_keys:
                 del self._cache[expired_key]
-            
+
             # Si aún estamos al límite, eliminar la más antigua
             if len(self._cache) >= self.max_size:
                 # Eliminar la entrada más antigua (FIFO)
@@ -256,7 +255,7 @@ class MemoryCache:
         """Limpia toda la caché. Thread-safe."""
         with self._lock:
             self._cache.clear()
-    
+
     def size(self) -> int:
         """Retorna el tamaño actual del caché. Thread-safe."""
         with self._lock:
@@ -1130,7 +1129,7 @@ class Filter:
 
                                         # MARCAR QUE FUE UN COMANDO PARA EVITAR GUARDADO EN OUTLET
                                         body["_memory_command_processed"] = True
-                                        
+
                                         # RETORNAR INMEDIATAMENTE - NO CONTINUAR CON INYECCIÓN DE MEMORIAS
                                         print(
                                             f"[SLASH-COMMANDS] 🎯 Comando procesado, retornando respuesta"
@@ -1295,8 +1294,8 @@ class Filter:
 
         # FIX #12: Verificar si se procesó un comando en inlet() - NO guardar
         if body.get("_memory_command_processed", False):
-            if self.valves.debug_mode:
-                logger.debug("Comando ya procesado en inlet(), omitiendo guardado en outlet()")
+            print("[FIX-12] 🛑 Comando detectado, saltando outlet() - NO GUARDAR")
+            logger.info("FIX #12: Comando ya procesado en inlet(), omitiendo guardado en outlet()")
             # Limpiar el flag antes de retornar
             body.pop("_memory_command_processed", None)
             return body
@@ -1347,68 +1346,83 @@ class Filter:
 
             # PRODUCTION FIX: Guardar AMBOS - input usuario + response asistente (conversación completa)
             messages = body.get("messages", [])
-            
+
             # Obtener último mensaje del usuario (input)
             user_messages = [
-                m for m in messages 
-                if isinstance(m, dict) and m.get("role") == "user" and isinstance(m.get("content"), str)
+                m
+                for m in messages
+                if isinstance(m, dict)
+                and m.get("role") == "user"
+                and isinstance(m.get("content"), str)
             ]
-            
+
             # Obtener última respuesta del asistente (output)
             assistant_messages = [
-                m for m in messages
-                if isinstance(m, dict) and m.get("role") == "assistant" and isinstance(m.get("content"), str)
+                m
+                for m in messages
+                if isinstance(m, dict)
+                and m.get("role") == "assistant"
+                and isinstance(m.get("content"), str)
             ]
-            
+
             if not assistant_messages:
                 if self.valves.debug_mode:
-                    logger.debug("No se encontraron mensajes del asistente para guardar")
+                    logger.debug(
+                        "No se encontraron mensajes del asistente para guardar"
+                    )
                 return body
 
             # Construir conversación completa (User + Assistant)
             last_user_message = user_messages[-1] if user_messages else None
             last_assistant_message = assistant_messages[-1]
-            
+
             # Formatear como conversación completa
             if last_user_message:
                 user_content = last_user_message.get("content", "").strip()
                 assistant_content = last_assistant_message.get("content", "").strip()
-                
+
                 # PRODUCTION FIX: Seguridad adicional - NO guardar comandos técnicos como memoria
                 # NOTA: Este filtro es redundante con el flag pero se mantiene como safety net
-                if user_content.startswith('/'):
+                if user_content.startswith("/"):
                     if self.valves.debug_mode:
-                        logger.debug(f"Comando detectado como fallback, NO guardando: {user_content.split()[0].lower()}")
+                        logger.debug(
+                            f"Comando detectado como fallback, NO guardando: {user_content.split()[0].lower()}"
+                        )
                     return body
-                
+
                 # PRODUCTION FIX: NO guardar conversaciones sobre memoria (filtro inteligente)
                 import re
+
                 user_content_lower = user_content.lower()
-                
+
                 # Patrones que indican conversación sobre memoria/sistema
                 memory_conversation_patterns = [
-                    r'\b(mostrar|ver|enseñar|muestra|enséñame)\b.*\b(memoria|memorias)\b',
-                    r'\b(página|pagina|siguiente|anterior|más|mas)\b.*\b(memoria|memorias)\b',
-                    r'\b(cuántas|cuantas|cuántos|cuantos)\b.*\b(memoria|memorias)\b',
-                    r'\bmemoria\b.*\b(completa|entera|total|íntegra|integra)\b',
-                    r'\b(buscar|búsqueda|busca)\b.*\b(memoria|memorias)\b',
-                    r'\b(última|ultimo|reciente|nueva)\b.*\b(memoria|memorias)\b',
-                    r'\b(borrar|eliminar|delete)\b.*\b(memoria|memorias)\b',
-                    r'\bmás reciente\b',
-                    r'\bno está completa\b',
-                    r'\bfalta.*\b(parte|asistente|respuesta)\b',
-                    r'\bpuedes.*\b(mostrar|ver|enseñar)\b',
-                    r'\bquiero.*\b(ver|memoria|memorias)\b'
+                    r"\b(mostrar|ver|enseñar|muestra|enséñame)\b.*\b(memoria|memorias)\b",
+                    r"\b(página|pagina|siguiente|anterior|más|mas)\b.*\b(memoria|memorias)\b",
+                    r"\b(cuántas|cuantas|cuántos|cuantos)\b.*\b(memoria|memorias)\b",
+                    r"\bmemoria\b.*\b(completa|entera|total|íntegra|integra)\b",
+                    r"\b(buscar|búsqueda|busca)\b.*\b(memoria|memorias)\b",
+                    r"\b(última|ultimo|reciente|nueva)\b.*\b(memoria|memorias)\b",
+                    r"\b(borrar|eliminar|delete)\b.*\b(memoria|memorias)\b",
+                    r"\bmás reciente\b",
+                    r"\bno está completa\b",
+                    r"\bfalta.*\b(parte|asistente|respuesta)\b",
+                    r"\bpuedes.*\b(mostrar|ver|enseñar)\b",
+                    r"\bquiero.*\b(ver|memoria|memorias)\b",
                 ]
-                
+
                 for pattern in memory_conversation_patterns:
                     if re.search(pattern, user_content_lower):
                         if self.valves.debug_mode:
-                            logger.debug(f"Conversación sobre memoria detectada, NO guardando: {pattern}")
+                            logger.debug(
+                                f"Conversación sobre memoria detectada, NO guardando: {pattern}"
+                            )
                         return body
-                
+
                 # Formato conversacional
-                message_content = f"Usuario: {user_content}\n\nAsistente: {assistant_content}"
+                message_content = (
+                    f"Usuario: {user_content}\n\nAsistente: {assistant_content}"
+                )
             else:
                 # Fallback: solo respuesta del asistente
                 message_content = last_assistant_message.get("content", "").strip()
@@ -1518,27 +1532,30 @@ class Filter:
             if not command or not isinstance(command, str):
                 logger.warning(f"[SECURITY] Comando inválido: {type(command)}")
                 return None
-                
+
             # Sanitizar comando: limitar longitud y caracteres peligrosos
             import re
+
             sanitized_command = command.strip()[:1000]  # Máximo 1000 caracteres
-            
+
             # Detectar y bloquear patrones peligrosos
             dangerous_patterns = [
-                r'[;<>&|`$]',  # Caracteres de shell injection
-                r'\.\./',      # Path traversal
-                r'rm\s+',      # Comandos destructivos
-                r'del\s+',     # Comandos destructivos Windows  
-                r'DROP\s+',    # SQL destructivo
-                r'DELETE\s+',  # SQL destructivo
-                r'<script',    # XSS básico
+                r"[;<>&|`$]",  # Caracteres de shell injection
+                r"\.\./",  # Path traversal
+                r"rm\s+",  # Comandos destructivos
+                r"del\s+",  # Comandos destructivos Windows
+                r"DROP\s+",  # SQL destructivo
+                r"DELETE\s+",  # SQL destructivo
+                r"<script",  # XSS básico
             ]
-            
+
             for pattern in dangerous_patterns:
                 if re.search(pattern, sanitized_command, re.IGNORECASE):
-                    logger.error(f"[SECURITY] Patrón peligroso detectado en comando: {pattern}")
+                    logger.error(
+                        f"[SECURITY] Patrón peligroso detectado en comando: {pattern}"
+                    )
                     return "❌ Comando bloqueado por seguridad"
-            
+
             # Dividir comando y argumentos
             parts = sanitized_command.split()
             cmd = parts[0].lower()
@@ -2846,11 +2863,14 @@ class Filter:
 
     # ✅ 查詢 raw 記憶 | Consultar memoria en bruto
     async def get_raw_existing_memories(
-        self, user_id: str, order_by: str = "created_at DESC", limit: Optional[int] = None
+        self,
+        user_id: str,
+        order_by: str = "created_at DESC",
+        limit: Optional[int] = None,
     ) -> List[Any]:
         """
         Obtiene las memorias sin procesar de un usuario, ordenadas por fecha.
-        
+
         PRODUCTION FIX: Añadido límite para prevenir memory leaks en usuarios con miles de memorias.
         SECURITY FIX: Validación anti-SQL injection en order_by.
 
@@ -2867,29 +2887,35 @@ class Filter:
             if not user_id or not isinstance(user_id, str) or len(user_id.strip()) == 0:
                 logger.error(f"[SECURITY] user_id inválido: {user_id}")
                 raise ValueError("user_id inválido o vacío")
-            
+
             # Sanitizar user_id: solo permitir caracteres alfanuméricos, guiones y puntos
             import re
-            sanitized_user_id = re.sub(r'[^a-zA-Z0-9\-_.]', '', str(user_id).strip())
+
+            sanitized_user_id = re.sub(r"[^a-zA-Z0-9\-_.]", "", str(user_id).strip())
             if sanitized_user_id != str(user_id).strip():
-                logger.warning(f"[SECURITY] user_id sanitizado: {user_id} -> {sanitized_user_id}")
+                logger.warning(
+                    f"[SECURITY] user_id sanitizado: {user_id} -> {sanitized_user_id}"
+                )
                 user_id = sanitized_user_id
-            
+
             # SECURITY FIX: Validar order_by para prevenir SQL injection
             ALLOWED_ORDER_BY = {
-                "created_at DESC", "created_at ASC", 
-                "updated_at DESC", "updated_at ASC",
-                "id DESC", "id ASC"
+                "created_at DESC",
+                "created_at ASC",
+                "updated_at DESC",
+                "updated_at ASC",
+                "id DESC",
+                "id ASC",
             }
-            
+
             if order_by not in ALLOWED_ORDER_BY:
                 logger.warning(f"[SECURITY] order_by inválido bloqueado: {order_by}")
                 order_by = "created_at DESC"  # Fallback seguro
                 print(f"[SECURITY] ⚠️ order_by inválido, usando fallback seguro")
-            
+
             # Determinar límite efectivo
             effective_limit = limit or self.valves.max_memories_per_user or 100
-            
+
             print(
                 f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {effective_limit} memorias para usuario {user_id} con orden: {order_by}"
             )
@@ -2934,18 +2960,27 @@ class Filter:
                     try:
                         # Ordenar por created_at DESC (más recientes primero)
                         existing_memories.sort(
-                            key=lambda x: getattr(x, 'created_at', ''), 
-                            reverse=True
+                            key=lambda x: getattr(x, "created_at", ""), reverse=True
                         )
-                        print(f"[MEMORIA-DEBUG] ⚠️ Ordenación manual en memoria realizada")
-                        logger.warning(f"[MEMORIA-DEBUG] ⚠️ Ordenación manual en memoria (costosa)")
+                        print(
+                            f"[MEMORIA-DEBUG] ⚠️ Ordenación manual en memoria realizada"
+                        )
+                        logger.warning(
+                            f"[MEMORIA-DEBUG] ⚠️ Ordenación manual en memoria (costosa)"
+                        )
                     except Exception as sort_error:
-                        logger.warning(f"Error al ordenar memorias en memoria: {sort_error}")
-                
+                        logger.warning(
+                            f"Error al ordenar memorias en memoria: {sort_error}"
+                        )
+
                 # Aplicar límite (paginar)
                 existing_memories = existing_memories[:effective_limit]
-                print(f"[MEMORIA-DEBUG] 🔒 Limitado a {effective_limit} memorias (memory leak prevention)")
-                logger.info(f"[MEMORIA-DEBUG] 🔒 Memory leak prevention: limitado a {effective_limit}")
+                print(
+                    f"[MEMORIA-DEBUG] 🔒 Limitado a {effective_limit} memorias (memory leak prevention)"
+                )
+                logger.info(
+                    f"[MEMORIA-DEBUG] 🔒 Memory leak prevention: limitado a {effective_limit}"
+                )
 
             print(
                 f"[MEMORIA-DEBUG] 📊 Total memorias devueltas: {len(existing_memories or [])}"
