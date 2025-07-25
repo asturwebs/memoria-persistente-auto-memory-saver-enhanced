@@ -9,7 +9,7 @@ conversaciones relevantes, mejorando la memoria contextual de los modelos de IA.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub: https://github.com/AsturWebs/auto-memory-saver-enhanced
-Versión: 2.2.0 Production Security
+Versión: 2.3.0 AI Mind Hacking
 Licencia: MIT
 
 Características principales:
