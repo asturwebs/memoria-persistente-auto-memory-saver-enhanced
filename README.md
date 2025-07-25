@@ -28,18 +28,18 @@
 - **v2.1.2 (Seguridad y Formato JSON):** Validación de entrada, formato JSON con paginación y mejoras del sistema
 - **v2.1.0 (Optimización de Memoria):** Gestión de memoria mejorada con relevancia contextual y rendimiento optimizado
 - **v2.2.0 (Seguridad y Rendimiento):** Seguridad de hilos, prevención de inyección SQL, sanitización de entrada y protección contra fugas de memoria
-- **v2.3.0 (AI Behavior Control):** Implementación de mind hacking para consistencia entre modelos IA, documentación de compatibilidad
+- **v2.3.0 (AI Behavior Control):** Implementación de AI Behavior Control para consistencia entre modelos IA, documentación exhaustiva de compatibilidad con 30 modelos testeados
 
 ---
 
 ## 📋 Descripción
 
-Filtro para OpenWebUI que gestiona automáticamente las memorias de conversaciones. Inyecta memorias previas relevantes y guarda automáticamente las respuestas del asistente como memorias para uso futuro.
+Filtro para OpenWebUI que gestiona automáticamente las memorias de conversaciones. Inyecta memorias previas relevantes y guarda automáticamente tanto las preguntas del usuario como las respuestas del asistente como memorias para uso futuro.
 
 ## 🚀 Características Principales
 
 - **Inyección de Memorias**: Inyecta memorias relevantes al contexto de la conversación actual
-- **Guardado Automático**: Almacena las respuestas del asistente como memorias
+- **Guardado Automático**: Almacena las preguntas del usuario y respuestas del asistente como memorias
 - **Comandos Interactivos**: Comandos para gestión de memorias (`/memories`, `/memory_search`, etc.)
 - **Configuración Flexible**: Múltiples opciones configurables según necesidades
 - **Sistema de Caché**: Optimización de rendimiento con caché y expiración
@@ -219,7 +219,7 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 
 ### Funcionamiento
 1. **inlet()**: Inyecta memorias relevantes al inicio de conversaciones
-2. **outlet()**: Guarda respuestas del asistente como memorias
+2. **outlet()**: Guarda preguntas del usuario y respuestas del asistente como memorias
 3. **Comandos**: Procesamiento de comandos interactivos de gestión
 
 ## 🔒 Seguridad
@@ -238,6 +238,21 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 - Validación de user_id y memory_id
 - Manejo seguro de errores sin exposición de datos
 
+## 🚀 Novedades v2.3.0
+
+### AI Behavior Control Universal
+- **Mind Hacking Eliminado**: Renombrado a "AI Behavior Control" por seguridad empresarial
+- **30 Modelos Testeados**: Documentación exhaustiva de compatibilidad sin precedentes
+- **Google/Gemini Liderazgo**: 5 de 11 modelos excelentes son de la familia Google
+- **Funcionalidad Universal**: Memoria automática funciona en TODOS los modelos IA
+- **Slash Commands Selectivos**: Solo 11 modelos soportan comandos JSON perfectos
+
+### Revelaciones del Testing
+- **Claude 4 Regresión**: Peor rendimiento que Claude 3.5 Sonnet para comandos sistema
+- **Grok Familia Perfecta**: Todos los variantes Grok funcionan impecablemente
+- **Amazon Nova Falla**: Toda la familia Nova no procesa comandos
+- **OpenAI Inconsistente**: Mini funciona, versiones completas fallan
+
 ## 📊 Novedades v2.2.0
 
 ### Mejoras de Seguridad y Rendimiento
@@ -245,7 +260,7 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 - **Memory Leak Prevention**: Límites automáticos en consultas
 - **SQL Injection Protection**: Whitelisting de parámetros
 - **Input Sanitization**: Filtrado inteligente de comandos
-- **Conversación Completa**: Guarda input del usuario + output de IA
+- **Conversación Completa**: Guarda preguntas del usuario + respuestas del asistente
 - **Filtro Anti-Meta**: No guarda conversaciones sobre memoria
 - **Paginación Mejorada**: 10 memorias por página (antes 4)
 
