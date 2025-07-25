@@ -1128,7 +1128,7 @@ class Filter:
                                             )
 
                                         # MARCAR QUE FUE UN COMANDO PARA EVITAR GUARDADO EN OUTLET
-                                        body["_memory_command_processed"] = True
+                                        self._command_processed_in_inlet = True
 
                                         # RETORNAR INMEDIATAMENTE - NO CONTINUAR CON INYECCIÓN DE MEMORIAS
                                         print(
@@ -1293,13 +1293,13 @@ class Filter:
             return body
 
         # FIX #12: Verificar si se procesó un comando en inlet() - NO guardar
-        if body.get("_memory_command_processed", False):
+        if getattr(self, '_command_processed_in_inlet', False):
             print("[FIX-12] 🛑 Comando detectado, saltando outlet() - NO GUARDAR")
             logger.info(
                 "FIX #12: Comando ya procesado en inlet(), omitiendo guardado en outlet()"
             )
             # Limpiar el flag antes de retornar
-            body.pop("_memory_command_processed", None)
+            self._command_processed_in_inlet = False
             return body
 
         if not self.valves.enabled or not self.valves.auto_save_responses:
