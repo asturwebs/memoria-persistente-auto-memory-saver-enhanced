@@ -5,6 +5,12 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere al [Versionado Semántico](https://semver.org/lang/es/).
 
+## [2.1.2] - 2025-07-25
+
+### 🔄 Cambios de Marca
+- **Nuevo Nombre del Proyecto**: Cambiado a "Memoria Persistente (Auto Memory Saver Enhanced)" para mejor claridad y posicionamiento
+- Actualizada documentación para reflejar el nuevo nombre
+
 ## [2.1.2] - 2025-07-24
 
 ### 🚀 Mejoras Enterprise - Seguridad y Formato JSON Avanzado

@@ -1,6 +1,6 @@
 # Guía de Contribución
 
-¡Gracias por tu interés en contribuir al Auto Memory Saver Enhanced! 🚀
+¡Gracias por tu interés en contribuir a Memoria Persistente (Auto Memory Saver Enhanced)! 🚀
 
 ## 🤝 Cómo Contribuir
 

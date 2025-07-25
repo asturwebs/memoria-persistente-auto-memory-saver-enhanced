@@ -1,4 +1,4 @@
-# 🏗️ Auto Memory Saver Enhanced - Arquitectura y Magnitud del Proyecto
+# 🏗️ Memoria Persistente (Auto Memory Saver Enhanced) - Arquitectura y Magnitud del Proyecto
 
 ## 📋 Resumen Ejecutivo
 

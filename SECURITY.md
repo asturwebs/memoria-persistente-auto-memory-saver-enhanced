@@ -1,4 +1,4 @@
-# Política de Seguridad
+# Política de Seguridad - Memoria Persistente (Auto Memory Saver Enhanced)
 
 ## 🔒 Versiones Soportadas
 

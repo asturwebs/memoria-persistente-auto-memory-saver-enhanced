@@ -1,3 +1,34 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Memoria Persistente (Auto Memory Saver Enhanced)
+==============================================
+
+Una potente extensión para OpenWebUI que permite guardar y recuperar automáticamente
+conversaciones relevantes, mejorando la memoria contextual de los modelos de IA.
+
+Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
+GitHub: https://github.com/AsturWebs/auto-memory-saver-enhanced
+Versión: 2.1.2 Enterprise
+Licencia: MIT
+
+Características principales:
+- Guardado automático de conversaciones relevantes
+- Búsqueda semántica de memorias
+- Integración con OpenWebUI
+- Compatible con múltiples modelos de IA
+- Interfaz de usuario intuitiva
+- Seguridad y privacidad mejoradas
+
+Para soporte o colaboraciones, contacta con:
+- Email: asturwebs@gmail.com
+- GitHub: @AsturWebs
+"""
+
+__author__ = "AsturWebs"
+__version__ = "2.1.2"
+__license__ = "MIT"
+
 # Configuración de logging
 import logging
 
