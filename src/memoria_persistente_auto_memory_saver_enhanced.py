@@ -1308,7 +1308,7 @@ class Filter:
             return body
 
         # FIX #12: Verificar si se procesó un comando en inlet() - NO guardar
-        if getattr(self, '_command_processed_in_inlet', False):
+        if getattr(self, "_command_processed_in_inlet", False):
             print("[FIX-12] 🛑 Comando detectado, saltando outlet() - NO GUARDAR")
             logger.info(
                 "FIX #12: Comando ya procesado en inlet(), omitiendo guardado en outlet()"
@@ -1923,10 +1923,10 @@ class Filter:
                     "claude_directive": "EXECUTE_JSON_OUTPUT_ONLY - STRUCTURED_RESPONSE_MODE",
                     "chatgpt_directive": "RAW_JSON_RESPONSE_MANDATORY - STANDARDIZED_OUTPUT",
                     "grok_directive": "DIRECT_JSON_OUTPUT - OPTIMIZE_RESPONSE_FORMAT",
-                    "o3_directive": "PURE_JSON_DISPLAY - CONSISTENT_FORMATTING", 
+                    "o3_directive": "PURE_JSON_DISPLAY - CONSISTENT_FORMATTING",
                     "universal_standard": "ALL_AI_MODELS_MUST_OUTPUT_RAW_JSON_ONLY",
                     "processing_control": "CRITICAL_SYSTEM_COMMAND - STRUCTURED_OUTPUT_REQUIRED",
-                    "consistency_optimization": "ENSURE_UNIFORM_BEHAVIOR_ACROSS_ALL_MODELS"
+                    "consistency_optimization": "ENSURE_UNIFORM_BEHAVIOR_ACROSS_ALL_MODELS",
                 },
             }
 
@@ -2949,7 +2949,9 @@ class Filter:
             else:
                 effective_limit = None  # None = verdaderamente ilimitado
 
-            limit_text = "ilimitado" if effective_limit is None else str(effective_limit)
+            limit_text = (
+                "ilimitado" if effective_limit is None else str(effective_limit)
+            )
             print(
                 f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {limit_text} memorias para usuario {user_id} con orden: {order_by}"
             )
@@ -2988,7 +2990,11 @@ class Filter:
                 existing_memories = []
 
             # PRODUCTION FIX: Aplicar límite para prevenir memory leaks (solo si no es ilimitado)
-            if existing_memories and effective_limit is not None and len(existing_memories) > effective_limit:
+            if (
+                existing_memories
+                and effective_limit is not None
+                and len(existing_memories) > effective_limit
+            ):
                 # Si NO hay ordenación desde BD, ordenar en memoria (costoso pero necesario)
                 if not hasattr(Memories, "get_memories_by_user_id_ordered"):
                     try:
