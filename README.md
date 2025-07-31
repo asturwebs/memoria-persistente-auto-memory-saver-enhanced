@@ -255,7 +255,7 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 
 ## 🔒 Seguridad
 
-### Características de Seguridad v2.2.0
+### Características de Seguridad
 - **Thread Safety**: Cache thread-safe con RLock
 - **SQL Injection Prevention**: Validación de parámetros order_by
 - **Input Sanitization**: Filtrado de comandos peligrosos
@@ -268,8 +268,6 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 - Prevención de caracteres peligrosos (`;`, `&`, `|`, etc.)
 - Validación de user_id y memory_id
 - Manejo seguro de errores sin exposición de datos
-
-## 🚀 Novedades v2.3.0
 
 ### AI Behavior Control Universal
 - **Mind Hacking Eliminado**: Renombrado a "AI Behavior Control" por seguridad empresarial
@@ -289,8 +287,6 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 - **Documentación Exhaustiva**: README con compatibilidad de 30 modelos testeados
 - **Fix OpenAI Compatibility**: Movimiento de flags internos para evitar errores 400
 - **Enhanced Release Notes**: Documentación técnica completa del breakthrough
-
-## 📊 Novedades v2.2.0
 
 ### Mejoras de Seguridad y Rendimiento
 - **Thread Safety**: Cache concurrente seguro
