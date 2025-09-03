@@ -1,50 +1,95 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Memoria Persistente (Auto Memory Saver Enhanced) v2.3.0
-======================================================
+Auto Memory Saver Enhanced (Persistent Memory) v2.3.0
+=====================================================
 
-🚀 BREAKTHROUGH HISTÓRICO: AI Behavior Control Universal + 30 Modelos Testeados
-
-Una potente extensión para OpenWebUI con el testing de compatibilidad más exhaustivo
-jamás realizado (30 modelos IA evaluados). Memoria persistente automática funciona
-universalmente, slash commands perfectos en 11 modelos excelentes.
+🚀 HISTORICAL BREAKTHROUGH: Universal AI Behavior Control + 30 Models Tested
+A powerful extension for OpenWebUI with the most exhaustive compatibility testing
+ever performed (30 AI models evaluated). Persistent automatic memory works
+universally, and slash commands work perfectly on 11 excellent models.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub: https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
-Versión: 2.3.0 - AI Behavior Control Universal
-Licencia: MIT
-Basado en: @linbanana Auto Memory Saver original
+Version: 2.3.0 - AI Behavior Control Universal
+License: MIT
+Based on: @linbanana Auto Memory Saver original
 
-🎯 FUNCIONALIDAD DUAL v2.3.0:
-✅ Memoria Persistente Automática: FUNCIONA EN TODOS LOS 30 MODELOS TESTEADOS
-✅ Slash Commands JSON: Funciona perfectamente en 11 modelos excelentes
+Modification (linbanana):
+- Documentation updated to bilingual (EN first, then ZH).
+- No code logic changes, behavior preserved for Open-WebUI compatibility.
 
-🏆 MODELOS EXCELENTES (JSON perfecto):
-- Claude 3.5 Sonnet (líder), Grok familia (4 variantes), Gemini familia (3 variantes)
-- GPT-4.1-mini, Gemma familia (2 variantes) - Google/Gemini dominan con 5/11
+🎯 DUAL FUNCTIONALITY v2.3.0:
+✅ Automatic Persistent Memory: WORKS ON ALL 30 TESTED MODELS  
+✅ JSON Slash Commands: Works perfectly on 11 excellent models  
+
+🏆 EXCELLENT MODELS (perfect JSON):
+- Claude 3.5 Sonnet (leader), Grok family (4 variants), Gemini family (3 variants)  
+- GPT-4.1-mini, Gemma family (2 variants) – Google/Gemini dominate with 5/11  
 
 🔧 AI BEHAVIOR CONTROL:
-- Sistema de directivas para consistencia entre modelos
-- Terminología enterprise-safe (eliminado "mind hacking")
-- Fix crítico OpenAI (error 400 resuelto)
-- Thread safety + SQL injection prevention
+- Directive system for consistency across models  
+- Enterprise-safe terminology (removed “mind hacking”)  
+- Critical OpenAI fix (400 error resolved)  
+- Thread safety + SQL injection prevention  
 
-📊 REVELACIONES TÉCNICAS:
-- Claude 4 regresión vs Claude 3.5 Sonnet
-- Amazon Nova familia falla completamente
-- OpenAI fragmentación: mini > full variants
+📊 TECHNICAL FINDINGS:
+- Claude 4 regression vs Claude 3.5 Sonnet  
+- Amazon Nova family completely fails  
+- OpenAI fragmentation: mini > full variants  
 
-Para soporte o colaboraciones:
-- Email: pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es
+For support or collaborations:
+- Email: pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es  
+- GitHub: @AsturWebs
+
+
+中文說明（摘要）
+================
+
+🚀 歷史性突破：通用 AI 行為控制 + 測試 30 種模型  
+這是一個強大的 OpenWebUI 擴充，經過迄今最完整的相容性測試（30 個 AI 模型）。  
+自動持久記憶可在所有模型上運作，Slash 指令在 11 個優秀模型中表現完美。  
+
+作者：Pedro Luis Cuevas Villarrubia - AsturWebs  
+GitHub：https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced  
+版本：2.3.0 - 通用 AI 行為控制  
+授權：MIT  
+基於：@linbanana Auto Memory Saver 原始版  
+
+linbanana 修改：  
+- 文件翻譯為雙語（英文優先，中文附註）。  
+- 程式邏輯未改動，保持與 Open-WebUI 相容。  
+
+🎯 雙重功能 v2.3.0：  
+✅ 自動持久記憶：在所有 30 個測試模型中可用  
+✅ JSON 格式 Slash 指令：在 11 個優秀模型中完美運作  
+
+🏆 優秀模型（JSON 完美）：  
+- Claude 3.5 Sonnet（領先）、Grok 系列（4 個變體）、Gemini 系列（3 個變體）  
+- GPT-4.1-mini、Gemma 系列（2 個變體）– Google/Gemini 系列佔 5/11  
+
+🔧 AI 行為控制：  
+- 跨模型一致性的指令系統  
+- 企業安全術語（移除了 “mind hacking”）  
+- OpenAI 關鍵修正（解決 400 錯誤）  
+- 執行緒安全 + SQL 注入防護  
+
+📊 技術發現：  
+- Claude 4 對比 Claude 3.5 Sonnet 出現回退  
+- Amazon Nova 系列完全失敗  
+- OpenAI 模型分裂：mini > full 版本  
+
+支援或合作聯繫：  
+- Email: pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es  
 - GitHub: @AsturWebs
 """
+
 
 __author__ = "AsturWebs"
 __version__ = "2.3.0"
 __license__ = "MIT"
 
-# Configuración de logging
+# Logging configuration
 import logging
 
 logging.basicConfig(
@@ -54,20 +99,20 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Importaciones estándar
+# Standard imports
 from dataclasses import dataclass, field
 from functools import lru_cache
 from typing import Optional, List, Any, Dict, TypedDict, Union, Callable, Awaitable
 from datetime import datetime
 import threading
 
-# Importaciones con manejo de dependencias
+# Imports with dependency handling | 進行依賴項處理的匯入
 try:
     from fastapi.requests import Request
     from fastapi import HTTPException, Depends
     from pydantic import BaseModel, Field, validate_arguments
 
-    # Importaciones específicas de OpenWebUI
+    # OpenWebUI-specific imports
     try:
         from open_webui.routers.users import Users
         from open_webui.routers.memories import (
@@ -77,9 +122,9 @@ try:
             MemoryModel,
         )
     except ImportError as e:
-        logger.error(f"Error al importar dependencias de OpenWebUI: {e}")
+        logger.error(f"Error importing OpenWebUI dependencies: {e}")
 
-        # Definir clases base mínimas para evitar errores en tiempo de importación
+        # Define minimal base classes to avoid import-time errors | 定義最小基類以避免匯入時錯誤
         class Users:  # type: ignore[no-redef]
             @staticmethod
             def get_user_by_id(user_id: str) -> Dict[str, str]:
@@ -95,39 +140,39 @@ try:
 
             @staticmethod
             def get_memories_by_user_id(user_id: str) -> list:
-                # MEJORA BYTIA: Fallback con datos de prueba para testing de ordenación
+                # BYTIA IMPROVEMENT: Fallback with test data for sorting testing | BYTIA 改進：使用測試數據作為排序測試的回退
                 from datetime import datetime, timedelta
 
-                # Crear memorias de prueba con fechas diferentes para testear ordenación
+                # Create test memories with different dates to test sorting | 建立不同日期的測試記憶以測試排序
                 test_memories = []
                 base_date = datetime.now()
 
-                # Simular memorias con diferentes fechas (más antigua a más reciente)
+                # Simulate memories with different dates (oldest to newest) | 模擬不同日期的記憶（從最舊到最新）
                 test_data = [
                     {
                         "id": "mem_001",
-                        "content": "Memoria más antigua - hace 5 días",
+                        "content": "Oldest memory - 5 days ago",
                         "days_ago": 5,
                     },
                     {
                         "id": "mem_002",
-                        "content": "Memoria intermedia - hace 3 días",
+                        "content": "Intermediate memory - 3 days ago",
                         "days_ago": 3,
                     },
                     {
                         "id": "mem_003",
-                        "content": "Memoria reciente - hace 1 día",
+                        "content": "Recent memory - 1 day ago",
                         "days_ago": 1,
                     },
                     {
                         "id": "mem_004",
-                        "content": "Memoria más reciente - hace 2 horas",
+                        "content": "Most recent memory - 2 hours ago",
                         "days_ago": 0,
                     },
                 ]
 
                 for data in test_data:
-                    # Crear objeto simulado con estructura similar a MemoryModel
+                    # Create simulated object with structure similar to MemoryModel | 建立類似 MemoryModel 結構的模擬物件
                     class TestMemory:
                         def __init__(self, id, content, created_at):
                             self.id = id
@@ -137,7 +182,7 @@ try:
                         def __str__(self):
                             return f"TestMemory(id={self.id}, content='{self.content[:30]}...', created_at={self.created_at})"
 
-                    # Calcular fecha de creación
+                    # Calculate creation date | 計算建立日期
                     from typing import cast
 
                     days_ago = cast(int, data["days_ago"])  # Cast explícito para MyPy
@@ -155,13 +200,13 @@ try:
                     )
 
                 print(
-                    f"[MEMORIA-DEBUG] 🧪 Fallback devolviendo {len(test_memories)} memorias de prueba"
+                    f"[MEMORY-DEBUG] 🧪 Fallback returning {len(test_memories)} test memories"
                 )
                 logger.info(
-                    f"[MEMORIA-DEBUG] 🧪 Fallback devolviendo {len(test_memories)} memorias de prueba"
+                    f"[MEMORY-DEBUG] 🧪 Fallback returning {len(test_memories)} test memories"
                 )
 
-                # Devolver en orden de BD (normalmente por ID = más antiguas primero)
+                # Return in DB order (normally by ID = oldest first) | 按資料庫順序返回（通常按 ID = 最舊的在前）
                 return test_memories
 
         def add_memory(*args, **kwargs):
@@ -172,24 +217,24 @@ try:
                 self.content = content
 
         logger.warning(
-            "Usando implementaciones mínimas para las dependencias de OpenWebUI"
+            "Using minimal shim implementations for OpenWebUI dependencies"
         )
 
 except ImportError as e:
-    logger.critical(f"Error crítico al importar dependencias principales: {e}")
+    logger.critical(f"Critical error importing core dependencies: {e}")
     raise
 
 
-# Tipos personalizados para mejorar el tipado
+# Custom types to improve typing | 自定義類型以改進類型註解
 class UserData(TypedDict, total=False):
-    """Estructura de datos para la información del usuario."""
+    """Data structure for user information. | 使用者資訊的資料結構"""
 
     id: str
     valves: Optional[Dict[str, Any]]
 
 
 class MessageDict(TypedDict):
-    """Estructura para los mensajes en la conversación."""
+    """Structure for messages in the conversation. | 對話中訊息的結構"""
 
     role: str
     content: str
@@ -198,30 +243,30 @@ class MessageDict(TypedDict):
 EventEmitter = Callable[[Dict[str, Any]], Awaitable[None]]
 
 
-# Constantes para mensajes y configuraciones
+# Constants for messages and configuration
 class Constants:
-    MEMORY_PREFIX = "📘 Memoria previa:\n"
-    NO_MEMORIES_MSG = "(no se encontraron memorias)"
-    MEMORY_SAVE_ERROR = "❌ Error al guardar la memoria"
-    MEMORY_RETRIEVE_ERROR = "❌ Error al recuperar las memorias"
-    MEMORY_SAVED_MSG = "Memoria guardada correctamente"
-    MEMORY_DELETED_MSG = "Memorias eliminadas correctamente"
+    MEMORY_PREFIX = "📘 Prior Memory:\n"
+    NO_MEMORIES_MSG = "(no memories found)"
+    MEMORY_SAVE_ERROR = "❌ Error while saving memory"
+    MEMORY_RETRIEVE_ERROR = "❌ Error while retrieving memories"
+    MEMORY_SAVED_MSG = "Memory saved successfully"
+    MEMORY_DELETED_MSG = "Memories deleted successfully"
 
-    # Configuración de caché
-    CACHE_MAXSIZE = 128  # Número máximo de entradas en caché
-    CACHE_TTL = 3600  # Tiempo de vida de la caché en segundos (1 hora)
+    # Cache configuration
+    CACHE_MAXSIZE = 128  # maximum number of cache entries
+    CACHE_TTL = 3600     # time-to-live in seconds (1 hour)
 
 
 @dataclass
 class CacheEntry:
-    """Estructura para las entradas de caché con tiempo de expiración."""
+    """Structure for cache entries with expiration time. | 帶有過期時間的快取條目結構"""
 
     data: Any
     expiry_time: float
 
 
 class MemoryCache:
-    """Caché thread-safe con expiración para almacenar en memoria."""
+    """Thread-safe cache with expiration for memory storage. | 執行緒安全的記憶體儲存快取（支援過期時間）"""
 
     def __init__(self, max_size: int = 100, ttl: int = 3600):
         self._cache: Dict[str, CacheEntry] = {}
@@ -230,7 +275,7 @@ class MemoryCache:
         self._lock = threading.RLock()  # ReentrantLock para thread safety
 
     def get(self, key: str) -> Any:
-        """Obtiene un valor de la caché si existe y no ha expirado. Thread-safe."""
+        """Gets a value from cache if it exists and hasn't expired. Thread-safe. | 從快取中取得值（如果存在且未過期）。執行緒安全。"""
         with self._lock:
             if key not in self._cache:
                 return None
@@ -245,20 +290,20 @@ class MemoryCache:
             return entry.data
 
     def set(self, key: str, value: Any) -> None:
-        """Establece un valor en la caché con tiempo de expiración. Thread-safe."""
+        """Sets a value in cache with expiration time. Thread-safe. | 在快取中設定帶有過期時間的值。執行緒安全。"""
         with self._lock:
             current_time = datetime.now().timestamp()
 
-            # Limpiar entradas expiradas antes de añadir nueva
+            # Clean expired entries before adding new one | 在新增新條目前清理過期的條目
             expired_keys = [
                 k for k, v in self._cache.items() if current_time > v.expiry_time
             ]
             for expired_key in expired_keys:
                 del self._cache[expired_key]
 
-            # Si aún estamos al límite, eliminar la más antigua
+            # If still at limit, remove the oldest one | 如果仍達到限制，移除最舊的條目
             if len(self._cache) >= self.max_size:
-                # Eliminar la entrada más antigua (FIFO)
+                # Remove oldest entry (FIFO) | 移除最舊的條目（先進先出）
                 oldest_key = next(iter(self._cache))
                 del self._cache[oldest_key]
 
@@ -267,234 +312,243 @@ class MemoryCache:
             )
 
     def clear(self) -> None:
-        """Limpia toda la caché. Thread-safe."""
+        """Clears all cache. Thread-safe. | 清除所有快取。執行緒安全。"""
         with self._lock:
             self._cache.clear()
 
     def size(self) -> int:
-        """Retorna el tamaño actual del caché. Thread-safe."""
+        """Returns current cache size. Thread-safe. | 返回當前快取大小。執行緒安全。"""
         with self._lock:
             return len(self._cache)
 
 
 class Filter:
     """
-    Clase principal que maneja el filtrado y gestión de memorias en conversaciones.
-    Permite inyectar memorias previas en nuevas conversaciones y guardar automáticamente
-    las respuestas del asistente como memorias.
+    Main class that handles filtering and memory management in conversations.
+    Allows injecting previous memories into new conversations and automatically saving
+    assistant responses as memories.
+    
+    主要類別，負責處理對話中的過濾和記憶管理。
+    允許將先前的記憶注入新對話中，並自動保存助理回應作為記憶。
     """
 
     class Valves(BaseModel):
         """
-        Configuración de válvulas principales que controlan el comportamiento del filtro.
+        Main valve configuration that controls filter behavior.
+        
+        主要閥門配置，控制過濾器行為。
         """
 
-        # Configuración principal
+        # Main configuration | 主要配置
         enabled: bool = Field(
             default=True,
-            description="Habilita/deshabilita el guardado automático de memorias",
+            description="Enables/disables automatic memory saving | 啟用/停用自動記憶儲存",
         )
 
-        # Configuración de inyección de memorias
+        # Memory injection configuration | 記憶注入配置
         inject_memories: bool = Field(
             default=True,
-            description="Inyecta memorias previas en nuevas conversaciones",
+            description="Injects previous memories into new conversations | 將先前記憶注入新對話",
         )
 
         max_memories_to_inject: int = Field(
             default=5,
-            description="Número máximo de memorias a inyectar por conversación",
+            description="Maximum number of memories to inject per conversation | 每次對話注入的最大記憶數量",
             ge=1,
             le=20,
         )
 
-        # Configuración de guardado
+        # Saving configuration | 儲存配置
         auto_save_responses: bool = Field(
             default=True,
-            description="Guarda automáticamente las respuestas del asistente",
+            description="Automatically saves assistant responses | 自動儲存助理回應",
         )
 
         min_response_length: int = Field(
             default=10,
-            description="Longitud mínima de respuesta para guardar (caracteres)",
+            description="Minimum response length to save (characters) | 儲存的最小回應長度（字元）",
             ge=1,
             le=1000,
         )
 
         max_response_length: int = Field(
             default=2000,
-            description="Longitud máxima de respuesta para guardar (caracteres)",
+            description="Maximum response length to save (characters) | 儲存的最大回應長度（字元）",
             ge=100,
             le=10000,
         )
 
-        # Configuración de caché
+        # Cache configuration | 快取配置
         enable_cache: bool = Field(
             default=True,
-            description="Habilita el sistema de caché para mejorar rendimiento",
+            description="Enables cache system to improve performance | 啟用快取系統以提升效能",
         )
 
         cache_ttl_minutes: int = Field(
-            default=60, description="Tiempo de vida del caché en minutos", ge=1, le=1440
+            default=60, description="Cache time-to-live in minutes | 快取存活時間（分鐘）", ge=1, le=1440
         )
 
-        # Configuración de limpieza automática
+        # Automatic cleanup configuration | 自動清理配置
         auto_cleanup: bool = Field(
-            default=False, description="Limpia automáticamente memorias antiguas"
+            default=False, description="Automatically cleans old memories | 自動清理舊記憶"
         )
 
         max_memories_per_user: int = Field(
             default=100,
-            description="Número máximo de memorias por usuario (0 = ilimitado)",
+            description="Maximum number of memories per user (0 = unlimited) | 每個使用者的最大記憶數量（0 = 無限制）",
             ge=0,
             le=1000,
         )
 
-        # Configuración de filtrado
+        # Filtering configuration | 過濾配置
         filter_duplicates: bool = Field(
-            default=True, description="Filtra memorias duplicadas o muy similares"
+            default=True, description="Filters duplicate or very similar memories | 過濾重複或非常相似的記憶"
         )
 
         similarity_threshold: float = Field(
             default=0.8,
-            description="Umbral de similitud para filtrar duplicados (0.0-1.0)",
+            description="Similarity threshold for filtering duplicates (0.0-1.0) | 過濾重複項目的相似性閾值（0.0-1.0）",
             ge=0.0,
             le=1.0,
         )
 
-        # Configuración de comandos
+        # Command configuration | 命令配置
         enable_memory_commands: bool = Field(
             default=True,
-            description="Habilita comandos como /memories, /clear_memories",
+            description="Enables commands like /memories, /clear_memories | 啟用如 /memories, /clear_memories 等命令",
         )
 
-        # Configuración de relevancia (NUEVA - sugerencia de auditoría)
+        # Relevance configuration (NEW - audit suggestion) | 相關性配置（新 - 審計建議）
         relevance_threshold: float = Field(
             default=0.05,
-            description="Umbral de relevancia (0.0-1.0) para inyectar memorias en contexto",
+            description="Relevance threshold (0.0-1.0) for injecting memories in context | 在上下文中注入記憶的相關性閾值（0.0-1.0）",
             ge=0.0,
             le=1.0,
         )
 
-        # Configuración de logging
+        # Logging configuration | 日誌配置
         debug_mode: bool = Field(
-            default=False, description="Habilita logging detallado para depuración"
+            default=False, description="Enables detailed logging for debugging | 啟用詳細日誌以供除錯"
         )
 
     class UserValves(BaseModel):
         """
-        Configuración de preferencias del usuario para la visualización y comportamiento.
+        User preference configuration for display and behavior.
+        
+        使用者偏好配置，用於顯示和行為設定。
         """
 
-        # Configuración de visualización
+        # Display configuration | 顯示配置
         show_status: bool = Field(
-            default=True, description="Muestra el estado durante el guardado en memoria"
+            default=True, description="Shows status during memory saving | 在記憶儲存過程中顯示狀態"
         )
 
         show_memory_count: bool = Field(
-            default=True, description="Muestra el número de memorias inyectadas"
+            default=True, description="Shows number of injected memories | 顯示注入記憶的數量"
         )
 
         show_save_confirmation: bool = Field(
             default=False,
-            description="Muestra confirmación cuando se guarda una memoria",
+            description="Shows confirmation when a memory is saved | 儲存記憶時顯示確認訊息",
         )
 
-        # Configuración de notificaciones
+        # Notification configuration | 通知配置
         notify_on_error: bool = Field(
-            default=True, description="Notifica al usuario cuando ocurre un error"
+            default=True, description="Notifies user when an error occurs | 發生錯誤時通知使用者"
         )
 
         notify_on_cleanup: bool = Field(
             default=False,
-            description="Notifica cuando se limpian memorias automáticamente",
+            description="Notifies when memories are automatically cleaned | 自動清理記憶時通知",
         )
 
-        # Configuración personalizada de usuario
+        # Custom user configuration | 使用者自定義配置
         custom_memory_prefix: str = Field(
             default="",
-            description="Prefijo personalizado para las memorias (vacío = usar por defecto)",
+            description="Custom prefix for memories (empty = use default) | 記憶的自定義前綴（空白 = 使用預設）",
         )
 
         max_personal_memories: int = Field(
             default=0,
-            description="Límite personal de memorias (0 = usar configuración global)",
+            description="Personal memory limit (0 = use global setting) | 個人記憶限制（0 = 使用全域設定）",
             ge=0,
             le=500,
         )
 
-        # Configuración de privacidad
+        # Privacy configuration | 私密配置
         private_mode: bool = Field(
             default=False,
-            description="Modo privado: no guarda memorias automáticamente",
+            description="Private mode: does not save memories automatically | 私人模式：不自動儲存記憶",
         )
 
     def __init__(self):
         """
-        Inicializa una nueva instancia del filtro con configuraciones predeterminadas.
+        Initializes a new filter instance with default configurations.
+        
+        初始化新的過濾器實例，使用預設配置。
         """
         self.valves = self.Valves()
         self._memory_cache = MemoryCache(
             max_size=Constants.CACHE_MAXSIZE, ttl=Constants.CACHE_TTL
         )
-        logger.info("Filtro de memoria inicializado con caché")
+        logger.info("Memory filter initialized with cache | 記憶過濾器已初始化並帶有快取")
 
-    # === 🔒 FUNCIONES DE SEGURIDAD Y VALIDACIÓN ===
+    # === 🔒 SECURITY AND VALIDATION FUNCTIONS | 安全性和驗證功能 ===
 
     def _sanitize_input(self, input_text: str, max_length: int = 1000) -> str:
-        """Sanitiza y valida input de usuario para prevenir inyecciones y ataques"""
+        """Sanitizes and validates user input to prevent injections and attacks | 清理和驗證使用者輸入以防止注入和攻擊"""
         if not input_text or not isinstance(input_text, str):
-            raise ValueError("Input debe ser una cadena no vacía")
+            raise ValueError("Input must be a non-empty string | 輸入必須是非空字串")
 
-        # Remover caracteres peligrosos y espacios extra
+        # Remove dangerous characters and extra spaces | 移除危險字元和多餘空格
         import re
 
         sanitized = re.sub(r'[<>"\'\\\/\x00-\x1f\x7f-\x9f]', "", input_text.strip())
 
-        # Validar longitud
+        # Validate length | 驗證長度
         if len(sanitized) > max_length:
-            raise ValueError(f"Input demasiado largo (máximo {max_length} caracteres)")
+            raise ValueError(f"Input too long (maximum {max_length} characters) | 輸入過長（最大 {max_length} 字元）")
 
         if len(sanitized) < 1:
-            raise ValueError("Input no puede estar vacío después de sanitización")
+            raise ValueError("Input cannot be empty after sanitization | 清理後輸入不能為空")
 
         return sanitized
 
     def _validate_user_id(self, user_id: str) -> str:
-        """Valida que el user_id sea seguro y válido"""
+        """Validates that user_id is safe and valid | 驗證 user_id 是安全和有效的"""
         if not user_id or not isinstance(user_id, str):
-            raise ValueError("user_id debe ser una cadena no vacía")
+            raise ValueError("user_id must be a non-empty string | user_id 必須是非空字串")
 
         import re
 
-        # Solo permitir caracteres alfanuméricos, guiones y puntos
+        # Only allow alphanumeric characters, hyphens and dots | 只允許字母數字、連字符和點
         if not re.match(r"^[a-zA-Z0-9._-]+$", user_id):
-            raise ValueError("user_id contiene caracteres no válidos")
+            raise ValueError("user_id contains invalid characters | user_id 包含無效字元")
 
         if len(user_id) > 100:
-            raise ValueError("user_id demasiado largo")
+            raise ValueError("user_id too long | user_id 過長")
 
         return user_id
 
     def _validate_memory_id(self, memory_id_str: str, total_memories: int) -> int:
-        """Valida que el memory_id sea un entero válido dentro del rango"""
+        """Validates that memory_id is a valid integer within range | 驗證 memory_id 是範圍內的有效整數"""
         try:
             memory_id = int(memory_id_str)
         except (ValueError, TypeError):
-            raise ValueError("ID de memoria debe ser un número entero")
+            raise ValueError("Memory ID must be an integer | 記憶 ID 必須是整數")
 
         if memory_id < 1:
-            raise ValueError("ID de memoria debe ser mayor que 0")
+            raise ValueError("Memory ID must be greater than 0 | 記憶 ID 必須大於 0")
 
         if memory_id > total_memories:
             raise ValueError(
-                f"ID de memoria {memory_id} no existe (máximo: {total_memories})"
+                f"Memory ID {memory_id} does not exist (maximum: {total_memories}) | 記憶 ID {memory_id} 不存在（最大值：{total_memories}）"
             )
 
         return memory_id
 
     def _safe_execute_command(self, command_func, *args, **kwargs) -> str:
-        """Ejecuta un comando de forma segura con manejo de errores consistente"""
+        """Executes a command safely with consistent error handling | 安全地執行命令，具有一致的錯誤處理"""
         try:
             return command_func(*args, **kwargs)
         except ValueError as ve:
@@ -513,13 +567,13 @@ class Filter:
                 + "\n```"
             )
         except Exception as e:
-            # Errores internos - log completo, respuesta genérica
-            logger.error(f"Error en comando: {str(e)}")
+            # Internal errors - full log, generic response | 內部錯誤 - 完整日誌，通用回應
+            logger.error(f"Command error: {str(e)}")
             error_response = {
                 "status": "INTERNAL_ERROR",
-                "error": "Error interno del sistema",
+                "error": "Internal system error | 內部系統錯誤",
                 "error_type": "internal",
-                "support_info": "Revisa los logs del sistema",
+                "support_info": "Check system logs | 檢查系統日誌",
                 "warning": "DO_NOT_INTERPRET_THIS_JSON_RESPONSE",
             }
             import json
@@ -531,7 +585,7 @@ class Filter:
             )
 
     async def _safe_execute_async_command(self, command_func, *args, **kwargs) -> str:
-        """Ejecuta un comando async de forma segura con manejo de errores consistente"""
+        """Executes an async command safely with consistent error handling | 安全地執行非同步命令，具有一致的錯誤處理"""
         try:
             return await command_func(*args, **kwargs)
         except ValueError as ve:
@@ -550,13 +604,13 @@ class Filter:
                 + "\n```"
             )
         except Exception as e:
-            # Errores internos - log completo, respuesta genérica
-            logger.error(f"Error en comando async: {str(e)}")
+            # Internal errors - full log, generic response | 內部錯誤 - 完整日誌，通用回應
+            logger.error(f"Async command error: {str(e)}")
             error_response = {
                 "status": "INTERNAL_ERROR",
-                "error": "Error interno del sistema",
+                "error": "Internal system error | 內部系統錯誤",
                 "error_type": "internal",
-                "support_info": "Revisa los logs del sistema",
+                "support_info": "Check system logs | 檢查系統日誌",
                 "warning": "DO_NOT_INTERPRET_THIS_JSON_RESPONSE",
             }
             import json
@@ -567,82 +621,86 @@ class Filter:
                 + "\n```"
             )
 
-    # === MÉTODOS AUXILIARES PARA LÓGICA DE INYECCIÓN ===
+    # === AUXILIARY METHODS FOR INJECTION LOGIC | 注入邏輯的輔助方法 ===
 
     def _is_first_message(self, messages: List[dict]) -> bool:
         """
-        Determina si es el primer mensaje de una nueva sesión de chat.
+        Determines if this is the first message of a new chat session.
+        
+        判斷這是否是新聊天對話的第一則訊息。
 
         Args:
-            messages: Lista de mensajes de la conversación actual
+            messages: List of messages from current conversation | 當前對話的訊息列表
 
         Returns:
-            bool: True si es el primer mensaje, False en caso contrario
+            bool: True if first message, False otherwise | 如果是第一則訊息則為 True，否則為 False
         """
         if not messages or not isinstance(messages, list):
             return True
 
-        # Contar mensajes del usuario (excluyendo mensajes del sistema)
+        # Count user messages (excluding system messages) | 計算使用者訊息（排除系統訊息）
         user_messages = [
             msg
             for msg in messages
             if isinstance(msg, dict) and msg.get("role") == "user"
         ]
 
-        # Es el primer mensaje si hay 1 o menos mensajes del usuario
-        # (el mensaje actual se cuenta como el primero)
+        # It's the first message if there's 1 or fewer user messages | 如果使用者訊息數量為 1 或更少，則為第一則訊息
+        # (the current message counts as the first) | （當前訊息計為第一則）
         is_first = len(user_messages) <= 1
 
         if self.valves.debug_mode:
             logger.debug(
-                f"Detección primer mensaje: {is_first} (mensajes usuario: {len(user_messages)})"
+                f"First message detection: {is_first} (user messages: {len(user_messages)}) | 第一則訊息偵測：{is_first}（使用者訊息：{len(user_messages)}）"
             )
 
         return is_first
 
     async def _get_recent_memories(self, user_id: str, limit: int) -> List[str]:
         """
-        Obtiene las memorias más recientes de un usuario, ordenadas por fecha.
+        Gets the most recent memories of a user, ordered by date.
+        
+        取得使用者最近的記憶，按日期排序。
 
         Args:
-            user_id: ID del usuario
-            limit: Número máximo de memorias a obtener
+            user_id: User ID | 使用者 ID
+            limit: Maximum number of memories to get | 要取得的最大記憶數量
 
         Returns:
-            List[str]: Lista de memorias formateadas, ordenadas de más reciente a más antigua
+            List[str]: List of formatted memories, ordered from newest to oldest | 格式化的記憶列表，從最新到最舊排序
         """
         try:
             print(
-                f"[MEMORIA-DEBUG] 🔍 Obteniendo {limit} memorias más recientes para usuario {user_id}"
+                f"[MEMORY-DEBUG] 🔍 Getting {limit} most recent memories for user {user_id} | [記憶-除錯] 🔍 為使用者 {user_id} 取得 {limit} 個最近記憶"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] 🔍 Obteniendo {limit} memorias más recientes para usuario {user_id}"
+                f"[MEMORY-DEBUG] 🔍 Getting {limit} most recent memories for user {user_id} | [記憶-除錯] 🔍 為使用者 {user_id} 取得 {limit} 個最近記憶"
             )
 
             if self.valves.debug_mode:
                 logger.debug(
-                    f"Obteniendo {limit} memorias más recientes para usuario {user_id}"
+                    f"Getting {limit} most recent memories for user {user_id} | 為使用者 {user_id} 取得 {limit} 個最近記憶"
                 )
 
-            # Obtener memorias sin procesar (EXPLÍCITAMENTE ordenadas por fecha descendente)
+            # Get raw memories (EXPLICITLY ordered by descending date) | 取得原始記憶（明確按降序日期排序）
             raw_memories = await self.get_raw_existing_memories(
                 user_id, order_by="created_at DESC"
             )
             if not raw_memories:
-                print(f"[MEMORIA-DEBUG] ⚠️ No se encontraron memorias para el usuario")
+                print(f"[MEMORY-DEBUG] ⚠️ No memories found for user | [記憶-除錯] ⚠️ 未找到使用者記憶")
                 logger.info(
-                    f"[MEMORIA-DEBUG] ⚠️ No se encontraron memorias para el usuario"
+                    f"[MEMORY-DEBUG] ⚠️ No memories found for user | [記憶-除錯] ⚠️ 未找到使用者記憶"
                 )
                 if self.valves.debug_mode:
-                    logger.debug("No se encontraron memorias para el usuario")
+                    logger.debug("No memories found for user | 未找到使用者記憶")
                 return []
 
-            print(f"[MEMORIA-DEBUG] 📊 Total memorias encontradas: {len(raw_memories)}")
+            print(f"[MEMORY-DEBUG] 📊 Total memories found: {len(raw_memories)} | [記憶-除錯] 📊 總共找到記憶數量: {len(raw_memories)}")
             logger.info(
-                f"[MEMORIA-DEBUG] 📊 Total memorias encontradas: {len(raw_memories)}"
+                f"[MEMORY-DEBUG] 📊 Total memories found: {len(raw_memories)} | [記憶-除錯] 📊 總共找到記憶數量: {len(raw_memories)}"
             )
 
-            # Inspeccionar las primeras memorias para ver su estructura
+            # Inspect first memories to see their structure | 檢查前幾個記憶以查看其結構
             for i, mem in enumerate(raw_memories[:3]):
                 created_at = getattr(mem, "created_at", "NO_DATE")
                 mem_id = getattr(mem, "id", "NO_ID")
@@ -650,18 +708,18 @@ class Filter:
                     str(mem)[:50] if hasattr(mem, "__str__") else "NO_CONTENT"
                 )
                 print(
-                    f"[MEMORIA-DEBUG] Memoria {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}..."
+                    f"[MEMORY-DEBUG] Memory {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}... | [記憶-除錯] 記憶 {i+1}: ID={mem_id}, 建立時間={created_at}, 內容={content_preview}..."
                 )
                 logger.info(
-                    f"[MEMORIA-DEBUG] Memoria {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}..."
+                    f"[MEMORY-DEBUG] Memory {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}... | [記憶-除錯] 記憶 {i+1}: ID={mem_id}, 建立時間={created_at}, 內容={content_preview}..."
                 )
 
-            # Ordenar por fecha de creación (más reciente primero)
+            # Sort by creation date (newest first) | 按建立日期排序（最新的在前）
             print(
-                f"[MEMORIA-DEBUG] 🔄 Ordenando memorias por fecha (más reciente primero)"
+                f"[MEMORY-DEBUG] 🔄 Sorting memories by date (newest first) | [記憶-除錯] 🔄 按日期排序記憶（最新的在前）"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] 🔄 Ordenando memorias por fecha (más reciente primero)"
+                f"[MEMORY-DEBUG] 🔄 Sorting memories by date (newest first) | [記憶-除錯] 🔄 按日期排序記憶（最新的在前）"
             )
 
             sorted_memories = sorted(
@@ -670,9 +728,9 @@ class Filter:
                 reverse=True,
             )
 
-            # Mostrar las primeras memorias después del ordenamiento
-            print(f"[MEMORIA-DEBUG] 🏆 Después del ordenamiento (primeras 3):")
-            logger.info(f"[MEMORIA-DEBUG] 🏆 Después del ordenamiento (primeras 3):")
+            # Show first memories after sorting | 顯示排序後的前幾個記憶
+            print(f"[MEMORY-DEBUG] 🏆 After sorting (first 3): | [記憶-除錯] 🏆 排序後（前3個）:")
+            logger.info(f"[MEMORY-DEBUG] 🏆 After sorting (first 3): | [記憶-除錯] 🏆 排序後（前3個）:")
             for i, mem in enumerate(sorted_memories[:3]):
                 created_at = getattr(mem, "created_at", "NO_DATE")
                 mem_id = getattr(mem, "id", "NO_ID")
@@ -680,16 +738,16 @@ class Filter:
                     str(mem)[:50] if hasattr(mem, "__str__") else "NO_CONTENT"
                 )
                 print(
-                    f"[MEMORIA-DEBUG] Posición {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}..."
+                    f"[MEMORY-DEBUG] Position {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}... | [記憶-除錯] 位置 {i+1}: ID={mem_id}, 建立時間={created_at}, 內容={content_preview}..."
                 )
                 logger.info(
-                    f"[MEMORIA-DEBUG] Posición {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}..."
+                    f"[MEMORY-DEBUG] Position {i+1}: ID={mem_id}, created_at={created_at}, content={content_preview}... | [記憶-除錯] 位置 {i+1}: ID={mem_id}, 建立時間={created_at}, 內容={content_preview}..."
                 )
 
-            # Limitar al número solicitado
+            # Limit to requested number | 限制為請求的數量
             limited_memories = sorted_memories[:limit]
 
-            # Formatear las memorias
+            # Format memories | 格式化記憶
             formatted_memories = []
             for mem in limited_memories:
                 try:
@@ -705,46 +763,49 @@ class Filter:
                     formatted_memories.append(content)
                 except Exception as e:
                     if self.valves.debug_mode:
-                        logger.warning(f"Error al formatear memoria: {e}")
+                        logger.warning(f"Error formatting memory: {e} | 格式化記憶時出錯: {e}")
                     continue
 
             if self.valves.debug_mode:
-                logger.debug(f"Obtenidas {len(formatted_memories)} memorias recientes")
+                logger.debug(f"Got {len(formatted_memories)} recent memories | 取得 {len(formatted_memories)} 個最近記憶")
 
             return formatted_memories
 
         except Exception as e:
-            logger.error(f"Error al obtener memorias recientes: {e}")
+            logger.error(f"Error getting recent memories: {e} | 取得最近記憶時出錯: {e}")
             return []
 
     def _calculate_relevance_score(self, memory_content: str, user_input: str) -> float:
         """
-        Calcula un puntaje de relevancia entre una memoria y el input del usuario.
-        Algoritmo simplificado y más efectivo.
+        Calculates a relevance score between a memory and user input.
+        Simplified and more effective algorithm.
+        
+        計算記憶和使用者輸入之間的相關性分數。
+        簡化且更有效的演算法。
 
         Args:
-            memory_content: Contenido de la memoria
-            user_input: Input actual del usuario
+            memory_content: Memory content | 記憶內容
+            user_input: Current user input | 當前使用者輸入
 
         Returns:
-            float: Puntaje de relevancia entre 0.0 y 1.0
+            float: Relevance score between 0.0 and 1.0 | 0.0 和 1.0 之間的相關性分數
         """
         if not memory_content or not user_input:
             return 0.0
 
-        # Convertir a minúsculas para comparación
+        # Convert to lowercase for comparison | 轉換為小寫以進行比較
         memory_lower = memory_content.lower()
         input_lower = user_input.lower()
 
-        # Dividir en palabras (sin filtrar por longitud para capturar "IA", "AI", etc.)
+        # Split into words (no length filtering to capture "AI", "IA", etc.) | 分割為單詞（不進行長度過濾以捕捉「AI」、「IA」等）
         memory_words = set(memory_lower.split())
         input_words = set(input_lower.split())
 
-        # Calcular coincidencias exactas de palabras
+        # Calculate exact word matches | 計算精確單詞匹配
         word_matches = memory_words.intersection(input_words)
         word_score = len(word_matches) / len(input_words) if input_words else 0.0
 
-        # Bonus por palabras clave importantes (case-insensitive substring matching)
+        # Bonus for important keywords (case-insensitive substring matching) | 重要關鍵詞加分（不區分大小寫的子字串匹配）
         substring_score = 0.0
         important_terms = [word for word in input_words if len(word) >= 3]
 
@@ -756,29 +817,31 @@ class Filter:
             substring_score / len(important_terms) if important_terms else 0.0
         )
 
-        # Puntaje final: 60% coincidencias exactas + 40% substring matching
+        # Final score: 60% exact matches + 40% substring matching | 最終分數：60% 精確匹配 + 40% 子字串匹配
         final_score = (word_score * 0.6) + (substring_score * 0.4)
 
-        # Debug logging si está habilitado
+        # Debug logging if enabled | 如果啟用則記錄除錯訊息
         if self.valves.debug_mode and final_score > 0:
             logger.debug(
-                f"Relevancia calculada: {final_score:.3f} - Coincidencias: {word_matches}"
+                f"Calculated relevance: {final_score:.3f} - Matches: {word_matches} | 計算相關性: {final_score:.3f} - 匹配: {word_matches}"
             )
 
         return min(final_score, 1.0)
 
     def _calculate_phrase_similarity(self, text1: str, text2: str) -> float:
         """
-        Calcula similitud basada en frases comunes de 2+ palabras.
+        Calculates similarity based on common phrases of 2+ words.
+        
+        根據 2+ 個單詞的共同片語計算相似性。
 
         Args:
-            text1: Primer texto
-            text2: Segundo texto
+            text1: First text | 第一個文本
+            text2: Second text | 第二個文本
 
         Returns:
-            float: Puntaje de similitud de frases entre 0.0 y 1.0
+            float: Phrase similarity score between 0.0 and 1.0 | 0.0 和 1.0 之間的片語相似性分數
         """
-        # Generar bigramas (frases de 2 palabras)
+        # Generate bigrams (2-word phrases) | 生成二元組（2個單詞的片語）
         words1 = text1.split()
         words2 = text2.split()
 
@@ -800,56 +863,58 @@ class Filter:
         self, user_id: str, user_input: str, max_memories: int = 5
     ) -> List[str]:
         """
-        Obtiene las memorias más relevantes para el input del usuario.
+        Gets the most relevant memories for user input.
+        
+        為使用者輸入取得最相關的記憶。
 
         Args:
-            user_id: ID del usuario
-            user_input: Input actual del usuario
-            max_memories: Número máximo de memorias relevantes a devolver
+            user_id: User ID | 使用者 ID
+            user_input: Current user input | 當前使用者輸入
+            max_memories: Maximum number of relevant memories to return | 返回的最大相關記憶數量
 
         Returns:
-            List[str]: Lista de memorias relevantes formateadas
+            List[str]: List of relevant formatted memories | 相關格式化記憶的列表
         """
         try:
             print(
-                f"[MEMORIA-DEBUG] 🔍 Buscando memorias relevantes para: '{user_input[:50]}...'"
+                f"[MEMORY-DEBUG] 🔍 Searching relevant memories for: '{user_input[:50]}...' | [記憶-除錯] 🔍 搜尋相關記憶: '{user_input[:50]}...'"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] 🔍 Buscando memorias relevantes para: '{user_input[:50]}...'"
+                f"[MEMORY-DEBUG] 🔍 Searching relevant memories for: '{user_input[:50]}...' | [記憶-除錯] 🔍 搜尋相關記憶: '{user_input[:50]}...'"
             )
             if self.valves.debug_mode:
                 logger.debug(
-                    f"Buscando memorias relevantes para: '{user_input[:50]}...'"
+                    f"Searching relevant memories for: '{user_input[:50]}...' | 搜尋相關記憶: '{user_input[:50]}...'"
                 )
 
-            # Obtener todas las memorias del usuario (orden no crítico para relevancia, pero mantenemos consistencia)
+            # Get all user memories (order not critical for relevance, but maintain consistency) | 取得使用者所有記憶（順序對相關性不關鍵，但保持一致性）
             raw_memories = await self.get_raw_existing_memories(
                 user_id, order_by="created_at DESC"
             )
             if not raw_memories:
                 return []
 
-            # Calcular relevancia para cada memoria
+            # Calculate relevance for each memory | 為每個記憶計算相關性
             memories_with_scores = []
             for mem in raw_memories:
                 try:
                     content = mem.content if hasattr(mem, "content") else str(mem)
                     score = self._calculate_relevance_score(content, user_input)
 
-                    if score > 0:  # Solo considerar memorias con alguna relevancia
+                    if score > 0:  # Only consider memories with some relevance | 只考慮具有某些相關性的記憶
                         memories_with_scores.append(
                             {"memory": mem, "content": content, "score": score}
                         )
                 except Exception as e:
                     if self.valves.debug_mode:
-                        logger.warning(f"Error al calcular relevancia: {e}")
+                        logger.warning(f"Error calculating relevance: {e} | 計算相關性時出錯: {e}")
                     continue
 
             print(
-                f"[MEMORIA-DEBUG] ⚖️ Usando umbral de relevancia: {self.valves.relevance_threshold}"
+                f"[MEMORY-DEBUG] ⚖️ Using relevance threshold: {self.valves.relevance_threshold} | [記憶-除錯] ⚖️ 使用相關性闾值: {self.valves.relevance_threshold}"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] ⚖️ Usando umbral de relevancia: {self.valves.relevance_threshold}"
+                f"[MEMORY-DEBUG] ⚖️ Using relevance threshold: {self.valves.relevance_threshold} | [記憶-除錯] ⚖️ 使用相關性闾值: {self.valves.relevance_threshold}"
             )
 
             relevant_memories = [
@@ -859,31 +924,31 @@ class Filter:
             ]
 
             print(
-                f"[MEMORIA-DEBUG] 📊 Memorias que superan umbral: {len(relevant_memories)} de {len(memories_with_scores)}"
+                f"[MEMORY-DEBUG] 📊 Memories exceeding threshold: {len(relevant_memories)} of {len(memories_with_scores)} | [記憶-除錯] 📊 超過闾值的記憶: {len(relevant_memories)} / {len(memories_with_scores)}"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] 📊 Memorias que superan umbral: {len(relevant_memories)} de {len(memories_with_scores)}"
+                f"[MEMORY-DEBUG] 📊 Memories exceeding threshold: {len(relevant_memories)} of {len(memories_with_scores)} | [記憶-除錯] 📊 超過闾值的記憶: {len(relevant_memories)} / {len(memories_with_scores)}"
             )
 
             if self.valves.debug_mode:
                 logger.debug(
-                    f"Usando umbral de relevancia: {self.valves.relevance_threshold}"
+                    f"Using relevance threshold: {self.valves.relevance_threshold} | 使用相關性闾值: {self.valves.relevance_threshold}"
                 )
 
             if not relevant_memories:
-                print(f"[MEMORIA-DEBUG] ❌ No se encontraron memorias relevantes")
-                logger.info(f"[MEMORIA-DEBUG] ❌ No se encontraron memorias relevantes")
+                print(f"[MEMORY-DEBUG] ❌ No relevant memories found | [記憶-除錯] ❌ 未找到相關記憶")
+                logger.info(f"[MEMORY-DEBUG] ❌ No relevant memories found | [記憶-除錯] ❌ 未找到相關記憶")
                 if self.valves.debug_mode:
-                    logger.debug("No se encontraron memorias relevantes")
+                    logger.debug("No relevant memories found | 未找到相關記憶")
                 return []
 
-            # Ordenar por relevancia (mayor a menor)
+            # Sort by relevance (highest to lowest) | 按相關性排序（最高到最低）
             relevant_memories.sort(key=lambda x: x["score"], reverse=True)
 
-            # Limitar al número máximo
+            # Limit to maximum number | 限制為最大數量
             selected_memories = relevant_memories[:max_memories]
 
-            # Formatear las memorias seleccionadas
+            # Format selected memories | 格式化選擇的記憶
             formatted_memories = []
             for mem_data in selected_memories:
                 try:
@@ -900,22 +965,22 @@ class Filter:
                     formatted_memories.append(content)
                 except Exception as e:
                     if self.valves.debug_mode:
-                        logger.warning(f"Error al formatear memoria relevante: {e}")
+                        logger.warning(f"Error formatting relevant memory: {e} | 格式化相關記憶時出錯: {e}")
                     continue
 
             if self.valves.debug_mode:
                 logger.debug(
-                    f"Encontradas {len(formatted_memories)} memorias relevantes"
+                    f"Found {len(formatted_memories)} relevant memories | 找到 {len(formatted_memories)} 個相關記憶"
                 )
                 for i, mem in enumerate(
                     formatted_memories[:3]
-                ):  # Mostrar solo las 3 primeras en debug
+                ):  # Show only first 3 in debug | 在除錯中只顯示前3個
                     logger.debug(f"  {i+1}. {mem[:100]}...")
 
             return formatted_memories
 
         except Exception as e:
-            logger.error(f"Error al obtener memorias relevantes: {e}")
+            logger.error(f"Error getting relevant memories: {e} | 取得相關記憶時出錯: {e}")
             return []
 
     async def _inject_memories_into_conversation(
@@ -928,15 +993,36 @@ class Filter:
         __event_emitter__=None,
     ) -> None:
         """
-        Inyecta las memorias seleccionadas en la conversación.
-
+        Builds and injects a `system` message with selected memory items.
+        
+        Selection policy:
+        - For the very first message, prefer recent memories (recency boost).
+        - For subsequent messages, prefer relevant memories (keyword overlap / similarity).
+        - Enforces `max_memories_to_inject` and `relevance_threshold`.
+        
         Args:
-            body: Cuerpo de la petición
-            memories: Lista de memorias formateadas para inyectar
-            user_valves: Configuración del usuario
-            user_id: ID del usuario
-            is_first_message: Si es el primer mensaje de la sesión
-            __event_emitter__: Emisor de eventos (opcional)
+            body (dict): OpenWebUI payload to be modified.
+            memories (List[MemoryModel]): Candidate memories.
+            reason (str): Free-form label for logging (e.g., "first_turn" / "relevance").
+        
+        Returns:
+            None (modifies `body` in place when injection occurs)
+        
+        中文說明：
+        建立並注入含已選記憶的 `system` 訊息。
+        
+        選取策略：
+        - 第一則訊息：偏向最近記憶（近期優先）。
+        - 後續訊息：偏向與當前輸入相關的記憶（關鍵字重疊/相似度）。
+        - 遵守 `max_memories_to_inject` 與 `relevance_threshold`。
+        
+        參數：
+            body (dict)：將被修改的 OpenWebUI 載荷。
+            memories (List[MemoryModel])：候選記憶。
+            reason (str)：記錄用途的標籤（如 "first_turn"/"relevance"）。
+        
+        回傳：
+            None（若注入會原地修改 `body`）
         """
         if not memories or "messages" not in body:
             return
@@ -960,7 +1046,7 @@ class Filter:
                     f"{memory_prefix}\n[Memorias relevantes al contexto actual]\n"
                 )
 
-            # Crear el mensaje de contexto
+            # Create context message | 建立上下文訊息
             context_string = context_header + "\n".join(memories)
             system_msg = {"role": "system", "content": context_string}
 
@@ -997,7 +1083,7 @@ class Filter:
         except Exception as e:
             logger.error(f"Error al inyectar memorias: {e}", exc_info=True)
 
-    # ✅ 注入記憶到新對話中 | Inyectar memoria en nuevas conversaciones
+    # ✅ Inject memories into new conversations | 注入記憶到新對話中
     async def inlet(
         self,
         body: dict,
@@ -1006,22 +1092,51 @@ class Filter:
         __event_emitter__=None,
     ) -> dict:
         """
-        Método que se ejecuta al inicio de una conversación.
-
-        NUEVA LÓGICA INTELIGENTE:
-        - Primer mensaje: Inyecta las X memorias más recientes (continuidad de contexto)
-        - Mensajes posteriores: Inyecta solo memorias relevantes al input actual, o ninguna
-
+        Injects memory context at the beginning of a turn.
+        
+        Smart logic:
+        - On the first user message of a conversation, inject the most recent X memories
+          to preserve continuity (recency boost).
+        - On subsequent messages, inject only memories relevant to the current input,
+          or none if nothing meets the relevance threshold.
+        
         Args:
-            body: Diccionario con el cuerpo de la petición
-            __request__: Objeto Request de FastAPI
-            __user__: Información del usuario actual (opcional)
-            __event_emitter__: Emisor de eventos para notificaciones (opcional)
-
+            body (dict): OpenWebUI request payload (messages/config).
+            __request__ (Request): FastAPI Request object.
+            __user__ (Any): Current user info (id/valves/etc.).
+            __event_emitter__ (Callable|None): Optional status event emitter.
+        
         Returns:
-            dict: Cuerpo de la petición modificado con las memorias inyectadas
+            dict: Possibly augmented payload with a `system` message including
+                  selected memory items (Top-K) when applicable.
+        
+        Notes:
+            - Memory selection respects `max_memories_to_inject` and `relevance_threshold`.
+            - If disabled via valves or user is missing, this is a no-op.
+            - Status events are emitted when `show_injection_status=True`.
+        
+        中文說明：
+        在每輪對話開始時注入記憶脈絡。
+        
+        智能邏輯：
+        - 對話第一則使用者訊息：注入最近 X 筆記憶，維持連貫性（近期優先）。
+        - 後續訊息：僅注入與當前輸入相關的記憶；若無符合門檻則不注入。
+        
+        參數：
+            body (dict)：OpenWebUI 請求內容（messages/設定）。
+            __request__ (Request)：FastAPI Request 物件。
+            __user__ (Any)：使用者資訊（id/valves 等）。
+            __event_emitter__ (Callable|None)：狀態事件通道。
+        
+        回傳：
+            dict：可能加入一則 `system` 訊息（含 Top-K 記憶）。
+        
+        備註：
+            - 遵守 `max_memories_to_inject` 與 `relevance_threshold`。
+            - 若 valves 停用或無使用者資訊，則不動作。
+            - `show_injection_status=True` 時會送出狀態事件。
         """
-        # Validación básica
+        # (body of the function remains unchanged)
         if not isinstance(body, dict):
             if self.valves.debug_mode:
                 logger.warning("El parámetro 'body' debe ser un diccionario")
@@ -1103,7 +1218,7 @@ class Filter:
                                         __user__.get("valves") or self.UserValves()
                                     )
 
-                                    # Procesar el comando
+                                    # Process the command | 處理命令
                                     command_response = (
                                         await self._process_memory_command(
                                             last_user_msg, user, user_valves
@@ -1185,7 +1300,7 @@ class Filter:
 
             if self.valves.debug_mode:
                 logger.debug(
-                    f"Procesando memorias para usuario {user_id} - Primer mensaje: {is_first_message}"
+                    f"Processing memories for user {user_id} - First message: {is_first_message} | 為使用者 {user_id} 處理記憶 - 第一則訊息: {is_first_message}"
                 )
 
             # PASO 2: Obtener memorias según la estrategia
@@ -1277,31 +1392,58 @@ class Filter:
         __event_emitter__=None,
     ) -> dict:
         """
-        Maneja el guardado automático de respuestas y consultas de memoria.
-
-        Args:
-            body: Contenido de la petición
-            __request__: Objeto Request de FastAPI
-            __user__: Datos del usuario (opcional)
-            __event_emitter__: Emisor de eventos (opcional)
-
-        Returns:
-            dict: Cuerpo de la petición modificado
-        """
-        """
-        Método que se ejecuta al final de una conversación.
-        Maneja el guardado automático de respuestas y consultas de memoria.
+        Post-generation hook that handles slash commands, auto-save, and quotas.
+        
+        Responsibilities:
+        - Slash commands: handle `/memories`, `/memory_search <q>`, `/forget_all`
+          (when `enable_memory_commands=True`). Commands short-circuit normal flow.
+        - Auto-save: depending on valves, persist the last user and/or assistant message
+          after applying length gates and duplicate filtering (`filter_duplicates`
+          with `similarity_threshold`).
+        - Capacity enforcement: if `max_memories_per_user > 0`, constrain growth (e.g., FIFO).
+        - Status events: emit progress updates when `show_injection_status=True`.
         
         Args:
-            body: Diccionario con el cuerpo de la petición
-            __request__: Objeto Request de FastAPI
-            __user__: Información del usuario actual (opcional)
-            __event_emitter__: Emisor de eventos para notificaciones (opcional)
-            
+            body (dict): OpenWebUI response payload (includes assistant output).
+            __request__ (Request): FastAPI Request object (for writes if required).
+            __user__ (Any): Current user info (required for memory writes).
+            __event_emitter__ (Callable|None): Optional status event emitter.
+        
         Returns:
-            dict: Cuerpo de la petición modificado
+            dict: The (possibly) annotated payload. If a slash command is processed,
+                  an assistant message is appended and the function returns early.
+        
+        Notes:
+            - Auto-save respects `min_response_length` and `max_response_length`.
+            - Duplicate checks compare normalized text against existing memories.
+            - Cache is invalidated on successful writes when `enable_cache=True`.
+        
+        中文說明：
+        在助理回覆產生後執行，負責指令處理、自動儲存與容量管控。
+        
+        職責：
+        - 斜線指令：在 `enable_memory_commands=True` 時處理 `/memories`、
+          `/memory_search <q>`、`/forget_all`；處理後會中斷一般流程。
+        - 自動儲存：依 valves 設定將最近一則使用者與/或助理訊息寫入記憶，
+          並套用長度閥值與重複過濾（`filter_duplicates` + `similarity_threshold`）。
+        - 容量控管：若 `max_memories_per_user > 0`，限制成長（如 FIFO）。
+        - 狀態事件：`show_injection_status=True` 時回報進度。
+        
+        參數：
+            body (dict)：OpenWebUI 回應（含助理輸出）。
+            __request__ (Request)：FastAPI Request 物件（必要時寫入記憶）。
+            __user__ (Any)：使用者資訊（寫入記憶必要）。
+            __event_emitter__ (Callable|None)：狀態事件通道。
+        
+        回傳：
+            dict：可能被附註的回應。若處理了指令，會直接附加助理訊息並結束。
+        
+        備註：
+            - 自動儲存遵守 `min_response_length` 與 `max_response_length`。
+            - 重複檢查以正規化文字與既有記憶比對。
+            - `enable_cache=True` 時成功寫入會使快取失效。
         """
-        # Validación básica
+        # (body of the function remains unchanged)
         if not isinstance(body, dict) or "messages" not in body:
             if self.valves.debug_mode:
                 logger.warning("Formato de petición no válido")
@@ -1529,20 +1671,22 @@ class Filter:
 
         return body
 
-    # ✅ 處理記憶指令 | Procesar comandos de memoria
+    # ✅ Process memory commands | 處理記憶命令
     async def _process_memory_command(
         self, command: str, user, user_valves
     ) -> Optional[str]:
         """
-        Procesa los comandos de memoria disponibles para los usuarios.
+        Processes available memory commands for users.
+        
+        處理使用者可用的記憶命令。
 
         Args:
-            command: Comando ingresado por el usuario
-            user: Información del usuario
-            user_valves: Configuración del usuario
+            command: Command entered by user | 使用者輸入的命令
+            user: User information | 使用者資訊
+            user_valves: User configuration | 使用者配置
 
         Returns:
-            str: Respuesta del comando o None si no es un comando válido
+            str: Command response or None if not a valid command | 命令回應，如果不是有效命令則為 None
         """
         try:
             # SECURITY FIX: Input sanitization real
@@ -1579,7 +1723,7 @@ class Filter:
             args = parts[1:] if len(parts) > 1 else []
 
             if self.valves.debug_mode:
-                logger.debug(f"Procesando comando: {cmd} con argumentos: {args}")
+                logger.debug(f"Processing command: {cmd} with arguments: {args} | 處理命令: {cmd} 參數: {args}")
 
             # === COMANDOS DE GESTIÓN DE MEMORIAS ===
 
@@ -1717,7 +1861,7 @@ class Filter:
     # === IMPLEMENTACIÓN DE COMANDOS INDIVIDUALES ===
 
     async def _cmd_list_memories(self, user_id: str, page: int = 1) -> str:
-        """Lista todas las memorias del usuario con formato JSON enterprise avanzado."""
+        """Lists all user memories with advanced enterprise JSON format. | 以進階企業 JSON 格式列出所有使用者記憶。"""
 
         async def _execute_list_memories():
             # Validar user_id usando funciones de seguridad
@@ -1783,12 +1927,12 @@ class Filter:
             total_pages = (total_memories + per_page - 1) // per_page
             current_page = min(page, total_pages) if total_pages > 0 else 1
 
-            # Calcular índices para paginación
+            # Calculate pagination indices | 計算分頁索引
             start_idx = (current_page - 1) * per_page
             end_idx = min(start_idx + per_page, total_memories)
             page_memories = processed_memories[start_idx:end_idx]
 
-            # Crear lista de memorias con UUIDs deterministas y previews inteligentes
+            # Create memory list with deterministic UUIDs and intelligent previews | 使用確定性UUID和智能預覽建立記憶列表
             memories_list = []
             for i, memory in enumerate(page_memories, start=start_idx + 1):
                 # Generar UUID determinista usando hash del contenido y posición
@@ -1800,7 +1944,7 @@ class Filter:
                 # Preview inteligente (primeras 100 chars con corte inteligente)
                 preview = memory[:100].strip()
                 if len(memory) > 100:
-                    # Buscar último espacio o punto para corte inteligente
+                    # Look for last space or period for intelligent cut | 尋找最後一個空格或句號進行智能截斷
                     last_space = preview.rfind(" ")
                     last_dot = preview.rfind(".")
                     if last_dot > 80:
@@ -1940,7 +2084,7 @@ class Filter:
         return await self._safe_execute_async_command(_execute_list_memories)
 
     async def _cmd_clear_memories(self, user_id: str) -> str:
-        """Elimina todas las memorias del usuario."""
+        """Deletes all user memories. | 刪除所有使用者記憶。"""
         try:
             await self.clear_user_memory(user_id)
             return "🗑️ **Todas las memorias han sido eliminadas correctamente.**"
@@ -1948,7 +2092,7 @@ class Filter:
             return "❌ Error al eliminar las memorias."
 
     async def _cmd_memory_count(self, user_id: str) -> str:
-        """Muestra el número total de memorias."""
+        """Shows total number of memories. | 顯示記憶總數。"""
         try:
             processed_memories = await self.get_processed_memory_strings(user_id)
             count = len(processed_memories) if processed_memories else 0
@@ -1967,7 +2111,7 @@ class Filter:
             return "❌ Error al contar las memorias."
 
     async def _cmd_search_memories(self, user_id: str, search_term: str) -> str:
-        """Busca memorias que contengan un término específico con validaciones de seguridad."""
+        """Searches for memories containing a specific term with security validations. | 搜尋包含特定詞彙的記憶，帶有安全驗證。"""
 
         async def _execute_search():
             # Validar y sanitizar inputs usando funciones de seguridad
@@ -1986,7 +2130,7 @@ class Filter:
             if not processed_memories:
                 return f"📘 {Constants.NO_MEMORIES_MSG}"
 
-            # Buscar memorias que contengan el término
+            # Search for memories containing the term | 搜尋包含該詞的記憶
             matches = []
             for i, memory in enumerate(processed_memories, 1):
                 if sanitized_search_term.lower() in memory.lower():
@@ -2064,7 +2208,7 @@ class Filter:
         return await self._safe_execute_async_command(_execute_search)
 
     async def _cmd_recent_memories(self, user_id: str, limit: int) -> str:
-        """Muestra las memorias más recientes."""
+        """Shows most recent memories. | 顯示最近的記憶。"""
         try:
             processed_memories = await self.get_processed_memory_strings(user_id)
             if not processed_memories:
@@ -2087,14 +2231,14 @@ class Filter:
             return f"❌ Error al obtener memorias recientes: {str(e)}"
 
     async def _cmd_export_memories(self, user_id: str) -> str:
-        """Exporta todas las memorias en formato texto."""
+        """Exports all memories in text format. | 以文字格式匯出所有記憶。"""
         try:
             processed_memories = await self.get_processed_memory_strings(user_id)
             if not processed_memories:
                 return f"📘 {Constants.NO_MEMORIES_MSG}"
 
-            # Crear exportación formateada
-            export_text = f"# Exportación de Memorias - Usuario: {user_id}\n"
+            # Create formatted export | 建立格式化匯出
+            export_text = f"# Memory Export - User: {user_id}\n"
             export_text += f"# Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
             export_text += f"# Total de memorias: {len(processed_memories)}\n\n"
 
@@ -2104,7 +2248,7 @@ class Filter:
             # Truncar si es muy largo
             if len(export_text) > 4000:
                 export_text = (
-                    export_text[:4000] + "\n\n... [Exportación truncada por longitud]"
+                    export_text[:4000] + "\n\n... [Export truncated for length] | ... [匯出因長度而截斷]"
                 )
 
             return f"📤 **Exportación de Memorias:**\n\n```\n{export_text}\n```"
@@ -2112,11 +2256,11 @@ class Filter:
             return f"❌ Error al exportar memorias: {str(e)}"
 
     async def _cmd_show_config(self, user_valves) -> str:
-        """Muestra la configuración actual del usuario."""
+        """Shows current user configuration. | 顯示當前使用者配置。"""
         try:
-            config_info = "⚙️ **Configuración Actual:**\n\n"
+            config_info = "⚙️ **Current Configuration: | 目前配置：**\n\n"
 
-            # Configuración del sistema
+            # System configuration | 系統配置
             config_info += "**Sistema:**\n"
             config_info += (
                 f"• Filtro habilitado: {'✅' if self.valves.enabled else '❌'}\n"
@@ -2129,7 +2273,7 @@ class Filter:
                 f"• Caché habilitado: {'✅' if self.valves.enable_cache else '❌'}\n\n"
             )
 
-            # Configuración del usuario
+            # User configuration | 使用者配置
             config_info += "**Usuario:**\n"
             if user_valves:
                 config_info += f"• Mostrar estado: {'✅' if getattr(user_valves, 'show_status', True) else '❌'}\n"
@@ -2145,7 +2289,7 @@ class Filter:
             return f"❌ Error al mostrar configuración: {str(e)}"
 
     async def _cmd_toggle_private_mode(self, mode: str) -> str:
-        """Activa o desactiva el modo privado."""
+        """Activates or deactivates private mode. | 啟用或停用私人模式。"""
         # Nota: En una implementación real, esto requeriría persistir la configuración
         status = "activado" if mode == "on" else "desactivado"
         return (
@@ -2155,7 +2299,7 @@ class Filter:
         )
 
     async def _cmd_set_memory_limit(self, limit: int) -> str:
-        """Establece el límite personal de memorias."""
+        """Sets personal memory limit. | 設定個人記憶限制。"""
         if limit < 0 or limit > 1000:
             return "❌ El límite debe estar entre 0 y 1000 (0 = ilimitado)"
 
@@ -2166,7 +2310,7 @@ class Filter:
         )
 
     async def _cmd_set_memory_prefix(self, prefix: str) -> str:
-        """Establece un prefijo personalizado para las memorias."""
+        """Sets custom prefix for memories. | 為記憶設定自定義前綴。"""
         if len(prefix) > 100:
             return "❌ El prefijo no puede tener más de 100 caracteres"
 
@@ -2176,40 +2320,40 @@ class Filter:
         )
 
     def _cmd_show_help(self) -> str:
-        """Muestra la ayuda con todos los comandos disponibles."""
+        """Shows help with all available commands. | 顯示所有可用命令的幫助。"""
         help_text = "🆘 **Comandos Disponibles (v2.1.1 - UX Profesional):**\n\n"
 
         help_text += "**📚 Gestión de Memorias:**\n"
         help_text += "• `/memories` - Lista todas las memorias\n"
         help_text += "• `/memory_add <texto>` - 🆕 Añade memoria manualmente\n"
-        help_text += "• `/clear_memories` - Elimina todas las memorias\n"
-        help_text += "• `/memory_count` - Muestra el número de memorias\n"
+        help_text += "• `/clear_memories` - Delete all memories | 刪除所有記憶\n"
+        help_text += "• `/memory_count` - Shows number of memories | 顯示記憶數量\n"
         help_text += "• `/memory_search <término>` - Busca memorias\n"
         help_text += "• `/memory_recent [número]` - Últimas N memorias\n"
         help_text += "• `/memory_export` - Exporta todas las memorias\n\n"
 
         help_text += "**✨ Comandos Avanzados (NUEVOS):**\n"
-        help_text += "• `/memory_pin <id>` - 🆕 Marca memoria como importante\n"
-        help_text += "• `/memory_unpin <id>` - 🆕 Desmarca memoria importante\n"
+        help_text += "• `/memory_pin <id>` - 🆕 Mark memory as important | 標記記憶為重要\n"
+        help_text += "• `/memory_unpin <id>` - 🆕 Unmark important memory | 取消標記重要記憶\n"
         help_text += "• `/memory_favorite <id>` - 🆕 Añade a favoritos\n"
-        help_text += "• `/memory_tag <id> <etiqueta>` - 🆕 Etiqueta memoria\n"
-        help_text += "• `/memory_edit <id> <texto>` - 🆕 Edita memoria existente\n"
-        help_text += "• `/memory_delete <id>` - 🆕 Elimina memoria específica\n\n"
+        help_text += "• `/memory_tag <id> <tag>` - 🆕 Tag memory | 標記記憶\n"
+        help_text += "• `/memory_edit <id> <text>` - 🆕 Edit existing memory | 編輯現有記憶\n"
+        help_text += "• `/memory_delete <id>` - 🆕 Delete specific memory | 刪除特定記憶\n\n"
 
-        help_text += "**⚙️ Configuración:**\n"
-        help_text += "• `/memory_config` - Muestra la configuración\n"
-        help_text += "• `/private_mode on|off` - Activa/desactiva modo privado\n"
-        help_text += "• `/memory_limit <número>` - Establece límite personal\n"
-        help_text += "• `/memory_prefix <texto>` - Configura prefijo personalizado\n\n"
+        help_text += "**⚙️ Configuration: | 配置：**\n"
+        help_text += "• `/memory_config` - Shows configuration | 顯示配置\n"
+        help_text += "• `/private_mode on|off` - Activate/deactivate private mode | 啟用/停用私人模式\n"
+        help_text += "• `/memory_limit <number>` - Set personal limit | 設定個人限制\n"
+        help_text += "• `/memory_prefix <text>` - Configure custom prefix | 配置自定義前綴\n\n"
 
         help_text += "**📊 Información y Análisis:**\n"
-        help_text += "• `/memory_help` - Muestra esta ayuda\n"
+        help_text += "• `/memory_help` - Shows this help | 顯示此幫助\n"
         help_text += "• `/memory_stats` - Estadísticas del sistema\n"
         help_text += "• `/memory_status` - Estado actual del filtro\n"
         help_text += "• `/memory_analytics` - 🆕 Análisis avanzado de memorias\n\n"
 
         help_text += "**🔧 Utilidades y Herramientas:**\n"
-        help_text += "• `/memory_cleanup` - Limpia duplicados manualmente\n"
+        help_text += "• `/memory_cleanup` - Clean duplicates manually | 手動清理重複\n"
         help_text += "• `/memory_backup` - Crea respaldo de memorias\n"
         help_text += "• `/memory_restore` - 🆕 Info sobre restauración\n"
         help_text += "• `/memory_import` - 🆕 Ayuda para importar memorias\n"
@@ -2226,7 +2370,7 @@ class Filter:
         return help_text
 
     async def _cmd_show_stats(self, user_id: str) -> str:
-        """Muestra estadísticas detalladas del sistema con validaciones de seguridad."""
+        """Shows detailed system statistics with security validations. | 顯示詳細系統統計資訊，帶有安全驗證。"""
 
         async def _execute_stats():
             # Validar user_id usando funciones de seguridad
@@ -2380,7 +2524,7 @@ class Filter:
         return await self._safe_execute_async_command(_execute_stats)
 
     async def _cmd_show_status(self) -> str:
-        """Muestra el estado actual del filtro."""
+        """Shows current filter status. | 顯示當前過濾器狀態。"""
         try:
             status = "🔍 **Estado del Auto Memory Saver:**\n\n"
 
@@ -2414,7 +2558,7 @@ class Filter:
             return f"❌ Error al mostrar estado: {str(e)}"
 
     async def _cmd_cleanup_duplicates(self, user_id: str) -> str:
-        """Limpia memorias duplicadas manualmente."""
+        """Cleans duplicate memories manually. | 手動清理重複記憶。"""
         try:
             processed_memories = await self.get_processed_memory_strings(user_id)
             if not processed_memories:
@@ -2442,7 +2586,7 @@ class Filter:
             return f"❌ Error al limpiar duplicados: {str(e)}"
 
     async def _cmd_backup_memories(self, user_id: str) -> str:
-        """Crea un respaldo de las memorias del usuario."""
+        """Creates a backup of user memories. | 建立使用者記憶的備份。"""
         try:
             processed_memories = await self.get_processed_memory_strings(user_id)
             if not processed_memories:
@@ -2468,7 +2612,7 @@ class Filter:
     # REMOVED: _cmd_add_memory_manual (usar /add_memory nativo de OpenWebUI)
 
     async def _cmd_pin_memory(self, user_id: str, memory_id: int) -> str:
-        """Marca una memoria como importante/fijada."""
+        """Marks a memory as important/pinned. | 將記憶標記為重要/置頂。"""
         try:
             memories = await self.get_processed_memory_strings(user_id)
             if not memories or memory_id < 1 or memory_id > len(memories):
@@ -2490,7 +2634,7 @@ class Filter:
             return f"❌ Error fijando memoria: {str(e)}"
 
     async def _cmd_unpin_memory(self, user_id: str, memory_id: int) -> str:
-        """Desmarca una memoria como importante."""
+        """Unmarks a memory as important. | 取消標記記憶為重要。"""
         try:
             memories = await self.get_processed_memory_strings(user_id)
             if not memories or memory_id < 1 or memory_id > len(memories):
@@ -2529,7 +2673,7 @@ class Filter:
             return f"❌ Error añadiendo a favoritos: {str(e)}"
 
     async def _cmd_tag_memory(self, user_id: str, memory_id: int, tag: str) -> str:
-        """Etiqueta una memoria con un tag personalizado."""
+        """Tags a memory with a custom tag. | 用自定義標籤標記記憶。"""
         try:
             memories = await self.get_processed_memory_strings(user_id)
             if not memories or memory_id < 1 or memory_id > len(memories):
@@ -2553,7 +2697,7 @@ class Filter:
     async def _cmd_edit_memory(
         self, user_id: str, memory_id: int, new_text: str
     ) -> str:
-        """Edita el contenido de una memoria existente con validaciones de seguridad críticas."""
+        """Edits the content of an existing memory with critical security validations. | 編輯現有記憶的內容，帶有關鍵安全驗證。"""
 
         async def _execute_edit():
             # Validar y sanitizar inputs usando funciones de seguridad
@@ -2635,7 +2779,7 @@ class Filter:
         return await self._safe_execute_async_command(_execute_edit)
 
     async def _cmd_delete_memory(self, user_id: str, memory_id: int) -> str:
-        """Elimina una memoria específica con validaciones de seguridad críticas."""
+        """Deletes a specific memory with critical security validations. | 刪除特定記憶，帶有關鍵安全驗證。"""
 
         async def _execute_delete():
             # Validar y sanitizar inputs usando funciones de seguridad
@@ -2701,7 +2845,7 @@ class Filter:
         return await self._safe_execute_async_command(_execute_delete)
 
     async def _cmd_memory_analytics(self, user_id: str) -> str:
-        """Proporciona análisis avanzado de las memorias del usuario."""
+        """Provides advanced analysis of user memories. | 提供使用者記憶的進階分析。"""
         try:
             memories = await self.get_processed_memory_strings(user_id)
             if not memories:
@@ -2754,7 +2898,7 @@ class Filter:
             return f"❌ Error en análisis: {str(e)}"
 
     async def _cmd_show_templates(self) -> str:
-        """Muestra plantillas de memorias comunes."""
+        """Shows common memory templates. | 顯示常用記憶範本。"""
         templates = f"📋 **Plantillas de Memorias Comunes**\n\n"
         templates += f"💡 **Cómo usar:** Copia y personaliza estas plantillas con /memory_add\n\n"
 
@@ -2789,7 +2933,7 @@ class Filter:
         return templates
 
     async def _cmd_import_help(self) -> str:
-        """Proporciona ayuda para importar memorias."""
+        """Provides help for importing memories. | 提供匯入記憶的幫助。"""
         help_text = f"📥 **Importación de Memorias**\n\n"
         help_text += f"🚀 **Métodos Disponibles:**\n\n"
 
@@ -2823,7 +2967,7 @@ class Filter:
         return help_text
 
     async def _cmd_restore_memories(self, user_id: str) -> str:
-        """Información sobre restauración de memorias."""
+        """Information about memory restoration. | 關於記憶復原的資訊。"""
         restore_info = f"🔄 **Restauración de Memorias**\n\n"
         restore_info += f"📋 **Estado Actual:**\n"
 
@@ -2864,13 +3008,15 @@ class Filter:
 
         return restore_info
 
-    # ✅ 清除記憶 | Limpiar memoria
+    # ✅ Clear memory | 清除記憶
     async def clear_user_memory(self, user_id: str) -> None:
         """
-                Elimina todas las memorias de un usuario específico.
-        {{ ... }}
-                Args:
-                    user_id: Identificador único del usuario
+        Deletes all memories of a specific user.
+        
+        刪除特定使用者的所有記憶。
+        
+        Args:
+            user_id: Unique user identifier | 唯一使用者標識符
         """
         try:
             print(f"[Memory] Clearing all memories for user: {user_id}")
@@ -2889,7 +3035,7 @@ class Filter:
         if self.valves.enabled:
             await self.clear_user_memory(user_id)
 
-    # ✅ 查詢 raw 記憶 | Consultar memoria en bruto
+    # ✅ Query raw memories | 查詢原始記憶
     async def get_raw_existing_memories(
         self,
         user_id: str,
@@ -2897,19 +3043,35 @@ class Filter:
         limit: Optional[int] = None,
     ) -> List[Any]:
         """
-        Obtiene las memorias sin procesar de un usuario, ordenadas por fecha.
+        Handles deletion events for a chat/conversation.
 
-        PRODUCTION FIX: Añadido límite para prevenir memory leaks en usuarios con miles de memorias.
-        SECURITY FIX: Validación anti-SQL injection en order_by.
+        Default safe policy:
+        - This implementation performs **no global memory purge** when a single chat is deleted,
+          preventing accidental loss of a user's full persistent memory.
+        - If you need parity with legacy behavior (purge all user memories on chat delete),
+          explicitly call `clear_user_memory(user_id)` here.
 
         Args:
-            user_id: Identificador único del usuario
-            order_by: Criterio de ordenación (por defecto: created_at DESC para más recientes primero)
-            limit: Límite máximo de memorias a retornar (None = usar límite por defecto de válvulas)
+            user_id (str): The user identifier associated with the deleted chat.
 
         Returns:
-            List[Any]: Lista de objetos de memoria sin procesar, ordenados por fecha (limitada)
+            None
+
+        中文說明：
+        處理聊天刪除事件。
+
+        預設的安全策略：
+        - 本實作在刪除單一聊天時 **不會** 清空該使用者的所有記憶，以避免誤刪。
+        - 若需要與舊版一致（刪除聊天即全清使用者記憶），可在此明確呼叫
+          `clear_user_memory(user_id)`。
+
+        參數：
+            user_id (str)：與被刪除聊天關聯的使用者識別碼。
+
+        回傳：
+            None
         """
+        # (body of the function remains unchanged)
         try:
             # SECURITY FIX: Validar user_id para prevenir SQL injection
             if not user_id or not isinstance(user_id, str) or len(user_id.strip()) == 0:
@@ -3036,16 +3198,18 @@ class Filter:
             logger.error(f"Error retrieving raw memories: {e}")
             return []
 
-    # ✅ 查詢文字格式記憶 | Consultar memoria en formato de texto
+    # ✅ Query text format memories | 查詢文字格式記憶
     async def get_processed_memory_strings(self, user_id: str) -> List[str]:
         """
-        Procesa las memorias de un usuario a un formato de texto legible.
+        Processes user memories into readable text format.
+        
+        將使用者記憶處理成可讀的文字格式。
 
         Args:
-            user_id: Identificador único del usuario
+            user_id: Unique user identifier | 唯一使用者標識符
 
         Returns:
-            List[str]: Lista de cadenas formateadas con las memorias
+            List[str]: List of formatted strings with memories | 記憶格式化字串的列表
         """
         try:
             existing_memories = await self.get_raw_existing_memories(
