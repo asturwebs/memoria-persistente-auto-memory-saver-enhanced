@@ -1,79 +1,79 @@
-# Política de Seguridad - Memoria Persistente (Auto Memory Saver Enhanced)
+# Security Policy - Persistent Memory (Auto Memory Saver Enhanced)
 
-## 🔒 Versiones Soportadas
+## 🔒 Supported Versions
 
-| Versión | Soporte de Seguridad |
+| Version | Security Support |
 | ------- | ------------------- |
-| 2.1.x   | ✅ Sí               |
-| 2.0.x   | ✅ Sí               |
+| 2.1.x   | ✅ Yes               |
+| 2.0.x   | ✅ Yes               |
 | < 2.0   | ❌ No               |
 
-## 🚨 Reportar Vulnerabilidades
+## 🚨 Report Vulnerabilities
 
-Si descubres una vulnerabilidad de seguridad, por favor **NO** la reportes públicamente. En su lugar:
+If you discover a security vulnerability, please **DO NOT** report it publicly. Instead:
 
-### Proceso de Reporte Responsable
+### Responsible Disclosure Process
 
-1. **Email Privado**: Envía los detalles a pedro@asturwebs.es
-2. **Información Requerida**:
-   - Descripción detallada de la vulnerabilidad
-   - Pasos para reproducir
-   - Impacto potencial
-   - Versión afectada
-   - Cualquier mitigación conocida
+1. **Private Email**: Send details to pedro@asturwebs.es
+2. **Required Information**:
+   - Detailed description of the vulnerability
+   - Steps to reproduce
+   - Potential impact
+   - Affected version
+   - Any known mitigation
 
-3. **Respuesta Esperada**:
-   - Confirmación de recepción: 24-48 horas
-   - Evaluación inicial: 1 semana
-   - Resolución: Según severidad (1-4 semanas)
+3. **Expected Response**:
+   - Receipt confirmation: 24-48 hours
+   - Initial assessment: 1 week
+   - Resolution: According to severity (1-4 weeks)
 
-### Severidad de Vulnerabilidades
+### Vulnerability Severity
 
-- **Crítica**: Ejecución remota de código, acceso no autorizado a datos
-- **Alta**: Escalación de privilegios, bypass de autenticación
-- **Media**: Divulgación de información, DoS
-- **Baja**: Problemas menores de configuración
+- **Critical**: Remote code execution, unauthorized data access
+- **High**: Privilege escalation, authentication bypass
+- **Medium**: Information disclosure, DoS
+- **Low**: Minor configuration issues
 
-## 🛡️ Mejores Prácticas de Seguridad
+## 🛡️ Security Best Practices
 
-### Para Usuarios
-- Mantén OpenWebUI actualizado
-- Revisa las configuraciones de válvulas regularmente
-- No compartas logs que contengan información sensible
-- Usa el modo privado para conversaciones sensibles
+### For Users
+- Keep OpenWebUI updated
+- Review valve configurations regularly
+- Don't share logs containing sensitive information
+- Use private mode for sensitive conversations
 
-### Para Desarrolladores
-- Valida todas las entradas de usuario
-- Sanitiza datos antes de almacenar
-- Usa logging seguro (sin datos sensibles)
-- Implementa rate limiting apropiado
+### For Developers
+- Validate all user inputs
+- Sanitize data before storing
+- Use secure logging (without sensitive data)
+- Implement appropriate rate limiting
 
-## 🔐 Consideraciones de Privacidad
+## 🔐 Privacy Considerations
 
-- Las memorias se almacenan localmente en OpenWebUI
-- No se envían datos a servicios externos
-- El modo privado previene el guardado de memorias
-- Los logs pueden contener fragmentos de conversación (configurar apropiadamente)
+- Memories are stored locally in OpenWebUI
+- No data is sent to external services
+- Private mode prevents memory saving
+- Logs may contain conversation fragments (configure appropriately)
 
-## 📋 Auditorías de Seguridad
+## 📋 Security Audits
 
-- Revisión de código regular
-- Análisis de dependencias
-- Testing de penetración básico
-- Monitoreo de vulnerabilidades conocidas
+- Regular code review
+- Dependency analysis
+- Basic penetration testing
+- Known vulnerability monitoring
 
-## 🤝 Divulgación Coordinada
+## 🤝 Coordinated Disclosure
 
-Trabajamos con investigadores de seguridad para:
-- Validar y reproducir reportes
-- Desarrollar patches de manera responsable
-- Coordinar la divulgación pública
-- Reconocer contribuciones de seguridad
+We work with security researchers to:
+- Validate and reproduce reports
+- Develop patches responsibly
+- Coordinate public disclosure
+- Recognize security contributions
 
-## 📞 Contacto de Seguridad
+## 📞 Security Contact
 
 - **Email**: pedro@asturwebs.es
-- **PGP**: Disponible bajo petición
-- **Respuesta**: 24-48 horas para reportes críticos
+- **PGP**: Available upon request
+- **Response**: 24-48 hours for critical reports
 
-¡Gracias por ayudar a mantener Auto Memory Saver Enhanced seguro! 🙏
+Thank you for helping keep Auto Memory Saver Enhanced secure! 🙏

@@ -1,28 +1,28 @@
-# 🚀 Guía de Configuración Git y GitHub
+# 🚀 Git and GitHub Setup Guide
 
-## 📋 Comandos para Crear el Repositorio
+## 📋 Commands to Create Repository
 
-### 1. Inicializar Git en el directorio del proyecto
+### 1. Initialize Git in project directory
 
 ```bash
 cd /Users/asturwebs/Desktop
 git init
 ```
 
-### 2. Configurar Git (si no lo has hecho antes)
+### 2. Configure Git (if you haven't done it before)
 
 ```bash
 git config --global user.name "Pedro Luis Cuevas Villarrubia"
 git config --global user.email "pedro@asturwebs.es"
 ```
 
-### 3. Añadir todos los archivos
+### 3. Add all files
 
 ```bash
 git add .
 ```
 
-### 4. Primer commit
+### 4. First commit
 
 ```bash
 git commit -m "🎉 Initial release: Auto Memory Saver Enhanced v2.0.0

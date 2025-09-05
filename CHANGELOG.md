@@ -1,298 +1,298 @@
 # Changelog
 
-Todos los cambios notables de este proyecto serán documentados en este archivo.
+All notable changes to this project will be documented in this file.
 
-El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
-y este proyecto adhiere al [Versionado Semántico](https://semver.org/lang/es/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [2.3.0] - 2025-07-25
 
-### 🚀 **AI Behavior Control Universal - Breakthrough Histórico**
+### 🚀 **AI Behavior Control Universal - Historic Breakthrough**
 
-#### 🌟 **Testing Exhaustivo de 30 Modelos IA**
-- **Compatibilidad sin Precedentes**: Testing más exhaustivo jamás realizado para un filtro OpenWebUI
-- **11 Modelos Excelentes**: JSON perfecto con AI Behavior Control (Claude 3.5 Sonnet, familia Grok, familia Gemini, GPT-4.1-mini, familia Gemma)
-- **3 Modelos Funcionales**: Compatibles con particularidades (Claude 3.7 Thinking/Sonnet, DeepSeek Reasoner)
-- **16 Modelos Problemáticos**: Documentados para transparencia total
-- **Google/Gemini Liderazgo**: 5 de 11 modelos excelentes pertenecen a la familia Google
+#### 🌟 **Exhaustive Testing of 30 AI Models**
+- **Unprecedented Compatibility**: Most exhaustive testing ever performed for an OpenWebUI filter
+- **11 Excellent Models**: Perfect JSON with AI Behavior Control (Claude 3.5 Sonnet, Grok family, Gemini family, GPT-4.1-mini, Gemma family)
+- **3 Functional Models**: Compatible with quirks (Claude 3.7 Thinking/Sonnet, DeepSeek Reasoner)
+- **16 Problematic Models**: Documented for total transparency
+- **Google/Gemini Leadership**: 5 out of 11 excellent models belong to the Google family
 
-#### 🎯 **Revelaciones Técnicas Clave**
-- **Claude 4 Regresión**: Opus/Sonnet 4 peor rendimiento que Claude 3.5 Sonnet para comandos sistema
-- **Grok Familia Perfecta**: 100% compatibilidad en todas las variantes (Grok 4, Grok-3, Grok-3-fast, Grok-3-mini-fast)
-- **OpenAI Fragmentación**: GPT-4.1-mini excelente, versiones completas fallan consistentemente
-- **Google API Directa Bug**: Modelos Google/Gemini solo funcionan vía OpenRouter/APIs intermedias, API directa tiene bugs con slash commands
-- **OpenRouter Effect Discovered**: Testing demuestra que OpenRouter mejora dramáticamente compatibilidad (ChatGPT-4o, GPT-4.1: problemático → perfecto)
-- **Amazon Nova Fallo Total**: Toda la familia Nova no procesa comandos
+#### 🎯 **Key Technical Revelations**
+- **Claude 4 Regression**: Opus/Sonnet 4 worse performance than Claude 3.5 Sonnet for system commands
+- **Grok Family Perfect**: 100% compatibility across all variants (Grok 4, Grok-3, Grok-3-fast, Grok-3-mini-fast)
+- **OpenAI Fragmentation**: GPT-4.1-mini excellent, full versions consistently fail
+- **Google API Direct Bug**: Google/Gemini models only work via OpenRouter/intermediate APIs, direct API has bugs with slash commands
+- **OpenRouter Effect Discovered**: Testing demonstrates that OpenRouter dramatically improves compatibility (ChatGPT-4o, GPT-4.1: problematic → perfect)
+- **Amazon Nova Total Failure**: Entire Nova family doesn't process commands
 
-#### 🔧 **AI Behavior Control Implementado**
-- **Sistema de Directivas**: Forzar consistencia JSON entre modelos
-- **Efectividad Comprobada**: 11 modelos respetan directivas perfectamente
-- **Terminología Enterprise**: Eliminación de referencias "mind hacking" por seguridad empresarial
-- **Configuración Universal**: Directivas específicas por familia de modelos
+#### 🔧 **AI Behavior Control Implemented**
+- **Directive System**: Force JSON consistency across models
+- **Proven Effectiveness**: 11 models respect directives perfectly
+- **Enterprise Terminology**: Elimination of "mind hacking" references for enterprise security
+- **Universal Configuration**: Model family-specific directives
 
-#### 🛠️ **Mejoras Técnicas**
-- **Fix Crítico OpenAI**: Movimiento de `_memory_command_processed` de body a variable instancia
-- **Error 400 Resuelto**: Eliminación de argumentos no reconocidos en requests OpenAI
-- **Funcionalidad Dual Clarificada**: Memoria automática universal vs slash commands selectivos
-- **Documentación Exhaustiva**: README con tabla de compatibilidad de 30 modelos
+#### 🛠️ **Technical Improvements**
+- **Critical OpenAI Fix**: Movement of `_memory_command_processed` from body to instance variable
+- **Error 400 Resolved**: Removal of unrecognized arguments in OpenAI requests
+- **Dual Functionality Clarified**: Universal automatic memory vs selective slash commands
+- **Exhaustive Documentation**: README with 30-model compatibility table
 
-#### 📊 **Impacto en la Industria**
-- **Nuevo Estándar de Testing**: Record absoluto en compatibilidad (30 modelos evaluados)
-- **Metodología Replicable**: Framework para otros desarrolladores
-- **Insights Reveladores**: Model families matter, Newer ≠ Better demostrado
+#### 📊 **Industry Impact**
+- **New Testing Standard**: Absolute record in compatibility (30 models evaluated)
+- **Replicable Methodology**: Framework for other developers
+- **Revealing Insights**: Model families matter, Newer ≠ Better demonstrated
 
 ## [2.2.0] - 2025-07-25
 
-### 🛡️ **Seguridad y Rendimiento Enterprise**
+### 🛡️ **Enterprise Security and Performance**
 
-#### 🔒 **Thread Safety Implementado**
-- **Cache Thread-Safe**: RLock para acceso concurrente seguro
-- **Prevención Memory Leaks**: Límites automáticos en consultas BD
-- **Concurrent Access**: Soporte múltiples usuarios simultáneos
+#### 🔒 **Thread Safety Implemented**
+- **Thread-Safe Cache**: RLock for safe concurrent access
+- **Memory Leak Prevention**: Automatic limits on DB queries
+- **Concurrent Access**: Multiple simultaneous user support
 
-#### 🚨 **Prevención SQL Injection**
-- **Parameter Whitelisting**: Validación de parámetros order_by
-- **Input Sanitization**: Filtrado de comandos peligrosos
-- **User ID Validation**: Sanitización con regex seguro
+#### 🚨 **SQL Injection Prevention**
+- **Parameter Whitelisting**: Validation of order_by parameters
+- **Input Sanitization**: Filtering of dangerous commands
+- **User ID Validation**: Sanitization with safe regex
 
-#### ⚡ **Optimizaciones de Rendimiento**
-- **Conversación Completa**: Guarda preguntas del usuario + respuestas del asistente
-- **Filtro Anti-Meta**: No guarda conversaciones sobre memoria
-- **Paginación Mejorada**: 10 memorias por página (antes 4)
-- **Query Performance**: <2ms response time mantenido
+#### ⚡ **Performance Optimizations**
+- **Complete Conversation**: Saves user questions + assistant responses
+- **Anti-Meta Filter**: Doesn't save conversations about memory
+- **Improved Pagination**: 10 memories per page (previously 4)
+- **Query Performance**: <2ms response time maintained
 
-#### 🔧 **Mejoras Técnicas**
-- **Error Handling Robusto**: Manejo seguro sin exposición de datos
-- **Memory Limits**: Gestión automática de recursos por usuario
-- **Cache Optimization**: TTL configurable con cleanup automático
+#### 🔧 **Technical Improvements**
+- **Robust Error Handling**: Safe handling without data exposure
+- **Memory Limits**: Automatic resource management per user
+- **Cache Optimization**: Configurable TTL with automatic cleanup
 
 ## [2.1.2] - 2025-07-25
 
-### 🔄 Cambios de Marca
-- **Nuevo Nombre del Proyecto**: Cambiado a "Memoria Persistente (Auto Memory Saver Enhanced)" para mejor claridad y posicionamiento
-- Actualizada documentación para reflejar el nuevo nombre
+### 🔄 Brand Changes
+- **New Project Name**: Changed to "Persistent Memory (Auto Memory Saver Enhanced)" for better clarity and positioning
+- Updated documentation to reflect the new name
 
 ## [2.1.2] - 2025-07-24
 
-### 🚀 Mejoras Enterprise - Seguridad y Formato JSON Avanzado
+### 🚀 Enterprise Improvements - Security and Advanced JSON Format
 
-#### 🛡️ Seguridad Crítica Implementada
-- **Validación Robusta de Entrada**: Implementadas funciones de seguridad core para todos los comandos críticos
-  - `_sanitize_input()` - Sanitización con regex avanzado y validación de longitud
-  - `_validate_user_id()` - Validación de user_id con caracteres seguros únicamente
-  - `_validate_memory_id()` - Validación de IDs de memoria con rangos de existencia real
-  - `_safe_execute_command()` y `_safe_execute_async_command()` - Manejo seguro de errores
+#### 🛡️ Critical Security Implemented
+- **Robust Input Validation**: Implemented core security functions for all critical commands
+  - `_sanitize_input()` - Sanitization with advanced regex and length validation
+  - `_validate_user_id()` - User_id validation with safe characters only
+  - `_validate_memory_id()` - Memory ID validation with real existence ranges
+  - `_safe_execute_command()` and `_safe_execute_async_command()` - Safe error handling
 
-- **Comandos Slash Securizados**: Implementada seguridad enterprise en comandos críticos
-  - `/memory_add` - Validación completa + sanitización + audit trail
-  - `/memory_search` - Sanitización de términos + validación de longitud mínima
-  - `/memory_delete` - Validación crítica + warnings de seguridad + metadata de auditoría
-  - `/memory_edit` - Sanitización + tracking de cambios + validación de existencia
-  - `/memory_stats` - Formato JSON enterprise con metadata de seguridad
+- **Secured Slash Commands**: Implemented enterprise security on critical commands
+  - `/memory_add` - Complete validation + sanitization + audit trail
+  - `/memory_search` - Term sanitization + minimum length validation
+  - `/memory_delete` - Critical validation + security warnings + audit metadata
+  - `/memory_edit` - Sanitization + change tracking + existence validation
+  - `/memory_stats` - Enterprise JSON format with security metadata
 
-#### 📊 Formato JSON Enterprise Avanzado
-- **Comando `/memories` Completamente Rediseñado**: Implementado formato enterprise observado en producción
-  - **Paginación Avanzada**: 4 memorias por página con navegación completa
-  - **UUIDs Deterministas**: Generados con MD5 hash para identificación única y consistente
-  - **Previews Inteligentes**: Corte inteligente en 100 caracteres con lógica de espacios/puntos
-  - **Clasificación Automática**: Detección de tipo (manual/auto) y prioridad (high/normal)
-  - **Analytics en Tiempo Real**: Distribución de tipos, prioridades y longitud promedio
-  - **Metadata de Seguridad**: User ID validado, nivel de seguridad, métricas de performance
-  - **Navegación Completa**: Enlaces a primera, última, anterior, siguiente página
-  - **Sistema de Información**: Versión, build, environment, memory engine
-  - **Tags y Relevance Score**: Etiquetado automático y puntuación de relevancia
-  - **Respuesta JSON Pura**: Completamente resistente a interpretación del modelo IA
+#### 📊 Advanced Enterprise JSON Format
+- **`/memories` Command Completely Redesigned**: Implemented enterprise format observed in production
+  - **Advanced Pagination**: 4 memories per page with complete navigation
+  - **Deterministic UUIDs**: Generated with MD5 hash for unique and consistent identification
+  - **Smart Previews**: Intelligent cut at 100 characters with space/period logic
+  - **Automatic Classification**: Type detection (manual/auto) and priority (high/normal)
+  - **Real-time Analytics**: Distribution of types, priorities and average length
+  - **Security Metadata**: Validated user ID, security level, performance metrics
+  - **Complete Navigation**: Links to first, last, previous, next page
+  - **Information System**: Version, build, environment, memory engine
+  - **Tags and Relevance Score**: Automatic tagging and relevance scoring
+  - **Pure JSON Response**: Completely resistant to AI model interpretation
 
-#### 🎯 Características de Seguridad Enterprise
-- **Prevención de Inyecciones**: Sanitización de caracteres peligrosos (`<>"'\/\x00-\x1f\x7f-\x9f`)
-- **Validación de Longitud**: Configurable por comando con límites mínimos y máximos
-- **User ID Validation**: Regex alfanumérico seguro con longitud limitada
-- **Memory ID Validation**: Verificación de rangos contra datos reales existentes
-- **Audit Trails**: Registro completo para operaciones destructivas (delete, edit)
-- **Metadata de Seguridad**: Información de validación en todas las respuestas JSON
-- **Manejo Consistente de Errores**: Logging apropiado y respuestas estructuradas
-- **Resistencia a Interpretación**: Avisos explícitos para evitar procesamiento por IA
+#### 🎯 Enterprise Security Features
+- **Injection Prevention**: Sanitization of dangerous characters (`<>"'\/\x00-\x1f\x7f-\x9f`)
+- **Length Validation**: Configurable per command with minimum and maximum limits
+- **User ID Validation**: Safe alphanumeric regex with limited length
+- **Memory ID Validation**: Range verification against existing real data
+- **Audit Trails**: Complete logging for destructive operations (delete, edit)
+- **Security Metadata**: Validation information in all JSON responses
+- **Consistent Error Handling**: Appropriate logging and structured responses
+- **Interpretation Resistance**: Explicit warnings to avoid AI processing
 
-#### 🔧 Mejoras Técnicas
-- **Manejo de Errores Unificado**: Sistema consistente de manejo de excepciones
-- **Logging Profesional**: Niveles diferenciados (info, error) con contexto apropiado
-- **Validación de Parámetros**: Verificación exhaustiva antes de ejecución
-- **Respuestas Estructuradas**: Formato JSON consistente en todos los comandos críticos
-- **Performance Optimizada**: Validaciones eficientes sin impacto en rendimiento
+#### 🔧 Technical Improvements
+- **Unified Error Handling**: Consistent exception handling system
+- **Professional Logging**: Differentiated levels (info, error) with appropriate context
+- **Parameter Validation**: Exhaustive verification before execution
+- **Structured Responses**: Consistent JSON format in all critical commands
+- **Optimized Performance**: Efficient validations without performance impact
 
-### ✅ Comandos Enterprise Validados
-- `/memories [página]` - Lista memorias con paginación enterprise y analytics
-- `/memory_add <texto>` - Añade memoria con validación completa y audit trail
-- `/memory_search <término>` - Búsqueda con sanitización y respuesta paginada
-- `/memory_delete <id>` - Eliminación con validaciones críticas y warnings
-- `/memory_edit <id> <texto>` - Edición con sanitización y tracking de cambios
-- `/memory_stats` - Estadísticas con formato JSON enterprise avanzado
+### ✅ Validated Enterprise Commands
+- `/memories [page]` - List memories with enterprise pagination and analytics
+- `/memory_add <text>` - Add memory with complete validation and audit trail
+- `/memory_search <term>` - Search with sanitization and paginated response
+- `/memory_delete <id>` - Deletion with critical validations and warnings
+- `/memory_edit <id> <text>` - Editing with sanitization and change tracking
+- `/memory_stats` - Statistics with advanced enterprise JSON format
 
-### 🎨 Formato de Respuesta Enterprise
-- **Estructura JSON Profesional**: Timestamp, system info, metadata completa
-- **Analytics Detallados**: Métricas por tipo, prioridad y performance
-- **Navegación Intuitiva**: Comandos de navegación entre páginas
-- **Actions Disponibles**: Lista completa de acciones disponibles para el usuario
-- **Warnings de Seguridad**: Avisos para evitar interpretación incorrecta
-- **Instructions Técnicas**: Directivas claras para el display correcto
+### 🎨 Enterprise Response Format
+- **Professional JSON Structure**: Timestamp, system info, complete metadata
+- **Detailed Analytics**: Metrics by type, priority and performance
+- **Intuitive Navigation**: Navigation commands between pages
+- **Available Actions**: Complete list of actions available to the user
+- **Security Warnings**: Warnings to avoid incorrect interpretation
+- **Technical Instructions**: Clear directives for correct display
 
 ## [2.1.1] - 2024-01-XX
 
-### 🔧 Correcciones Críticas
-- **SOLUCIONADO**: Slash commands no funcionaban debido a procesamiento incorrecto en `outlet`
-- **MEJORADO**: Slash commands ahora se procesan correctamente en `inlet` para mejor UX
-- **AÑADIDO**: Logging exhaustivo de diagnóstico para slash commands
-- **ELIMINADO**: Procesamiento duplicado y problemático en `outlet`
+### 🔧 Critical Fixes
+- **FIXED**: Slash commands weren't working due to incorrect processing in `outlet`
+- **IMPROVED**: Slash commands now process correctly in `inlet` for better UX
+- **ADDED**: Exhaustive diagnostic logging for slash commands
+- **REMOVED**: Duplicate and problematic processing in `outlet`
 
-### 📊 Mejoras Técnicas
-- Detección robusta de comandos que empiecen con `/`
-- Manejo de errores mejorado en procesamiento de comandos
-- Notificaciones de estado para comandos ejecutados
-- Logs visibles para debugging y monitoreo
+### 📊 Technical Improvements
+- Robust detection of commands starting with `/`
+- Improved error handling in command processing
+- Status notifications for executed commands
+- Visible logs for debugging and monitoring
 
-### 📝 Comandos Validados
-- `/memories` - Lista todas las memorias
-- `/clear_memories` - Elimina todas las memorias
-- `/memory_count` - Contador detallado
-- `/memory_search <término>` - Búsqueda de memorias
-- `/memory_recent [número]` - Memorias recientes
-- `/memory_export` - Exportación completa
-- `/memory_config` - Configuración del sistema
-- `/private_mode on|off` - Control de privacidad
-- `/memory_help` - Ayuda completa
-- `/memory_stats` - Estadísticas detalladas
-- `/memory_status` - Estado del filtro
-- `/memory_cleanup` - Limpieza de duplicados
-- `/memory_backup` - Respaldo de memorias
-- Y más...
+### 📝 Validated Commands
+- `/memories` - List all memories
+- `/clear_memories` - Delete all memories
+- `/memory_count` - Detailed counter
+- `/memory_search <term>` - Memory search
+- `/memory_recent [number]` - Recent memories
+- `/memory_export` - Complete export
+- `/memory_config` - System configuration
+- `/private_mode on|off` - Privacy control
+- `/memory_help` - Complete help
+- `/memory_stats` - Detailed statistics
+- `/memory_status` - Filter status
+- `/memory_cleanup` - Duplicate cleanup
+- `/memory_backup` - Memory backup
+- And more...
 
 ## [2.1.0] - 2025-07-24
 
-### 🚀 Mejorado
-- **Algoritmo de Relevancia Rediseñado**: Completamente reescrito para ser más efectivo y permisivo en casos reales
-- **Inyección Inteligente de Memorias**: Lógica dual - memorias recientes en primer mensaje vs memorias relevantes en mensajes posteriores
-- **Optimización de Tokens**: Eliminado log verboso que desperdiciaba tokens, mejorando eficiencia y privacidad
-- **Umbral de Relevancia Configurable**: Valor óptimo validado (0.05) para balance perfecto entre relevancia y permisividad
-- **Logs de Diagnóstico Mejorados**: Sistema completo de logging para monitoreo y depuración en producción
-- **Gestión de Memoria Mejorada**: Se ha rediseñado el sistema de inyección de memorias para priorizar la relevancia contextual
-- **Renombrado de Archivo**: El archivo principal ha sido renombrado a `Auto_Memory_Saver_Enhanced.py` para mayor claridad
-- **Continuidad Mejorada**: Se ha mejorado la continuidad entre sesiones de chat
-- **Documentación Actualizada**: Se han actualizado el README y la documentación para reflejar los cambios
+### 🚀 Enhanced
+- **Redesigned Relevance Algorithm**: Completely rewritten to be more effective and permissive in real cases
+- **Intelligent Memory Injection**: Dual logic - recent memories in first message vs relevant memories in subsequent messages
+- **Token Optimization**: Removed verbose logging that wasted tokens, improving efficiency and privacy
+- **Configurable Relevance Threshold**: Validated optimal value (0.05) for perfect balance between relevance and permissiveness
+- **Improved Diagnostic Logs**: Complete logging system for production monitoring and debugging
+- **Enhanced Memory Management**: Redesigned memory injection system to prioritize contextual relevance
+- **File Renamed**: Main file has been renamed to `Auto_Memory_Saver_Enhanced.py` for clarity
+- **Improved Continuity**: Enhanced continuity between chat sessions
+- **Updated Documentation**: Updated README and documentation to reflect changes
 
-### ✅ Validado
-- **Funcionamiento en Producción**: Validación exhaustiva en entorno real con casos de uso reales
-- **Algoritmo de Relevancia**: 16 de 16 memorias procesadas correctamente con input real
-- **Límites Configurables**: Sistema respeta correctamente max_memories_to_inject
-- **Guardado Automático**: Incremento correcto de memorias (19→20) validado
+### ✅ Validated
+- **Production Operation**: Exhaustive validation in real environment with real use cases
+- **Relevance Algorithm**: 16 out of 16 memories processed correctly with real input
+- **Configurable Limits**: System correctly respects max_memories_to_inject
+- **Automatic Saving**: Correct memory increment (19→20) validated
 
-### 🔧 Corregido
-- **Algoritmo de Relevancia Demasiado Estricto**: Reemplazado índice de Jaccard complejo por sistema de coincidencias directas + substring matching
-- **Filtros Excesivos**: Eliminado filtro de longitud mínima que bloqueaba términos importantes como "IA", "BytIA"
-- **Logs Verbosos**: Eliminado log que mostraba contenido completo de memorias, optimizando gasto de tokens
-- **Método Faltante**: Corregido error silencioso en _calculate_phrase_similarity
-- Se ha corregido un problema donde el prefijo 'fr' en el nombre del archivo podía causar confusión
-- Mejorado el manejo de memoria para evitar pérdida de contexto en conversaciones largas
+### 🔧 Fixed
+- **Overly Strict Relevance Algorithm**: Replaced complex Jaccard index with direct matching system + substring matching
+- **Excessive Filters**: Removed minimum length filter that blocked important terms like "AI", "BytIA"
+- **Verbose Logs**: Removed log showing complete memory content, optimizing token usage
+- **Missing Method**: Fixed silent error in _calculate_phrase_similarity
+- Fixed an issue where the 'fr' prefix in the filename could cause confusion
+- Improved memory handling to avoid context loss in long conversations
 
 ## [2.0.0] - 2025-01-22
 
-### 🎉 Versión Enhanced - Reescritura Completa
+### 🎉 Enhanced Version - Complete Rewrite
 
-#### Añadido
-- **16 comandos interactivos** para gestión completa de memorias
-  - `/memories` - Ver todas las memorias del usuario
-  - `/clear_memories` - Limpiar todas las memorias
-  - `/memory_search <término>` - Buscar en memorias
-  - `/memory_stats` - Estadísticas detalladas
-  - `/memory_help` - Ayuda completa de comandos
-  - `/memory_backup` - Crear respaldo de memorias
-  - `/memory_restore` - Restaurar desde respaldo
-  - `/memory_cleanup` - Limpieza automática de duplicados
-  - `/memory_export` - Exportar memorias a JSON
-  - `/memory_import` - Importar memorias desde JSON
-  - `/private_mode on|off` - Activar/desactivar modo privado
-  - `/memory_limit <número>` - Configurar límite de memorias
-  - `/memory_prefix <texto>` - Personalizar prefijo de memorias
-  - `/memory_count on|off` - Mostrar/ocultar contador de memorias
-  - `/memory_status on|off` - Mostrar/ocultar estado de guardado
-  - `/memory_debug on|off` - Activar/desactivar modo debug
+#### Added
+- **16 interactive commands** for complete memory management
+  - `/memories` - View all user memories
+  - `/clear_memories` - Clear all memories
+  - `/memory_search <term>` - Search in memories
+  - `/memory_stats` - Detailed statistics
+  - `/memory_help` - Complete command help
+  - `/memory_backup` - Create memory backup
+  - `/memory_restore` - Restore from backup
+  - `/memory_cleanup` - Automatic duplicate cleanup
+  - `/memory_export` - Export memories to JSON
+  - `/memory_import` - Import memories from JSON
+  - `/private_mode on|off` - Enable/disable private mode
+  - `/memory_limit <number>` - Configure memory limit
+  - `/memory_prefix <text>` - Customize memory prefix
+  - `/memory_count on|off` - Show/hide memory counter
+  - `/memory_status on|off` - Show/hide save status
+  - `/memory_debug on|off` - Enable/disable debug mode
 
-- **24 válvulas configurables** para control granular
-  - 16 válvulas principales del sistema
-  - 8 válvulas personalizables por usuario
-  - Control de inyección, guardado, límites, filtros, caché
+- **24 configurable valves** for granular control
+  - 16 main system valves
+  - 8 user-customizable valves
+  - Control of injection, saving, limits, filters, cache
 
-- **Sistema de caché avanzado**
-  - TTL configurable (por defecto 300 segundos)
-  - Mejora significativa del rendimiento
-  - Gestión automática de expiración
+- **Advanced cache system**
+  - Configurable TTL (default 300 seconds)
+  - Significant performance improvement
+  - Automatic expiration management
 
-- **Tipos personalizados y validaciones**
-  - `MemoryData` TypedDict para estructura de datos
-  - `CacheEntry` dataclass para entradas de caché
-  - Validaciones estrictas con Pydantic
+- **Custom types and validations**
+  - `MemoryData` TypedDict for data structure
+  - `CacheEntry` dataclass for cache entries
+  - Strict validations with Pydantic
 
-- **Logging robusto y manejo de errores**
-  - Logging condicional basado en `debug_mode`
-  - Manejo de excepciones con mensajes descriptivos
-  - Trazabilidad completa de operaciones
+- **Robust logging and error handling**
+  - Conditional logging based on `debug_mode`
+  - Exception handling with descriptive messages
+  - Complete operation traceability
 
-- **Documentación bilingüe**
-  - Comentarios en español para toda la funcionalidad nueva
-  - Preservación de comentarios originales en chino
-  - Documentación completa de API y uso
+- **Bilingual documentation**
+  - Spanish comments for all new functionality
+  - Preservation of original Chinese comments
+  - Complete API and usage documentation
 
-- **Configuraciones predefinidas**
-  - 5 escenarios de configuración listos para usar
-  - Configuración básica, desarrollo, producción, privacidad, empresarial
-  - Variables de entorno para EasyPanel
+- **Predefined configurations**
+  - 5 ready-to-use configuration scenarios
+  - Basic, development, production, privacy, enterprise configuration
+  - Environment variables for EasyPanel
 
-#### Mejorado
-- **Rendimiento**: Sistema de caché reduce consultas a BD en ~80%
-- **Seguridad**: Validaciones estrictas y sanitización de entradas
-- **Usabilidad**: Comandos intuitivos con respuestas formateadas
-- **Mantenibilidad**: Código modular y bien documentado
-- **Escalabilidad**: Arquitectura preparada para grandes volúmenes
+#### Enhanced
+- **Performance**: Cache system reduces DB queries by ~80%
+- **Security**: Strict validations and input sanitization
+- **Usability**: Intuitive commands with formatted responses
+- **Maintainability**: Modular and well-documented code
+- **Scalability**: Architecture prepared for large volumes
 
-#### Cambiado
-- Refactorización completa de métodos `inlet` y `outlet`
-- Procesamiento centralizado de comandos en `_process_memory_command`
-- Estructura de configuración expandida con válvulas granulares
-- Sistema de constantes para textos y configuraciones
+#### Changed
+- Complete refactoring of `inlet` and `outlet` methods
+- Centralized command processing in `_process_memory_command`
+- Expanded configuration structure with granular valves
+- Constants system for texts and configurations
 
-### 📚 Documentación
-- README.md completamente reescrito con ejemplos y guías
-- config_example.py con 5 configuraciones predefinidas
-- Documentación de API completa para todos los comandos
-- Guías de instalación y despliegue para EasyPanel
+### 📚 Documentation
+- README.md completely rewritten with examples and guides
+- config_example.py with 5 predefined configurations
+- Complete API documentation for all commands
+- Installation and deployment guides for EasyPanel
 
-### 🔧 Infraestructura
-- Licencia MIT añadida
-- .gitignore profesional
-- requirements.txt con dependencias específicas
-- Estructura de proyecto enterprise-ready
+### 🔧 Infrastructure
+- MIT License added
+- Professional .gitignore
+- requirements.txt with specific dependencies
+- Enterprise-ready project structure
 
 ## [1.0.0] - 2024
 
-### Versión Original por @linbanana
+### Original Version by @linbanana
 
-#### Añadido
-- Funcionalidad básica de guardado automático de memorias
-- Comando `/memories` simple para consultar memorias
-- Integración básica con OpenWebUI
-- Métodos `inlet` y `outlet` fundamentales
+#### Added
+- Basic automatic memory saving functionality
+- Simple `/memories` command to query memories
+- Basic OpenWebUI integration
+- Fundamental `inlet` and `outlet` methods
 
-#### Características Originales
-- Guardado automático de respuestas del asistente
-- Inyección de memorias previas en conversaciones
-- Integración con sistema de usuarios de OpenWebUI
-- Manejo básico de eventos y estados
+#### Original Features
+- Automatic saving of assistant responses
+- Injection of previous memories in conversations
+- Integration with OpenWebUI user system
+- Basic event and state handling
 
 ---
 
-## Tipos de Cambios
-- `Añadido` para nuevas funcionalidades
-- `Cambiado` para cambios en funcionalidades existentes
-- `Obsoleto` para funcionalidades que serán removidas
-- `Removido` para funcionalidades removidas
-- `Corregido` para corrección de errores
-- `Seguridad` para vulnerabilidades corregidas
+## Types of Changes
+- `Added` for new features
+- `Changed` for changes in existing functionality
+- `Deprecated` for soon-to-be removed features
+- `Removed` for now removed features
+- `Fixed` for any bug fixes
+- `Security` for vulnerability fixes

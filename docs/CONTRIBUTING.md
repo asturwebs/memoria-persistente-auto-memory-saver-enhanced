@@ -1,92 +1,92 @@
-# Guía de Contribución
+# Contribution Guide
 
-¡Gracias por tu interés en contribuir a Memoria Persistente (Auto Memory Saver Enhanced)! 🚀
+Thank you for your interest in contributing to Persistent Memory (Auto Memory Saver Enhanced)! 🚀
 
-## 🤝 Cómo Contribuir
+## 🤝 How to Contribute
 
-### Reportar Bugs
-1. Verifica que el bug no haya sido reportado previamente en [Issues](https://github.com/AsturWebs/auto-memory-saver-enhanced/issues)
-2. Crea un nuevo issue con:
-   - Descripción clara del problema
-   - Pasos para reproducir
-   - Comportamiento esperado vs actual
-   - Versión de OpenWebUI y Python
-   - Logs relevantes (sin información sensible)
+### Report Bugs
+1. Verify the bug hasn't been reported previously in [Issues](https://github.com/AsturWebs/auto-memory-saver-enhanced/issues)
+2. Create a new issue with:
+   - Clear description of the problem
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - OpenWebUI and Python version
+   - Relevant logs (without sensitive information)
 
-### Sugerir Mejoras
-1. Abre un issue con la etiqueta "enhancement"
-2. Describe claramente la funcionalidad propuesta
-3. Explica por qué sería útil para la comunidad
-4. Proporciona ejemplos de uso si es posible
+### Suggest Improvements
+1. Open an issue with the "enhancement" label
+2. Clearly describe the proposed functionality
+3. Explain why it would be useful for the community
+4. Provide usage examples if possible
 
-### Contribuir Código
-1. Fork el repositorio
-2. Crea una rama para tu feature: `git checkout -b feature/nueva-funcionalidad`
-3. Realiza tus cambios siguiendo las mejores prácticas
-4. Añade tests si es aplicable
-5. Actualiza la documentación si es necesario
-6. Commit con mensajes descriptivos
-7. Push a tu fork: `git push origin feature/nueva-funcionalidad`
-8. Abre un Pull Request
+### Contribute Code
+1. Fork the repository
+2. Create a branch for your feature: `git checkout -b feature/new-functionality`
+3. Make your changes following best practices
+4. Add tests if applicable
+5. Update documentation if necessary
+6. Commit with descriptive messages
+7. Push to your fork: `git push origin feature/new-functionality`
+8. Open a Pull Request
 
-## 📋 Estándares de Código
+## 📋 Code Standards
 
 ### Python
-- Seguir PEP 8
-- Usar type hints
-- Documentar funciones y clases
-- Manejar errores apropiadamente
-- Logging en español para consistencia
+- Follow PEP 8
+- Use type hints
+- Document functions and classes
+- Handle errors appropriately
+- Logging in English for consistency
 
-### Documentación
-- README en español
-- Comentarios en código en español
-- Ejemplos claros y funcionales
-- Mantener CHANGELOG actualizado
+### Documentation
+- README in English
+- Code comments in English
+- Clear and functional examples
+- Keep CHANGELOG updated
 
 ## 🧪 Testing
 
-Antes de enviar un PR:
-1. Prueba tu código en un entorno OpenWebUI real
-2. Verifica que no rompe funcionalidad existente
-3. Valida que los logs son informativos pero no verbosos
-4. Confirma que respeta las configuraciones de válvulas
+Before submitting a PR:
+1. Test your code in a real OpenWebUI environment
+2. Verify it doesn't break existing functionality
+3. Validate that logs are informative but not verbose
+4. Confirm it respects valve configurations
 
-## 📝 Proceso de Review
+## 📝 Review Process
 
-1. Todos los PRs requieren review
-2. Se verificará:
-   - Funcionalidad correcta
-   - Calidad del código
-   - Documentación actualizada
-   - Compatibilidad con versiones existentes
-3. Se pueden solicitar cambios antes de merge
+1. All PRs require review
+2. We will verify:
+   - Correct functionality
+   - Code quality
+   - Updated documentation
+   - Compatibility with existing versions
+3. Changes may be requested before merge
 
-## 🎯 Áreas de Contribución
+## 🎯 Contribution Areas
 
-### Prioritarias
-- Mejoras en algoritmo de relevancia
-- Optimizaciones de rendimiento
-- Tests automatizados
-- Documentación de casos de uso
+### Priority
+- Improvements in relevance algorithm
+- Performance optimizations
+- Automated tests
+- Use case documentation
 
-### Bienvenidas
-- Traducciones a otros idiomas
-- Mejoras en UI/UX
-- Integración con otros sistemas
-- Ejemplos de configuración
+### Welcome
+- Translations to other languages
+- UI/UX improvements
+- Integration with other systems
+- Configuration examples
 
-## 📞 Contacto
+## 📞 Contact
 
-- **Issues**: Para bugs y sugerencias
-- **Discussions**: Para preguntas generales
-- **Email**: pedro@asturwebs.es (para temas sensibles)
+- **Issues**: For bugs and suggestions
+- **Discussions**: For general questions
+- **Email**: pedro@asturwebs.es (for sensitive topics)
 
-## 🙏 Reconocimiento
+## 🙏 Recognition
 
-Todos los contribuidores serán reconocidos en:
-- README del proyecto
-- CHANGELOG de releases
-- Sección de créditos
+All contributors will be recognized in:
+- Project README
+- Release CHANGELOG
+- Credits section
 
-¡Esperamos tus contribuciones! 🎉
+We look forward to your contributions! 🎉

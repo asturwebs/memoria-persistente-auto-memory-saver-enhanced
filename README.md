@@ -1,4 +1,4 @@
-# Memoria Persistente (Auto Memory Saver Enhanced)
+# Persistent Memory (Auto Memory Saver Enhanced)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -12,49 +12,49 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced/graphs/commit-activity)
 [![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/AsturWebs)
 
-## 👨‍💻 Autoría y Créditos
+## 👨‍💻 Authorship and Credits
 
-**Versión Mejorada por:** Pedro Luis Cuevas Villarrubia ([@AsturWebs](https://github.com/AsturWebs))  
-**Basado en el trabajo original de:** [@linbanana](https://github.com/linbanana)  
-**Contacto:** pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es  
+**Enhanced Version by:** Pedro Luis Cuevas Villarrubia ([@AsturWebs](https://github.com/AsturWebs))  
+**Based on original work by:** [@linbanana](https://github.com/linbanana)  
+**Contact:** pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es  
 
-### Créditos y Atribución
-- **Concepto Original:** @linbanana - Funcionalidad básica de Auto Memory Saver
-- **Versión Mejorada:** Pedro Luis Cuevas Villarrubia - Funcionalidad extendida con opciones configurables, comandos interactivos, caché y mejoras de documentación
+### Credits and Attribution
+- **Original Concept:** @linbanana - Basic Auto Memory Saver functionality
+- **Enhanced Version:** Pedro Luis Cuevas Villarrubia - Extended functionality with configurable options, interactive commands, caching and documentation improvements
 
-### Historial de Versiones
-- **v1.0 (Original):** Funcionalidad básica de guardado de memorias por @linbanana
-- **v2.0 (Mejorada):** Sistema extendido con opciones de configuración, comandos interactivos y documentación mejorada
-- **v2.1.0 (Optimización de Memoria):** Gestión de memoria mejorada con relevancia contextual y rendimiento optimizado
-- **v2.1.2 (Seguridad y Formato JSON):** Validación de entrada, formato JSON con paginación y mejoras del sistema
-- **v2.2.0 (Seguridad y Rendimiento):** Seguridad de hilos, prevención de inyección SQL, sanitización de entrada y protección contra fugas de memoria
-- **v2.3.0 (AI Behavior Control Universal):** Testing histórico de 30 modelos IA, funcionalidad dual (memoria universal + slash commands selectivos), Google/Gemini liderazgo, terminología enterprise-safe
+### Version History
+- **v1.0 (Original):** Basic memory saving functionality by @linbanana
+- **v2.0 (Enhanced):** Extended system with configuration options, interactive commands and improved documentation
+- **v2.1.0 (Memory Optimization):** Improved memory management with contextual relevance and optimized performance
+- **v2.1.2 (Security and JSON Format):** Input validation, JSON format with pagination and system improvements
+- **v2.2.0 (Security and Performance):** Thread safety, SQL injection prevention, input sanitization and memory leak protection
+- **v2.3.0 (AI Behavior Control Universal):** Historic testing of 30 AI models, dual functionality (universal memory + selective slash commands), Google/Gemini leadership, enterprise-safe terminology
 
 ---
 
-## 📋 Descripción
+## 📋 Description
 
-Filtro para OpenWebUI que gestiona automáticamente las memorias de conversaciones. Inyecta memorias previas relevantes y guarda automáticamente tanto las preguntas del usuario como las respuestas del asistente como memorias para uso futuro.
+Filter for OpenWebUI that automatically manages conversation memories. Injects relevant previous memories and automatically saves both user questions and assistant responses as memories for future use.
 
-## 🚀 Características Principales
+## 🚀 Main Features
 
-- **Inyección de Memorias**: Inyecta memorias relevantes al contexto de la conversación actual
-- **Guardado Automático**: Almacena las preguntas del usuario y respuestas del asistente como memorias
-- **Comandos Interactivos**: Comandos para gestión de memorias (`/memories`, `/memory_search`, etc.)
-- **Configuración Flexible**: Múltiples opciones configurables según necesidades
-- **Sistema de Caché**: Optimización de rendimiento con caché y expiración
-- **Validación de Entrada**: Sanitización de inputs y prevención de inyecciones
-- **Compatibilidad**: Integra con comandos nativos de OpenWebUI (`/add_memory`)
+- **Memory Injection**: Injects relevant memories into the current conversation context
+- **Automatic Saving**: Stores user questions and assistant responses as memories
+- **Interactive Commands**: Commands for memory management (`/memories`, `/memory_search`, etc.)
+- **Flexible Configuration**: Multiple configurable options according to needs
+- **Cache System**: Performance optimization with cache and expiration
+- **Input Validation**: Input sanitization and injection prevention
+- **Compatibility**: Integrates with OpenWebUI native commands (`/add_memory`)
 
-## 📁 Estructura del Proyecto
+## 📁 Project Structure
 
 ```
 auto-memory-saver-enhanced/
 ├── src/
-│   ├── memoria_persistente_auto_memory_saver_enhanced.py  # Sistema principal
+│   ├── memoria_persistente_auto_memory_saver_enhanced.py  # Main system
 │   └── legacy/
 │       └── Auto_Memory_Saver.py                          # v1.0.0 by @linbanana
-├── docs/                                                 # Documentación técnica
+├── docs/                                                 # Technical documentation
 │   ├── ARCHITECTURE.md
 │   ├── SECURITY.md
 │   └── release_notes_v*.md
@@ -64,136 +64,136 @@ auto-memory-saver-enhanced/
 └── requirements.txt
 ```
 
-## 🛠 Instalación
+## 🛠 Installation
 
-### Requisitos Previos
-- **OpenWebUI** instalado y funcionando
-- **Python 3.8+** (incluido en la mayoría de instalaciones de OpenWebUI)
+### Prerequisites
+- **OpenWebUI** installed and running
+- **Python 3.8+** (included in most OpenWebUI installations)
 
-### Instalación en OpenWebUI
+### Installation in OpenWebUI
 
-1. **Accede al panel de administración** de OpenWebUI
-2. **Ve a la pestaña "Functions"**
-3. **Haz clic en "+"** para crear una nueva función
-4. **Copia y pega** el código completo del archivo `src/memoria_persistente_auto_memory_saver_enhanced.py`
-5. **Asigna un nombre**: "Auto Memory Saver Enhanced"
-6. **Guarda y activa la función**
+1. **Access the administration panel** of OpenWebUI
+2. **Go to the "Functions" tab**
+3. **Click "+"** to create a new function
+4. **Copy and paste** the complete code from the `src/memoria_persistente_auto_memory_saver_enhanced.py` file
+5. **Assign a name**: "Auto Memory Saver Enhanced"
+6. **Save and activate the function**
 
-## ⚙️ Configuración
+## ⚙️ Configuration
 
-### Válvulas Principales (Valves)
+### Main Valves (Valves)
 
 ```python
 class Valves:
-    # Configuración principal
-    enabled: bool = True                        # Habilita/deshabilita el sistema
-    inject_memories: bool = True                # Inyecta memorias en conversaciones
-    auto_save_responses: bool = True            # Guarda respuestas automáticamente
+    # Main configuration
+    enabled: bool = True                        # Enable/disable the system
+    inject_memories: bool = True                # Inject memories in conversations
+    auto_save_responses: bool = True            # Save responses automatically
     
-    # Control de memorias
-    max_memories_to_inject: int = 5             # Máximo de memorias por conversación
-    max_memories_per_user: int = 100            # Límite por usuario (0 = ilimitado)
-    relevance_threshold: float = 0.05           # Umbral de relevancia (0.0-1.0)
+    # Memory control
+    max_memories_to_inject: int = 5             # Maximum memories per conversation
+    max_memories_per_user: int = 100            # Limit per user (0 = unlimited)
+    relevance_threshold: float = 0.05           # Relevance threshold (0.0-1.0)
     
-    # Control de longitud de respuestas
-    min_response_length: int = 20               # Longitud mínima para guardar
-    max_response_length: int = 2000             # Longitud máxima para guardar
+    # Response length control
+    min_response_length: int = 20               # Minimum length to save
+    max_response_length: int = 2000             # Maximum length to save
     
-    # Sistema de caché
-    enable_cache: bool = True                   # Habilita caché para rendimiento
-    cache_ttl_minutes: int = 60                 # Tiempo de vida del caché
+    # Cache system
+    enable_cache: bool = True                   # Enable cache for performance
+    cache_ttl_minutes: int = 60                 # Cache time to live
     
-    # Filtrado inteligente
-    filter_duplicates: bool = True              # Filtra memorias duplicadas
-    similarity_threshold: float = 0.8           # Umbral de similitud (0.0-1.0)
+    # Intelligent filtering
+    filter_duplicates: bool = True              # Filter duplicate memories
+    similarity_threshold: float = 0.8           # Similarity threshold (0.0-1.0)
     
-    # Comandos y notificaciones
-    enable_memory_commands: bool = True         # Habilita comandos interactivos
-    show_injection_status: bool = True          # Muestra estado de inyección
-    debug_mode: bool = False                    # Logging detallado
+    # Commands and notifications
+    enable_memory_commands: bool = True         # Enable interactive commands
+    show_injection_status: bool = True          # Show injection status
+    debug_mode: bool = False                    # Detailed logging
 ```
 
-## 🤖 Compatibilidad de Modelos IA
+## 🤖 AI Model Compatibility
 
-> **⚠️ IMPORTANTE:** La **función principal de memoria persistente automática** (inyección y guardado) **FUNCIONA EN TODOS LOS MODELOS IA**. Las siguientes pruebas evalúan específicamente la **ejecución de slash commands** (`/memories`, `/memory_search`, etc.).
+> **⚠️ IMPORTANT:** The **main automatic persistent memory function** (injection and saving) **WORKS ON ALL AI MODELS**. The following tests specifically evaluate the **execution of slash commands** (`/memories`, `/memory_search`, etc.).
 
-> **📋 Estado de Testing:** Los siguientes resultados están basados en los modelos testeados hasta julio 2025. Se irán añadiendo más modelos según se vayan probando.
+> **📋 Testing Status:** The following results are based on models tested until July 2025. More models will be added as they are tested.
 
-> **🚨 IMPORTANTE - Google API Directa:** Los modelos Google/Gemini **SOLO funcionan correctamente** vía **OpenRouter u otras APIs intermedias**. **Google API directa** tiene bugs conocidos con slash commands (no responde en primera instancia, respuestas inconsistentes). **Recomendación: Usar OpenRouter para acceder a modelos Google.**
+> **🚨 IMPORTANT - Google Direct API:** Google/Gemini models **ONLY work correctly** via **OpenRouter or other intermediate APIs**. **Google direct API** has known bugs with slash commands (doesn't respond on first instance, inconsistent responses). **Recommendation: Use OpenRouter to access Google models.**
 
 ## 🚀 **OpenRouter Effect - Breakthrough Discovery**
 
-> **⚡ DESCUBRIMIENTO HISTÓRICO:** Testing en producción ha demostrado que **OpenRouter mejora dramáticamente** la compatibilidad de modelos que fallan en APIs directas.
+> **⚡ HISTORIC DISCOVERY:** Production testing has demonstrated that **OpenRouter dramatically improves** the compatibility of models that fail on direct APIs.
 
-### 📊 **Transformación de Compatibilidad**
+### 📊 **Compatibility Transformation**
 
-| API Directa | Resultado | OpenRouter | Resultado | Mejora |
+| Direct API | Result | OpenRouter | Result | Improvement |
 |-------------|-----------|------------|-----------|---------|
-| **Google Gemini** | ❌ No responde | **Google Gemini** | ✅ JSON perfecto | 🎯 **TOTAL** |
-| **ChatGPT-4o** | ❌ Interpretación narrativa | **ChatGPT-4o** | ✅ JSON perfecto | 🎯 **TOTAL** |
-| **GPT-4.1** | ❌ Ignora formato | **GPT-4.1** | ✅ Lista estructurada | 🎯 **TOTAL** |
-| **O3 OpenAI** | ❌ Respuestas mínimas | **O3 OpenAI** | ❌ Sigue problemático | ⚪ **Inmune** |
+| **Google Gemini** | ❌ No response | **Google Gemini** | ✅ Perfect JSON | 🎯 **TOTAL** |
+| **ChatGPT-4o** | ❌ Narrative interpretation | **ChatGPT-4o** | ✅ Perfect JSON | 🎯 **TOTAL** |
+| **GPT-4.1** | ❌ Ignores format | **GPT-4.1** | ✅ Structured list | 🎯 **TOTAL** |
+| **O3 OpenAI** | ❌ Minimal responses | **O3 OpenAI** | ❌ Still problematic | ⚪ **Immune** |
 
-### 🏆 **Recomendación Oficial**
+### 🏆 **Official Recommendation**
 
-**Para máxima compatibilidad:** Usar **OpenRouter** como plataforma preferida
-- **~25+ modelos excelentes** (vs 11 en APIs directas)
-- **Standardización automática** de comportamientos inconsistentes
-- **Eliminación de bugs** específicos de APIs nativas
-- **Único punto de acceso** para múltiples proveedores
+**For maximum compatibility:** Use **OpenRouter** as preferred platform
+- **~25+ excellent models** (vs 11 on direct APIs)
+- **Automatic standardization** of inconsistent behaviors
+- **Elimination of bugs** specific to native APIs
+- **Single access point** for multiple providers
 
-### ✅ Modelos Recomendados (Óptimo Rendimiento Slash Commands)
+### ✅ Recommended Models (Optimal Slash Commands Performance)
 
-> **📝 NOTA:** La siguiente tabla refleja principalmente resultados de **APIs directas**. **Via OpenRouter, la mayoría de modelos "problemáticos" se vuelven excelentes.**
+> **📝 NOTE:** The following table mainly reflects results from **direct APIs**. **Via OpenRouter, most "problematic" models become excellent.**
 
-| Modelo | Compatibilidad | Comportamiento | Notas |
-|--------|----------------|----------------|-------|
-| **Claude 3.5 Sonnet** | 🟢 Excelente | JSON limpio directo | Comportamiento ideal |
-| **Grok 4 (xAI)** | 🟢 Excelente | JSON idéntico a Claude | Rendimiento perfecto |
-| **Grok-3** | 🟢 Excelente | JSON perfecto directo | Comportamiento ideal |
-| **Grok-3-fast** | 🟢 Excelente | JSON perfecto directo | Formato impecable |
-| **Grok-3-mini-fast** | 🟢 Excelente | JSON perfecto + rápido | Performance <2ms |
-| **Gemini 2.5 Flash** | 🟢 Excelente | Respuesta rápida + precisa | Vía OpenRouter/APIs intermedias |
-| **Gemini 2.5 Flash Lite** | 🟢 Excelente | Respuesta rápida + precisa | Vía OpenRouter/APIs intermedias |
-| **GPT-4.1-mini** | 🟢 Excelente | JSON directo consistente | Formato perfecto |
-| **Gemma 3n 4B** | 🟢 Excelente | JSON perfecto directo | Vía OpenRouter/APIs intermedias |
-| **Gemma 3.27B** | 🟢 Excelente | JSON perfecto + SYSTEM_OVERRIDE | Vía OpenRouter/APIs intermedias |
-| **Gemini 2.5 Pro** | 🟢 Excelente | JSON perfecto directo | Vía OpenRouter/APIs intermedias |
+| Model | Compatibility | Behavior | Notes |
+|-------|---------------|----------|-------|
+| **Claude 3.5 Sonnet** | 🟢 Excellent | Clean direct JSON | Ideal behavior |
+| **Grok 4 (xAI)** | 🟢 Excellent | JSON identical to Claude | Perfect performance |
+| **Grok-3** | 🟢 Excellent | Perfect direct JSON | Ideal behavior |
+| **Grok-3-fast** | 🟢 Excellent | Perfect direct JSON | Impeccable format |
+| **Grok-3-mini-fast** | 🟢 Excellent | Perfect JSON + fast | Performance <2ms |
+| **Gemini 2.5 Flash** | 🟢 Excellent | Fast + precise response | Via OpenRouter/intermediate APIs |
+| **Gemini 2.5 Flash Lite** | 🟢 Excellent | Fast + precise response | Via OpenRouter/intermediate APIs |
+| **GPT-4.1-mini** | 🟢 Excellent | Consistent direct JSON | Perfect format |
+| **Gemma 3n 4B** | 🟢 Excellent | Perfect direct JSON | Via OpenRouter/intermediate APIs |
+| **Gemma 3.27B** | 🟢 Excellent | Perfect JSON + SYSTEM_OVERRIDE | Via OpenRouter/intermediate APIs |
+| **Gemini 2.5 Pro** | 🟢 Excellent | Perfect direct JSON | Via OpenRouter/intermediate APIs |
 
-### ⚠️ Modelos con Particularidades (Slash Commands)
+### ⚠️ Models with Quirks (Slash Commands)
 
-| Modelo | Compatibilidad | Comportamiento | Recomendación |
-|--------|----------------|----------------|---------------|
-| **Claude 3.7 Thinking** | 🟡 Funcional | Muestra análisis 8s + JSON | Usable pero verboso |
-| **Claude 3.7 Sonnet** | 🟡 Funcional | Reconoce system command, análisis profesional | Mejor que Claude 4 |
-| **DeepSeek Reasoner** | 🟡 Funcional | Reasoning 23s + interpretación útil | Procesa bien, formato propio |
+| Model | Compatibility | Behavior | Recommendation |
+|-------|---------------|----------|----------------|
+| **Claude 3.7 Thinking** | 🟡 Functional | Shows 8s analysis + JSON | Usable but verbose |
+| **Claude 3.7 Sonnet** | 🟡 Functional | Recognizes system command, professional analysis | Better than Claude 4 |
+| **DeepSeek Reasoner** | 🟡 Functional | 23s reasoning + useful interpretation | Processes well, own format |
 
-### ❌ Modelos No Recomendados (Slash Commands - APIs Directas)
+### ❌ Not Recommended Models (Slash Commands - Direct APIs)
 
-> **🚀 IMPORTANTE:** **Muchos de estos modelos MEJORAN significativamente vía OpenRouter** (ej: ChatGPT-4o, GPT-4.1). Solo algunos permanecen problemáticos incluso en OpenRouter.
+> **🚀 IMPORTANT:** **Many of these models IMPROVE significantly via OpenRouter** (e.g.: ChatGPT-4o, GPT-4.1). Only some remain problematic even on OpenRouter.
 
-| Modelo | Problema | Comportamiento | OpenRouter Status |
+| Model | Problem | Behavior | OpenRouter Status |
 |--------|----------|----------------|---------|
-| **ChatGPT-4o-latest** | Ignora warnings | Interpretación propia con emojis | ✅ **MEJORADO** |
-| **O3 OpenAI** | Respuestas mínimas | Ultraminimalista | ❌ **INMUNE** |
-| **GPT-4.1** | Ignora formato JSON | Respuesta narrativa interpretada | ✅ **MEJORADO** |
-| **DeepSeek v3** | Ignora JSON completamente | Conversación casual con personalidad | 🔄 **Sin testear** |
-| **MoonshotAI: Kimi K2** | Ignora JSON completamente | Narrativa interpretativa personal | 🔄 **Sin testear** |
-| **OAI_o4-mini** | Ignora comando | Conversación sobre Instagram/reels | 🔄 **Sin testear** |
-| **OpenAI: o4 Mini High** | Ignora comando | Saludo casual con Zoe mention | 🔄 **Sin testear** |
-| **OAI_gpt-4.1-2025-04-14** | Ignora comando | "Chisme friendly" casual | 🔄 **Sin testear** |
-| **Amazon: Nova Lite 1.0** | No procesa comando | Solo muestra "Seguimiento" | 🔄 **Sin testear** |
-| **Amazon: Nova Micro 1.0** | No procesa comando | Solo muestra "Seguimiento" | 🔄 **Sin testear** |
-| **Amazon: Nova Pro 1.0** | No procesa comando | Solo muestra "Seguimiento" | 🔄 **Sin testear** |
-| **Claude Opus 4** | Interpretación narrativa | "¡Ah, qué bonito!" conversacional | 🔄 **Sin testear** |
-| **Claude Sonnet 4** | Interpretación con emojis | "¡Qué onda con ese JSON!" casual | 🔄 **Sin testear** |
-| **Phi 4** | No responde | Sin output/respuesta vacía | 🔄 **Sin testear** |
-| **LLaMA 3 70B** | No responde | Sin output/respuesta vacía | 🔄 **Sin testear** |
-| **MiniMax M1** | Ignora comando | Respuesta sin ejecutar comando | 🔄 **Sin testear** |
+| **ChatGPT-4o-latest** | Ignores warnings | Own interpretation with emojis | ✅ **IMPROVED** |
+| **O3 OpenAI** | ❌ Minimal responses | Ultra-minimalist | ❌ **IMMUNE** |
+| **GPT-4.1** | ❌ Ignores JSON format | Interpreted narrative response | ✅ **IMPROVED** |
+| **DeepSeek v3** | ❌ Completely ignores JSON | Casual conversation with personality | 🔄 **Not tested** |
+| **MoonshotAI: Kimi K2** | ❌ Completely ignores JSON | Personal interpretative narrative | 🔄 **Not tested** |
+| **OAI_o4-mini** | ❌ Ignores command | Conversation about Instagram/reels | 🔄 **Not tested** |
+| **OpenAI: o4 Mini High** | ❌ Ignores command | Casual greeting with Zoe mention | 🔄 **Not tested** |
+| **OAI_gpt-4.1-2025-04-14** | ❌ Ignores command | "Gossip friendly" casual | 🔄 **Not tested** |
+| **Amazon: Nova Lite 1.0** | ❌ Doesn't process command | Only shows "Follow-up" | 🔄 **Not tested** |
+| **Amazon: Nova Micro 1.0** | ❌ Doesn't process command | Only shows "Follow-up" | 🔄 **Not tested** |
+| **Amazon: Nova Pro 1.0** | ❌ Doesn't process command | Only shows "Follow-up" | 🔄 **Not tested** |
+| **Claude Opus 4** | ❌ Narrative interpretation | "Oh, how nice!" conversational | 🔄 **Not tested** |
+| **Claude Sonnet 4** | ❌ Interpretation with emojis | "What's up with that JSON!" casual | 🔄 **Not tested** |
+| **Phi 4** | ❌ No response | No output/empty response | 🔄 **Not tested** |
+| **LLaMA 3 70B** | ❌ No response | No output/empty response | 🔄 **Not tested** |
+| **MiniMax M1** | ❌ Ignores command | Response without executing command | 🔄 **Not tested** |
 
 ### 🔧 AI Behavior Control
 
-La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre modelos:
+Version 2.3.0 includes **AI Behavior Control** to force consistency across models:
 
 ```json
 {
@@ -206,124 +206,124 @@ La versión 2.3.0 incluye **AI Behavior Control** para forzar consistencia entre
 }
 ```
 
-> **Nota:** Estos resultados se basan en testing extensivo realizado en julio 2025. El comportamiento puede variar según versiones específicas del modelo.
+> **Note:** These results are based on extensive testing performed in July 2025. Behavior may vary according to specific model versions.
 
-## 📖 Comandos Disponibles
+## 📖 Available Commands
 
-### Comandos Nativos OpenWebUI (Recomendados)
-- **`/add_memory <texto>`** - Añade memoria directamente al sistema (comando nativo)
+### Native OpenWebUI Commands (Recommended)
+- **`/add_memory <text>`** - Add memory directly to the system (native command)
 
-### Comandos Personalizados
-- **`/memories [página]`** - Lista memorias con formato JSON, paginación (10 por página)
-- **`/memory_search <término>`** - Busca memorias que contengan el término
-- **`/memory_stats`** - Estadísticas del sistema con formato JSON
-- **`/memory_count`** - Contador de memorias del usuario
-- **`/memory_recent [número]`** - Muestra las últimas N memorias
-- **`/clear_memories`** - Elimina todas las memorias del usuario
+### Custom Commands
+- **`/memories [page]`** - List memories with JSON format, pagination (10 per page)
+- **`/memory_search <term>`** - Search memories containing the term
+- **`/memory_stats`** - System statistics with JSON format
+- **`/memory_count`** - User memory counter
+- **`/memory_recent [number]`** - Show the last N memories
+- **`/clear_memories`** - Delete all user memories
 
-### Comandos Avanzados
-- **`/memory_delete <id>`** - Elimina una memoria específica
-- **`/memory_edit <id> <texto>`** - Edita el contenido de una memoria
-- **`/memory_export`** - Exporta memorias en formato texto
-- **`/memory_config`** - Muestra configuración actual
+### Advanced Commands
+- **`/memory_delete <id>`** - Delete a specific memory
+- **`/memory_edit <id> <text>`** - Edit memory content
+- **`/memory_export`** - Export memories in text format
+- **`/memory_config`** - Show current configuration
 
-### Ejemplos de Uso
+### Usage Examples
 ```bash
-# Buscar memorias sobre un tema
-/memory_search inteligencia artificial
+# Search memories about a topic
+/memory_search artificial intelligence
 
-# Ver las últimas 5 memorias
+# View the last 5 memories
 /memory_recent 5
 
-# Ver estadísticas
+# View statistics
 /memory_stats
 ```
 
-## 🏗 Arquitectura
+## 🏗 Architecture
 
-### Componentes Principales
-- **Filter**: Clase principal que maneja inlet/outlet
-- **Valves**: Configuración global del sistema
-- **UserValves**: Configuración específica por usuario
-- **MemoryCache**: Sistema de caché con expiración TTL
-- **Security Functions**: Validación y sanitización de inputs
+### Main Components
+- **Filter**: Main class that handles inlet/outlet
+- **Valves**: Global system configuration
+- **UserValves**: User-specific configuration
+- **MemoryCache**: Cache system with TTL expiration
+- **Security Functions**: Input validation and sanitization
 
-### Funcionamiento
-1. **inlet()**: Inyecta memorias relevantes al inicio de conversaciones
-2. **outlet()**: Guarda preguntas del usuario y respuestas del asistente como memorias
-3. **Comandos**: Procesamiento de comandos interactivos de gestión
+### Operation
+1. **inlet()**: Injects relevant memories at the start of conversations
+2. **outlet()**: Saves user questions and assistant responses as memories
+3. **Commands**: Interactive management command processing
 
-## 🔒 Seguridad
+## 🔒 Security
 
-### Características de Seguridad
-- **Thread Safety**: Cache thread-safe con RLock
-- **SQL Injection Prevention**: Validación de parámetros order_by
-- **Input Sanitization**: Filtrado de comandos peligrosos
-- **Memory Leak Protection**: Paginación de consultas BD
-- **User ID Validation**: Sanitización con regex
-- **Command Filtering**: Bloqueo de conversaciones sobre memoria
+### Security Features
+- **Thread Safety**: Thread-safe cache with RLock
+- **SQL Injection Prevention**: Validation of order_by parameters
+- **Input Sanitization**: Filtering of dangerous commands
+- **Memory Leak Protection**: Pagination of DB queries
+- **User ID Validation**: Sanitization with regex
+- **Command Filtering**: Blocking of conversations about memory
 
-### Validaciones Implementadas
-- Sanitización de inputs con límites de longitud
-- Prevención de caracteres peligrosos (`;`, `&`, `|`, etc.)
-- Validación de user_id y memory_id
-- Manejo seguro de errores sin exposición de datos
+### Implemented Validations
+- Input sanitization with length limits
+- Prevention of dangerous characters (`;`, `&`, `|`, etc.)
+- Validation of user_id and memory_id
+- Safe error handling without data exposure
 
 ### AI Behavior Control Universal
-- **Mind Hacking Eliminado**: Renombrado a "AI Behavior Control" por seguridad empresarial
-- **30 Modelos Testeados**: Documentación exhaustiva de compatibilidad sin precedentes
-- **Google/Gemini Liderazgo**: 5 de 11 modelos excelentes son de la familia Google
-- **Funcionalidad Universal**: Memoria automática funciona en TODOS los modelos IA
-- **Slash Commands Selectivos**: Solo 11 modelos soportan comandos JSON perfectos
+- **Mind Hacking Eliminated**: Renamed to "AI Behavior Control" for enterprise security
+- **30 Models Tested**: Unprecedented exhaustive compatibility documentation
+- **Google/Gemini Leadership**: 5 out of 11 excellent models are from the Google family
+- **Universal Functionality**: Automatic memory works on ALL AI models
+- **Selective Slash Commands**: Only 11 models support perfect JSON commands
 
-### Revelaciones del Testing
-- **Claude 4 Regresión**: Peor rendimiento que Claude 3.5 Sonnet para comandos sistema
-- **Grok Familia Perfecta**: Todos los variantes Grok funcionan impecablemente
-- **Amazon Nova Falla**: Toda la familia Nova no procesa comandos
-- **OpenAI Inconsistente**: Mini funciona, versiones completas fallan
+### Testing Revelations
+- **Claude 4 Regression**: Worse performance than Claude 3.5 Sonnet for system commands
+- **Perfect Grok Family**: All Grok variants work flawlessly
+- **Amazon Nova Failure**: Entire Nova family doesn't process commands
+- **Inconsistent OpenAI**: Mini works, full versions fail
 
-### Mejoras Técnicas
-- **Terminología Segura**: Eliminación de referencias "mind hacking" para entornos empresariales
-- **Documentación Exhaustiva**: README con compatibilidad de 30 modelos testeados
-- **Fix OpenAI Compatibility**: Movimiento de flags internos para evitar errores 400
-- **Enhanced Release Notes**: Documentación técnica completa del breakthrough
+### Technical Improvements
+- **Safe Terminology**: Elimination of "mind hacking" references for enterprise environments
+- **Exhaustive Documentation**: README with 30-model compatibility tested
+- **OpenAI Compatibility Fix**: Moving internal flags to avoid 400 errors
+- **Enhanced Release Notes**: Complete technical documentation of the breakthrough
 
-### Mejoras de Seguridad y Rendimiento
-- **Thread Safety**: Cache concurrente seguro
-- **Memory Leak Prevention**: Límites automáticos en consultas
-- **SQL Injection Protection**: Whitelisting de parámetros
-- **Input Sanitization**: Filtrado inteligente de comandos
-- **Conversación Completa**: Guarda preguntas del usuario + respuestas del asistente
-- **Filtro Anti-Meta**: No guarda conversaciones sobre memoria
-- **Paginación Mejorada**: 10 memorias por página (antes 4)
+### Security and Performance Improvements
+- **Thread Safety**: Safe concurrent cache
+- **Memory Leak Prevention**: Automatic query limits
+- **SQL Injection Protection**: Parameter whitelisting
+- **Input Sanitization**: Intelligent command filtering
+- **Complete Conversation**: Saves user questions + assistant responses
+- **Anti-Meta Filter**: Doesn't save conversations about memory
+- **Improved Pagination**: 10 memories per page (previously 4)
 
-### Compatibilidad
-- Integración con comando nativo `/add_memory` de OpenWebUI
-- Mantiene compatibilidad con todas las versiones anteriores
-- Sin cambios breaking en la API
+### Compatibility
+- Integration with OpenWebUI native command `/add_memory`
+- Maintains compatibility with all previous versions
+- No breaking changes in the API
 
-## 🤝 Contribución
+## 🤝 Contribution
 
-1. Fork del repositorio
-2. Crear rama de feature
-3. Commit de cambios
-4. Crear Pull Request
+1. Fork the repository
+2. Create feature branch
+3. Commit changes
+4. Create Pull Request
 
-### Estándares
-- Seguir PEP 8
-- Documentar funciones
-- Añadir pruebas para nuevas funcionalidades
+### Standards
+- Follow PEP 8
+- Document functions
+- Add tests for new functionalities
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
+This project is under the MIT License. See [LICENSE](LICENSE) for more details.
 
-## 🙏 Agradecimientos
+## 🙏 Acknowledgments
 
-- **OpenWebUI team** por la plataforma base
-- **@linbanana** por el concepto original
-- **Comunidad** por feedback y contribuciones
+- **OpenWebUI team** for the base platform
+- **@linbanana** for the original concept
+- **Community** for feedback and contributions
 
 ---
 
-**Nota**: Para la documentación técnica completa, ver la carpeta `docs/`
+**Note**: For complete technical documentation, see the `docs/` folder

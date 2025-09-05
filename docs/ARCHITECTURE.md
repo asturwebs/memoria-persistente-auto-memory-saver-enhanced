@@ -1,164 +1,164 @@
-# 🏗️ Memoria Persistente (Auto Memory Saver Enhanced) - Arquitectura y Magnitud del Proyecto
+# 🏗️ Persistent Memory (Auto Memory Saver Enhanced) - Architecture and Project Magnitude
 
-## 📋 Resumen Ejecutivo
+## 📋 Executive Summary
 
-**Auto Memory Saver Enhanced** es un sistema enterprise de gestión de memorias persistentes para asistentes de IA, desarrollado hasta la versión **v2.1.2 Enterprise**. Representa un proyecto de **nivel profesional** con más de **2,400 líneas de código**, **25 comandos interactivos**, **24 válvulas configurables** y **arquitectura de seguridad crítica**.
+**Auto Memory Saver Enhanced** is an enterprise persistent memory management system for AI assistants, developed up to version **v2.1.2 Enterprise**. It represents a **professional-level** project with more than **2,400 lines of code**, **25 interactive commands**, **24 configurable valves** and **critical security architecture**.
 
-### 🎯 **Propósito Principal**
-Transformar cualquier asistente de IA en un sistema con **memoria persistente avanzada**, permitiendo recordar información entre conversaciones con capacidades de análisis semántico, seguridad enterprise y gestión granular.
+### 🎯 **Main Purpose**
+Transform any AI assistant into a system with **advanced persistent memory**, allowing information to be remembered between conversations with semantic analysis capabilities, enterprise security and granular management.
 
 ---
 
-## 🏗️ **Arquitectura del Sistema**
+## 🏗️ **System Architecture**
 
-### **1. Núcleo Principal - Clase Filter**
+### **1. Main Core - Filter Class**
 ```python
 class Filter:
     """
-    Filtro principal de 2,400+ líneas que maneja:
-    - Interceptación de conversaciones
-    - Inyección inteligente de memorias
-    - Guardado automático de respuestas
-    - Gestión de comandos slash
-    - Seguridad enterprise
+    Main filter of 2,400+ lines that handles:
+    - Conversation interception
+    - Intelligent memory injection
+    - Automatic response saving
+    - Slash command management
+    - Enterprise security
     """
 ```
 
-**Características del Núcleo:**
-- **78 métodos** y funciones especializadas
-- **Manejo asíncrono** completo para alta performance
-- **Integración nativa** con OpenWebUI
-- **Arquitectura modular** con separación de responsabilidades
-- **Logging profesional** con niveles configurables
+**Core Characteristics:**
+- **78 methods** and specialized functions
+- **Complete asynchronous handling** for high performance
+- **Native integration** with OpenWebUI
+- **Modular architecture** with separation of responsibilities
+- **Professional logging** with configurable levels
 
-### **2. Sistema de Válvulas (24 Configurables)**
+### **2. Valve System (24 Configurable)**
 ```python
 class Filter.Valves:
-    # CONTROL PRINCIPAL
-    enabled: bool = True                    # Habilita/deshabilita sistema
-    max_memories: int = 50                  # Límite de memorias por usuario
-    relevance_threshold: float = 0.05       # Umbral de relevancia (0.0-1.0)
+    # MAIN CONTROL
+    enabled: bool = True                    # Enable/disable system
+    max_memories: int = 50                  # Memory limit per user
+    relevance_threshold: float = 0.05       # Relevance threshold (0.0-1.0)
     
-    # CONFIGURACIÓN AVANZADA
-    memory_injection_enabled: bool = True   # Inyección automática
-    auto_save_enabled: bool = True          # Guardado automático
-    private_mode: bool = False              # Modo privado
+    # ADVANCED CONFIGURATION
+    memory_injection_enabled: bool = True   # Automatic injection
+    auto_save_enabled: bool = True          # Automatic saving
+    private_mode: bool = False              # Private mode
     
-    # PERSONALIZACIÓN DE COMPORTAMIENTO
-    max_memory_length: int = 2000           # Longitud máxima de memoria
-    min_message_length: int = 10            # Longitud mínima para procesar
-    context_window_size: int = 10           # Ventana de contexto
+    # BEHAVIOR CUSTOMIZATION
+    max_memory_length: int = 2000           # Maximum memory length
+    min_message_length: int = 10            # Minimum length to process
+    context_window_size: int = 10           # Context window
     
-    # ALGORITMO DE RELEVANCIA
-    use_advanced_relevance: bool = True     # Algoritmo avanzado TF-IDF
-    semantic_similarity_weight: float = 0.7 # Peso de similitud semántica
-    keyword_match_weight: float = 0.3       # Peso de coincidencia de palabras
+    # RELEVANCE ALGORITHM
+    use_advanced_relevance: bool = True     # Advanced TF-IDF algorithm
+    semantic_similarity_weight: float = 0.7 # Semantic similarity weight
+    keyword_match_weight: float = 0.3       # Keyword match weight
     
-    # OPTIMIZACIÓN Y RENDIMIENTO
-    enable_caching: bool = True             # Sistema de caché
-    cache_ttl: int = 3600                   # Tiempo de vida del caché
-    batch_processing: bool = True           # Procesamiento por lotes
+    # OPTIMIZATION AND PERFORMANCE
+    enable_caching: bool = True             # Cache system
+    cache_ttl: int = 3600                   # Cache time to live
+    batch_processing: bool = True           # Batch processing
     
-    # SEGURIDAD Y AUDITORÍA
-    enable_audit_trail: bool = True         # Registro de auditoría
-    sanitize_inputs: bool = True            # Sanitización de entradas
-    validate_user_permissions: bool = True  # Validación de permisos
+    # SECURITY AND AUDITING
+    enable_audit_trail: bool = True         # Audit logging
+    sanitize_inputs: bool = True            # Input sanitization
+    validate_user_permissions: bool = True  # Permission validation
     
-    # DEPURACIÓN Y MONITOREO
-    debug_mode: bool = False                # Modo depuración
-    performance_monitoring: bool = True     # Monitoreo de rendimiento
-    detailed_logging: bool = False          # Logging detallado
+    # DEBUGGING AND MONITORING
+    debug_mode: bool = False                # Debug mode
+    performance_monitoring: bool = True     # Performance monitoring
+    detailed_logging: bool = False          # Detailed logging
 ```
 
-### **3. Sistema de Comandos Slash (25 Comandos)**
+### **3. Slash Command System (25 Commands)**
 
-#### **🛡️ Comandos Securizados Críticos (Nivel Enterprise)**
+#### **🛡️ Critical Secured Commands (Enterprise Level)**
 ```python
-# GESTIÓN CORE DE MEMORIAS
-/memory_add         # ✅ Añadir memoria con validación enterprise
-/memory_search      # ✅ Búsqueda con paginación JSON avanzada
-/memory_delete      # ✅ Eliminación con audit trail completo
-/memory_edit        # ✅ Edición con tracking de cambios
-/memory_stats       # ✅ Estadísticas JSON enterprise completas
-/memories           # ✅ Listado con paginación y UUIDs únicos
+# CORE MEMORY MANAGEMENT
+/memory_add         # ✅ Add memory with enterprise validation
+/memory_search      # ✅ Search with advanced JSON pagination
+/memory_delete      # ✅ Deletion with complete audit trail
+/memory_edit        # ✅ Editing with change tracking
+/memory_stats       # ✅ Complete enterprise JSON statistics
+/memories           # ✅ Listing with pagination and unique UUIDs
 ```
 
-#### **📊 Comandos de Gestión y Administración**
+#### **📊 Management and Administration Commands**
 ```python
-# LISTADO Y VISUALIZACIÓN
-/list_memories      # Lista todas las memorias del usuario
-/recent_memories    # Memorias más recientes (configurable)
-/memory_count       # Contador total de memorias
-/show_memories      # Vista detallada de memorias
+# LISTING AND VISUALIZATION
+/list_memories      # List all user memories
+/recent_memories    # Most recent memories (configurable)
+/memory_count       # Total memory counter
+/show_memories      # Detailed memory view
 
-# CONFIGURACIÓN Y CONTROL
-/show_config        # Configuración actual de válvulas
-/toggle_private_mode # Activar/desactivar modo privado
-/set_memory_limit   # Establecer límite de memorias
-/reset_config       # Resetear configuración a valores por defecto
+# CONFIGURATION AND CONTROL
+/show_config        # Current valve configuration
+/toggle_private_mode # Enable/disable private mode
+/set_memory_limit   # Set memory limit
+/reset_config       # Reset configuration to default values
 
-# OPERACIONES MASIVAS
-/clear_memories     # Limpiar todas las memorias (con confirmación)
-/export_memories    # Exportar memorias a formato JSON
-/import_memories    # Importar memorias desde archivo
-/backup_memories    # Crear respaldo de memorias
+# BATCH OPERATIONS
+/clear_memories     # Clear all memories (with confirmation)
+/export_memories    # Export memories to JSON format
+/import_memories    # Import memories from file
+/backup_memories    # Create memory backup
 
-# ANÁLISIS Y ESTADÍSTICAS
-/memory_analytics   # Analytics avanzados de uso
-/relevance_test     # Probar algoritmo de relevancia
-/performance_stats  # Estadísticas de rendimiento del sistema
-/health_check       # Verificación de salud del sistema
+# ANALYSIS AND STATISTICS
+/memory_analytics   # Advanced usage analytics
+/relevance_test     # Test relevance algorithm
+/performance_stats  # System performance statistics
+/health_check       # System health verification
 
-# UTILIDADES AVANZADAS
-/find_duplicates    # Encontrar memorias duplicadas
-/optimize_memories  # Optimizar base de memorias
-/memory_insights    # Insights inteligentes sobre memorias
+# ADVANCED UTILITIES
+/find_duplicates    # Find duplicate memories
+/optimize_memories  # Optimize memory base
+/memory_insights    # Intelligent memory insights
 ```
 
 ---
 
-## 🛡️ **Seguridad Enterprise v2.1.2**
+## 🛡️ **Enterprise Security v2.1.2**
 
-### **Funciones de Seguridad Core**
+### **Core Security Functions**
 ```python
 def _sanitize_input(self, input_text: str) -> str:
-    """Sanitización avanzada de caracteres peligrosos"""
+    """Advanced sanitization of dangerous characters"""
     dangerous_chars = r'[<>"\'\/\x00-\x1f\x7f-\x9f]'
     return re.sub(dangerous_chars, '', input_text[:self.valves.max_memory_length])
 
 def _validate_user_id(self, user_id: str) -> bool:
-    """Validación estricta de IDs de usuario"""
+    """Strict validation of user IDs"""
     pattern = r'^[a-zA-Z0-9_-]{1,50}$'
     return bool(re.match(pattern, user_id))
 
 def _validate_memory_id(self, memory_id: int, user_id: str) -> bool:
-    """Validación de rangos de memoria existentes"""
-    # Verificación contra base de datos real
+    """Validation of existing memory ranges"""
+    # Verification against real database
 
 def _safe_execute_command(self, func, *args, **kwargs):
-    """Manejo seguro de errores síncronos"""
+    """Safe synchronous error handling"""
     
 async def _safe_execute_async_command(self, func, *args, **kwargs):
-    """Manejo seguro de errores asíncronos"""
+    """Safe asynchronous error handling"""
 ```
 
-### **Características de Seguridad Implementadas**
-- ✅ **Sanitización de inputs** con regex avanzado
-- ✅ **Validación de user_id** alfanumérico estricto
-- ✅ **Validación de memory_id** con rangos reales
-- ✅ **Audit trails** para operaciones críticas (delete, edit)
-- ✅ **Manejo seguro de errores** síncronos y asíncronos
-- ✅ **Logging profesional** con niveles apropiados
-- ✅ **Prevención de inyecciones** SQL y XSS
-- ✅ **Respuestas JSON** resistentes a interpretación de IA
-- ✅ **Metadata de seguridad** en todas las respuestas
-- ✅ **Timeouts configurables** para prevenir ataques DoS
+### **Implemented Security Features**
+- ✅ **Input sanitization** with advanced regex
+- ✅ **User_id validation** strict alphanumeric
+- ✅ **Memory_id validation** with real ranges
+- ✅ **Audit trails** for critical operations (delete, edit)
+- ✅ **Safe error handling** synchronous and asynchronous
+- ✅ **Professional logging** with appropriate levels
+- ✅ **Injection prevention** SQL and XSS
+- ✅ **JSON responses** resistant to AI interpretation
+- ✅ **Security metadata** in all responses
+- ✅ **Configurable timeouts** to prevent DoS attacks
 
 ---
 
-## 📊 **Formato JSON Enterprise Avanzado**
+## 📊 **Advanced Enterprise JSON Format**
 
-### **Estructura de Respuestas Profesionales**
+### **Professional Response Structure**
 ```json
 {
   "status": "SUCCESS",
@@ -248,46 +248,46 @@ class RelevanceAnalyzer:
     Algoritmo híbrido de relevancia semántica:
     - TF-IDF (Term Frequency-Inverse Document Frequency)
     - Cosine Similarity para análisis vectorial
-    - Stopwords en español filtradas automáticamente
-    - Stemming básico para mejor coincidencia
-    - Análisis de contexto conversacional
-    - Puntuación ponderada configurable
+    - Spanish stopwords filtered automatically
+    - Basic stemming for better matching
+    - Conversational context analysis
+    - Configurable weighted scoring
     """
 ```
 
-**Componentes del Algoritmo:**
-- **Análisis TF-IDF** para importancia de términos
-- **Similitud coseno** para análisis vectorial
-- **Filtrado de stopwords** en español (el, la, de, que, etc.)
-- **Stemming básico** (corriendo → corr, hablando → habl)
-- **Análisis de contexto** conversacional
-- **Puntuación híbrida** configurable (0.0 - 1.0)
-- **Caché inteligente** con invalidación automática
+**Algorithm Components:**
+- **TF-IDF Analysis** for term importance
+- **Cosine similarity** for vector analysis
+- **Stopword filtering** in Spanish (el, la, de, que, etc.)
+- **Basic stemming** (corriendo → corr, hablando → habl)
+- **Context analysis** conversational
+- **Hybrid scoring** configurable (0.0 - 1.0)
+- **Intelligent cache** with automatic invalidation
 
-### **Flujo del Algoritmo**
-1. **Preprocesamiento**: Limpieza y normalización de texto
-2. **Tokenización**: División en palabras significativas
-3. **Filtrado**: Eliminación de stopwords y caracteres especiales
-4. **Vectorización**: Conversión a vectores TF-IDF
-5. **Cálculo de similitud**: Cosine similarity entre consulta y memorias
-6. **Ponderación**: Aplicación de pesos configurables
-7. **Ranking**: Ordenación por puntuación de relevancia
-8. **Filtrado final**: Aplicación de umbral de relevancia
+### **Algorithm Flow**
+1. **Preprocessing**: Text cleaning and normalization
+2. **Tokenization**: Division into meaningful words
+3. **Filtering**: Removal of stopwords and special characters
+4. **Vectorization**: Conversion to TF-IDF vectors
+5. **Similarity calculation**: Cosine similarity between query and memories
+6. **Weighting**: Application of configurable weights
+7. **Ranking**: Ordering by relevance score
+8. **Final filtering**: Application of relevance threshold
 
 ---
 
-## 💾 **Sistema de Caché Inteligente**
+## 💾 **Intelligent Cache System**
 
-### **Arquitectura del Caché**
+### **Cache Architecture**
 ```python
 class MemoryCache:
     """
-    Sistema de caché con expiración automática:
-    - TTL (Time To Live) configurable
-    - Límite de tamaño con LRU eviction
-    - Keys específicos por usuario y consulta
-    - Invalidación inteligente en cambios
-    - Métricas de hit/miss rate
+    Intelligent cache system with automatic expiration:
+    - Configurable TTL (Time To Live)
+    - Size limit with LRU eviction
+    - User and query specific keys
+    - Intelligent invalidation on changes
+    - Hit/miss rate metrics
     """
     
     def __init__(self, max_size: int = 100, ttl: int = 3600):
@@ -297,14 +297,14 @@ class MemoryCache:
         self.stats = CacheStats()
 ```
 
-**Características del Caché:**
-- ✅ **Expiración automática** con TTL configurable
-- ✅ **Límite de tamaño** con política LRU
-- ✅ **Keys granulares** por usuario y tipo de consulta
-- ✅ **Invalidación inteligente** en modificaciones
-- ✅ **Métricas de rendimiento** (hit rate, miss rate)
-- ✅ **Compresión opcional** para memorias grandes
-- ✅ **Persistencia opcional** en disco
+**Cache Features:**
+- ✅ **Automatic expiration** with configurable TTL
+- ✅ **Size limit** with LRU policy
+- ✅ **Granular keys** per user and query type
+- ✅ **Intelligent invalidation** on modifications
+- ✅ **Performance metrics** (hit rate, miss rate)
+- ✅ **Optional compression** for large memories
+- ✅ **Optional persistence** to disk
 
 ---
 

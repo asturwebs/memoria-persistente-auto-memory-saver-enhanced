@@ -1,15 +1,15 @@
 # 🚀 Auto Memory Saver Enhanced v2.1.0
 
-## ✨ **Algoritmo de Relevancia Mejorado - Validado en Producción**
+## ✨ **Improved Relevance Algorithm - Production Validated**
 
-### 🧠 **Funcionalidades Principales**
+### 🧠 **Main Features**
 
-#### **Inyección Inteligente de Memorias**
-- **Lógica Dual Optimizada**: 
-  - **Primer mensaje**: Inyecta memorias más recientes para continuidad contextual
-  - **Mensajes posteriores**: Solo memorias relevantes al input actual
-- **Algoritmo de Relevancia Rediseñado**: Combinación de coincidencias exactas (60%) + substring matching (40%)
-- **Umbral Óptimo Validado**: `relevance_threshold: 0.05` - Balance perfecto entre relevancia y permisividad
+#### **Intelligent Memory Injection**
+- **Optimized Dual Logic**: 
+  - **First message**: Injects most recent memories for contextual continuity
+  - **Subsequent messages**: Only memories relevant to current input
+- **Redesigned Relevance Algorithm**: Combination of exact matches (60%) + substring matching (40%)
+- **Validated Optimal Threshold**: `relevance_threshold: 0.05` - Perfect balance between relevance and permissiveness
 
 #### **Optimizaciones de Rendimiento**
 - **Eliminación de Logs Verbosos**: Optimizado para reducir gasto de tokens y mejorar privacidad

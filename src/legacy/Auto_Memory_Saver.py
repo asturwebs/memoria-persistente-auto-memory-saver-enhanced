@@ -1,14 +1,14 @@
 """
-Auto Memory Saver - Versión 1.0.0
+Auto Memory Saver - Version 1.0.0
 ================================
 
-Función para OpenWebUI que guarda automáticamente los mensajes del asistente en la memoria del usuario.
+Function for OpenWebUI that automatically saves assistant messages to user memory.
 
-Autor original: @linbanana (https://github.com/linbanana)
-Basado en: https://github.com/linbanana/auto-memory-saver
+Original author: @linbanana (https://github.com/linbanana)
+Based on: https://github.com/linbanana/auto-memory-saver
 
-Esta es la versión original 1.0.0 conservada con fines de referencia.
-La versión mejorada y actualizada está disponible en Auto_Memory_Saver_Enhanced.py
+This is the original version 1.0.0 preserved for reference purposes.
+The enhanced and updated version is available in Auto_Memory_Saver_Enhanced.py
 """
 
 from pydantic import BaseModel, Field
