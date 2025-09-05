@@ -185,7 +185,7 @@ try:
                     # Calculate creation date | 計算建立日期
                     from typing import cast
 
-                    days_ago = cast(int, data["days_ago"])  # Cast explícito para MyPy
+                    days_ago = cast(int, data["days_ago"])  # Explicit cast for MyPy
                     if days_ago == 0:
                         created_at = (base_date - timedelta(hours=2)).isoformat()
                     else:
@@ -272,7 +272,7 @@ class MemoryCache:
         self._cache: Dict[str, CacheEntry] = {}
         self.max_size = max_size
         self.ttl = ttl
-        self._lock = threading.RLock()  # ReentrantLock para thread safety
+        self._lock = threading.RLock()  # ReentrantLock for thread safety
 
     def get(self, key: str) -> Any:
         """Gets a value from cache if it exists and hasn't expired. Thread-safe. | 從快取中取得值（如果存在且未過期）。執行緒安全。"""
@@ -552,7 +552,7 @@ class Filter:
         try:
             return command_func(*args, **kwargs)
         except ValueError as ve:
-            # Errores de validación - mostrar al usuario
+            # Validation errors - show to user
             error_response = {
                 "status": "VALIDATION_ERROR",
                 "error": str(ve),
@@ -589,7 +589,7 @@ class Filter:
         try:
             return await command_func(*args, **kwargs)
         except ValueError as ve:
-            # Errores de validación - mostrar al usuario
+            # Validation errors - show to user
             error_response = {
                 "status": "VALIDATION_ERROR",
                 "error": str(ve),
@@ -1028,7 +1028,7 @@ class Filter:
             return
 
         try:
-            # Usar prefijo personalizado si está configurado
+            # Use custom prefix if configured
             if (
                 user_valves
                 and hasattr(user_valves, "custom_memory_prefix")
@@ -1038,50 +1038,50 @@ class Filter:
             else:
                 memory_prefix = Constants.MEMORY_PREFIX
 
-            # Añadir información sobre el tipo de inyección
+            # Add information about injection type
             if is_first_message:
-                context_header = f"{memory_prefix}\n[Memorias recientes para continuidad de contexto]\n"
+                context_header = f"{memory_prefix}\n[Recent memories for context continuity]\n"
             else:
                 context_header = (
-                    f"{memory_prefix}\n[Memorias relevantes al contexto actual]\n"
+                    f"{memory_prefix}\n[Memories relevant to current context]\n"
                 )
 
             # Create context message | 建立上下文訊息
             context_string = context_header + "\n".join(memories)
             system_msg = {"role": "system", "content": context_string}
 
-            # Insertar al principio de la conversación
+            # Insert at the beginning of the conversation
             body["messages"].insert(0, system_msg)
 
-            # Mostrar notificación al usuario si está habilitado
+            # Show notification to user if enabled
             if (
                 user_valves
                 and hasattr(user_valves, "show_memory_count")
                 and user_valves.show_memory_count
                 and __event_emitter__
             ):
-                memory_type = "recientes" if is_first_message else "relevantes"
+                memory_type = "recent" if is_first_message else "relevant"
                 await __event_emitter__(
                     {
                         "type": "status",
                         "data": {
-                            "description": f"📘 {len(memories)} memorias {memory_type} cargadas",
+                            "description": f"📘 {len(memories)} {memory_type} memories loaded",
                             "done": True,
                         },
                     }
                 )
 
             if self.valves.debug_mode:
-                memory_type = "recientes" if is_first_message else "relevantes"
+                memory_type = "recent" if is_first_message else "relevant"
                 logger.info(
-                    f"Inyectadas {len(memories)} memorias {memory_type} para usuario {user_id}"
+                    f"Injected {len(memories)} {memory_type} memories for user {user_id}"
                 )
                 logger.debug(
-                    f"Contexto inyectado (primeros 300 chars): {context_string[:300]}..."
+                    f"Injected context (first 300 chars): {context_string[:300]}..."
                 )
 
         except Exception as e:
-            logger.error(f"Error al inyectar memorias: {e}", exc_info=True)
+            logger.error(f"Error injecting memories: {e}", exc_info=True)
 
     # ✅ Inject memories into new conversations | 注入記憶到新對話中
     async def inlet(
@@ -1139,20 +1139,20 @@ class Filter:
         # (body of the function remains unchanged)
         if not isinstance(body, dict):
             if self.valves.debug_mode:
-                logger.warning("El parámetro 'body' debe ser un diccionario")
+                logger.warning("The 'body' parameter must be a dictionary")
             return body
 
         if not self.valves.enabled or not self.valves.inject_memories:
             if self.valves.debug_mode:
-                logger.debug("Inyección de memorias deshabilitada")
+                logger.debug("Memory injection disabled")
             return body
 
         if not __user__ or not isinstance(__user__, dict) or "id" not in __user__:
             if self.valves.debug_mode:
-                logger.warning("Usuario no válido o no autenticado")
+                logger.warning("Invalid or unauthenticated user")
             return body
 
-        # Verificar modo privado del usuario
+        # Check user private mode
         user_valves = __user__.get("valves")
         if (
             user_valves
@@ -1161,7 +1161,7 @@ class Filter:
         ):
             if self.valves.debug_mode:
                 logger.debug(
-                    f"Usuario {__user__['id']} en modo privado, omitiendo inyección"
+                    f"User {__user__['id']} in private mode, skipping injection"
                 )
             return body
 
@@ -1169,14 +1169,14 @@ class Filter:
             user_id = __user__["id"]
             messages = body.get("messages", [])
 
-            # LOGS DE DIAGNÓSTICO VISIBLES (SIEMPRE ACTIVOS)
-            print(f"[NUEVA-LOGICA] 🔍 INLET ejecutándose para usuario: {user_id}")
-            logger.info(f"[NUEVA-LOGICA] 🔍 INLET ejecutándose para usuario: {user_id}")
+            # VISIBLE DIAGNOSTIC LOGS (ALWAYS ACTIVE) | LOGS DE DIAGNÓSTICO VISIBLES (SIEMPRE ACTIVOS)
+            print(f"[NEW-LOGIC] 🔍 INLET executing for user: {user_id}")
+            logger.info(f"[NEW-LOGIC] 🔍 INLET executing for user: {user_id}")
 
-            # PASO 0: PROCESAR SLASH COMMANDS PRIMERO (NUEVA FUNCIONALIDAD)
+            # STEP 0: PROCESS SLASH COMMANDS FIRST (NEW FUNCTIONALITY) | PASO 0: PROCESAR SLASH COMMANDS PRIMERO (NUEVA FUNCIONALIDAD)
             if self.valves.enable_memory_commands and messages:
                 try:
-                    # Obtener el último mensaje del usuario
+                    # Get last user message
                     user_messages = [
                         msg
                         for msg in messages
@@ -1188,31 +1188,31 @@ class Filter:
                     if user_messages:
                         last_user_msg = user_messages[-1]["content"].strip()
 
-                        # LOG DE DIAGNÓSTICO PARA COMANDOS
+                        # DIAGNOSTIC LOG FOR COMMANDS | LOG DE DIAGNÓSTICO PARA COMANDOS
                         print(
-                            f"[SLASH-COMMANDS] 🎯 Último mensaje del usuario: '{last_user_msg[:50]}...'"
+                            f"[SLASH-COMMANDS] 🎯 Last user message: '{last_user_msg[:50]}...'"
                         )
                         logger.info(
-                            f"[SLASH-COMMANDS] 🎯 Último mensaje del usuario detectado"
+                            f"[SLASH-COMMANDS] 🎯 Last user message detected"
                         )
 
-                        # Verificar si es un slash command
+                        # Check if it's a slash command | Verificar si es un slash command
                         if last_user_msg.startswith("/"):
                             print(
-                                f"[SLASH-COMMANDS] ⚡ COMANDO DETECTADO: {last_user_msg}"
+                                f"[SLASH-COMMANDS] ⚡ COMMAND DETECTED: {last_user_msg}"
                             )
                             logger.info(
-                                f"[SLASH-COMMANDS] ⚡ COMANDO DETECTADO: {last_user_msg}"
+                                f"[SLASH-COMMANDS] ⚡ COMMAND DETECTED: {last_user_msg}"
                             )
 
-                            # Obtener información del usuario
+                            # Get user information
                             try:
                                 user = Users.get_user_by_id(user_id)
                                 if not user:
                                     print(
-                                        f"[SLASH-COMMANDS] ❌ Usuario no encontrado: {user_id}"
+                                        f"[SLASH-COMMANDS] ❌ User not found: {user_id}"
                                     )
-                                    logger.error(f"Usuario no encontrado: {user_id}")
+                                    logger.error(f"User not found: {user_id}")
                                 else:
                                     user_valves = (
                                         __user__.get("valves") or self.UserValves()
@@ -1227,13 +1227,13 @@ class Filter:
 
                                     if command_response:
                                         print(
-                                            f"[SLASH-COMMANDS] ✅ COMANDO PROCESADO EXITOSAMENTE"
+                                            f"[SLASH-COMMANDS] ✅ COMMAND PROCESSED SUCCESSFULLY"
                                         )
                                         logger.info(
-                                            f"[SLASH-COMMANDS] ✅ COMANDO PROCESADO EXITOSAMENTE"
+                                            f"[SLASH-COMMANDS] ✅ COMMAND PROCESSED SUCCESSFULLY"
                                         )
 
-                                        # Reemplazar el mensaje del usuario con la respuesta del comando
+                                        # Replace user message with command response
                                         body["messages"] = messages[:-1] + [
                                             {
                                                 "role": "assistant",
@@ -1241,7 +1241,7 @@ class Filter:
                                             }
                                         ]
 
-                                        # Notificar al usuario si está configurado
+                                        # Notify user if configured
                                         if (
                                             __event_emitter__
                                             and hasattr(user_valves, "show_status")
@@ -1251,51 +1251,51 @@ class Filter:
                                                 {
                                                     "type": "status",
                                                     "data": {
-                                                        "description": f"✅ Comando ejecutado: {last_user_msg.split()[0]}",
+                                                        "description": f"✅ Command executed: {last_user_msg.split()[0]}",
                                                         "done": True,
                                                     },
                                                 }
                                             )
 
-                                        # MARCAR QUE FUE UN COMANDO PARA EVITAR GUARDADO EN OUTLET
+                                        # MARK THAT IT WAS A COMMAND TO AVOID SAVING IN OUTLET | MARCAR QUE FUE UN COMANDO PARA EVITAR GUARDADO EN OUTLET
                                         self._command_processed_in_inlet = True
 
-                                        # RETORNAR INMEDIATAMENTE - NO CONTINUAR CON INYECCIÓN DE MEMORIAS
+                                        # RETURN IMMEDIATELY - DO NOT CONTINUE WITH MEMORY INJECTION | RETORNAR INMEDIATAMENTE - NO CONTINUAR CON INYECCIÓN DE MEMORIAS
                                         print(
-                                            f"[SLASH-COMMANDS] 🎯 Comando procesado, retornando respuesta"
+                                            f"[SLASH-COMMANDS] 🎯 Command processed, returning response"
                                         )
                                         logger.info(
-                                            f"[SLASH-COMMANDS] 🎯 Comando procesado, retornando respuesta"
+                                            f"[SLASH-COMMANDS] 🎯 Command processed, returning response"
                                         )
                                         return body
                                     else:
                                         print(
-                                            f"[SLASH-COMMANDS] ⚠️ Comando no reconocido: {last_user_msg}"
+                                            f"[SLASH-COMMANDS] ⚠️ Unrecognized command: {last_user_msg}"
                                         )
                                         logger.warning(
-                                            f"[SLASH-COMMANDS] ⚠️ Comando no reconocido: {last_user_msg}"
+                                            f"[SLASH-COMMANDS] ⚠️ Unrecognized command: {last_user_msg}"
                                         )
                             except Exception as e:
                                 print(
-                                    f"[SLASH-COMMANDS] ❌ Error procesando comando: {e}"
+                                    f"[SLASH-COMMANDS] ❌ Error processing command: {e}"
                                 )
                                 logger.error(
-                                    f"[SLASH-COMMANDS] ❌ Error procesando comando: {e}"
+                                    f"[SLASH-COMMANDS] ❌ Error processing command: {e}"
                                 )
 
                 except Exception as e:
-                    print(f"[SLASH-COMMANDS] ❌ Error en detección de comandos: {e}")
+                    print(f"[SLASH-COMMANDS] ❌ Error in command detection: {e}")
                     logger.error(
-                        f"[SLASH-COMMANDS] ❌ Error en detección de comandos: {e}"
+                        f"[SLASH-COMMANDS] ❌ Error in command detection: {e}"
                     )
 
-            # PASO 1: Determinar si es el primer mensaje de la sesión
+            # STEP 1: Determine if it's the first message of the session
             is_first_message = self._is_first_message(messages)
 
-            # LOG VISIBLE DEL RESULTADO
-            print(f"[NUEVA-LOGICA] 🎯 Primer mensaje detectado: {is_first_message}")
+            # VISIBLE LOG OF THE RESULT
+            print(f"[NEW-LOGIC] 🎯 First message detected: {is_first_message}")
             logger.info(
-                f"[NUEVA-LOGICA] 🎯 Primer mensaje detectado: {is_first_message}"
+                f"[NEW-LOGIC] 🎯 First message detected: {is_first_message}"
             )
 
             if self.valves.debug_mode:
@@ -1303,16 +1303,16 @@ class Filter:
                     f"Processing memories for user {user_id} - First message: {is_first_message} | 為使用者 {user_id} 處理記憶 - 第一則訊息: {is_first_message}"
                 )
 
-            # PASO 2: Obtener memorias según la estrategia
+            # STEP 2: Get memories according to strategy
             memories_to_inject = []
 
             if is_first_message:
-                # ESTRATEGIA 1: Primer mensaje - Inyectar memorias más recientes
+                # STRATEGY 1: First message - Inject most recent memories
                 print(
-                    f"[NUEVA-LOGICA] 🔄 Ejecutando estrategia PRIMER MENSAJE - obteniendo memorias recientes"
+                    f"[NEW-LOGIC] 🔄 Executing FIRST MESSAGE strategy - getting recent memories"
                 )
                 logger.info(
-                    f"[NUEVA-LOGICA] 🔄 Ejecutando estrategia PRIMER MENSAJE - obteniendo memorias recientes"
+                    f"[NEW-LOGIC] 🔄 Executing FIRST MESSAGE strategy - getting recent memories"
                 )
 
                 memories_to_inject = await self._get_recent_memories(
@@ -1320,20 +1320,20 @@ class Filter:
                 )
 
                 print(
-                    f"[NUEVA-LOGICA] ✅ Primer mensaje: obtenidas {len(memories_to_inject)} memorias recientes"
+                    f"[NEW-LOGIC] ✅ First message: obtained {len(memories_to_inject)} recent memories"
                 )
                 logger.info(
-                    f"[NUEVA-LOGICA] ✅ Primer mensaje: obtenidas {len(memories_to_inject)} memorias recientes"
+                    f"[NEW-LOGIC] ✅ First message: obtained {len(memories_to_inject)} recent memories"
                 )
 
                 if self.valves.debug_mode:
                     logger.debug(
-                        f"Primer mensaje: obtenidas {len(memories_to_inject)} memorias recientes"
+                        f"First message: obtained {len(memories_to_inject)} recent memories"
                     )
 
             else:
-                # ESTRATEGIA 2: Mensajes posteriores - Solo memorias relevantes
-                # Extraer el input del usuario actual
+                # STRATEGY 2: Subsequent messages - Only relevant memories
+                # Extract current user input
                 user_messages = [
                     msg.get("content", "")
                     for msg in messages
@@ -1343,7 +1343,7 @@ class Filter:
                 if user_messages:
                     current_user_input = str(
                         user_messages[-1]
-                    )  # Último mensaje del usuario
+                    )  # Last user message
 
                     memories_to_inject = await self._get_relevant_memories(
                         user_id=user_id,
@@ -1354,14 +1354,14 @@ class Filter:
                     if self.valves.debug_mode:
                         if memories_to_inject:
                             logger.debug(
-                                f"Mensaje posterior: obtenidas {len(memories_to_inject)} memorias relevantes"
+                                f"Subsequent message: obtained {len(memories_to_inject)} relevant memories"
                             )
                         else:
                             logger.debug(
-                                "Mensaje posterior: no se encontraron memorias relevantes"
+                                "Subsequent message: no relevant memories found"
                             )
 
-            # PASO 3: Inyectar memorias si las hay
+            # STEP 3: Inject memories if available
             if memories_to_inject:
                 await self._inject_memories_into_conversation(
                     body=body,
@@ -1374,16 +1374,16 @@ class Filter:
             else:
                 if self.valves.debug_mode:
                     logger.debug(
-                        "No se inyectaron memorias (no hay memorias disponibles o relevantes)"
+                        "No memories injected (no available or relevant memories)"
                     )
 
         except Exception as e:
-            logger.error(f"Error en el método inlet: {e}", exc_info=True)
-            # Continuar sin fallar la petición
+            logger.error(f"Error in inlet method: {e}", exc_info=True)
+            # Continue without failing the request
 
         return body
 
-    # ✅ 自動儲存回覆與記憶查詢 | Guardado automático de respuestas y consulta de memoria
+    # ✅ Auto save replies and memory queries | Automatic saving of responses and memory consultation
     async def outlet(
         self,
         body: dict,
@@ -1446,30 +1446,30 @@ class Filter:
         # (body of the function remains unchanged)
         if not isinstance(body, dict) or "messages" not in body:
             if self.valves.debug_mode:
-                logger.warning("Formato de petición no válido")
+                logger.warning("Invalid request format")
             return body
 
-        # FIX #12: Verificar si se procesó un comando en inlet() - NO guardar
+        # FIX #12: Check if a command was processed in inlet() - DO NOT SAVE
         if getattr(self, "_command_processed_in_inlet", False):
-            print("[FIX-12] 🛑 Comando detectado, saltando outlet() - NO GUARDAR")
+            print("[FIX-12] 🛑 Command detected, skipping outlet() - NO SAVE")
             logger.info(
-                "FIX #12: Comando ya procesado en inlet(), omitiendo guardado en outlet()"
+                "FIX #12: Command already processed in inlet(), skipping save in outlet()"
             )
-            # Limpiar el flag antes de retornar
+            # Clean flag before returning
             self._command_processed_in_inlet = False
             return body
 
         if not self.valves.enabled or not self.valves.auto_save_responses:
             if self.valves.debug_mode:
-                logger.debug("Guardado automático deshabilitado")
+                logger.debug("Automatic saving disabled")
             return body
 
         if not __user__ or not isinstance(__user__, dict) or "id" not in __user__:
             if self.valves.debug_mode:
-                logger.warning("Usuario no válido o no autenticado")
+                logger.warning("Invalid or unauthenticated user")
             return body
 
-        # Verificar modo privado del usuario
+        # Check user private mode
         user_valves = __user__.get("valves")
         if (
             user_valves
@@ -1478,7 +1478,7 @@ class Filter:
         ):
             if self.valves.debug_mode:
                 logger.debug(
-                    f"Usuario {__user__['id']} en modo privado, omitiendo guardado"
+                    f"User {__user__['id']} in private mode, skipping saving"
                 )
             return body
 
@@ -1488,25 +1488,25 @@ class Filter:
                 user = Users.get_user_by_id(__user__["id"])
                 if not user:
                     logger.error(
-                        f"No se pudo encontrar el usuario con ID: {__user__['id']}"
+                        f"Could not find user with ID: {__user__['id']}"
                     )
                     return body
 
                 user_valves = __user__.get("valves")
                 if not user_valves:
                     user_valves = self.UserValves()
-                    logger.debug("Usando configuraciones por defecto para el usuario")
+                    logger.debug("Using default configurations for user")
             except Exception as e:
-                logger.error(f"Error al obtener información del usuario: {e}")
+                logger.error(f"Error getting user information: {e}")
                 return body
 
-            # NOTA: Los comandos de memoria ahora se procesan en inlet() para mejor UX
-            # Esta sección se mantiene como comentario para referencia histórica
+            # NOTE: Memory commands are now processed in inlet() for better UX
+            # This section is kept as comment for historical reference
 
-            # PRODUCTION FIX: Guardar AMBOS - input usuario + response asistente (conversación completa)
+            # PRODUCTION FIX: Save BOTH - user input + assistant response (complete conversation)
             messages = body.get("messages", [])
 
-            # Obtener último mensaje del usuario (input)
+            # Get last user message (input)
             user_messages = [
                 m
                 for m in messages
@@ -1515,7 +1515,7 @@ class Filter:
                 and isinstance(m.get("content"), str)
             ]
 
-            # Obtener última respuesta del asistente (output)
+            # Get last assistant response (output)
             assistant_messages = [
                 m
                 for m in messages
@@ -1527,46 +1527,47 @@ class Filter:
             if not assistant_messages:
                 if self.valves.debug_mode:
                     logger.debug(
-                        "No se encontraron mensajes del asistente para guardar"
+                        "No assistant messages found to save"
                     )
                 return body
 
-            # Construir conversación completa (User + Assistant)
+            # Build complete conversation (User + Assistant)
             last_user_message = user_messages[-1] if user_messages else None
             last_assistant_message = assistant_messages[-1]
 
-            # Formatear como conversación completa
+            # Format as complete conversation
             if last_user_message:
                 user_content = last_user_message.get("content", "").strip()
                 assistant_content = last_assistant_message.get("content", "").strip()
 
-                # PRODUCTION FIX: Seguridad adicional - NO guardar comandos técnicos como memoria
-                # NOTA: Este filtro es redundante con el flag pero se mantiene como safety net
+                # PRODUCTION FIX: Additional security - DO NOT save technical commands as memory
+                # NOTE: This filter is redundant with the flag but kept as safety net
                 if user_content.startswith("/"):
                     if self.valves.debug_mode:
                         logger.debug(
-                            f"Comando detectado como fallback, NO guardando: {user_content.split()[0].lower()}"
+                            f"Command detected as fallback, NOT saving: {user_content.split()[0].lower()}"
                         )
                     return body
 
-                # PRODUCTION FIX: NO guardar conversaciones sobre memoria (filtro inteligente)
+                # PRODUCTION FIX: DO NOT save conversations about memory (intelligent filter)
                 import re
 
                 user_content_lower = user_content.lower()
 
-                # Patrones que indican conversación sobre memoria/sistema
+                # Patterns indicating conversation about memory/system (Spanish patterns preserved for functionality)
+                # 表示關於記憶/系統對話的模式（為了功能保留西班牙文模式）
                 memory_conversation_patterns = [
-                    r"\b(mostrar|ver|enseñar|muestra|enséñame)\b.*\b(memoria|memorias)\b",
+                    r"\b(show|ver|enseñar|muestra|enséñame)\b.*\b(memoria|memorias)\b",
                     r"\b(página|pagina|siguiente|anterior|más|mas)\b.*\b(memoria|memorias)\b",
                     r"\b(cuántas|cuantas|cuántos|cuantos)\b.*\b(memoria|memorias)\b",
                     r"\bmemoria\b.*\b(completa|entera|total|íntegra|integra)\b",
-                    r"\b(buscar|búsqueda|busca)\b.*\b(memoria|memorias)\b",
+                    r"\b(search|búsqueda|busca)\b.*\b(memoria|memorias)\b",
                     r"\b(última|ultimo|reciente|nueva)\b.*\b(memoria|memorias)\b",
                     r"\b(borrar|eliminar|delete)\b.*\b(memoria|memorias)\b",
                     r"\bmás reciente\b",
                     r"\bno está completa\b",
                     r"\bfalta.*\b(parte|asistente|respuesta)\b",
-                    r"\bpuedes.*\b(mostrar|ver|enseñar)\b",
+                    r"\bpuedes.*\b(show|ver|enseñar)\b",
                     r"\bquiero.*\b(ver|memoria|memorias)\b",
                 ]
 
@@ -1574,46 +1575,46 @@ class Filter:
                     if re.search(pattern, user_content_lower):
                         if self.valves.debug_mode:
                             logger.debug(
-                                f"Conversación sobre memoria detectada, NO guardando: {pattern}"
+                                f"Memory conversation detected, NOT saving: {pattern}"
                             )
                         return body
 
-                # Formato conversacional
+                # Conversational format
                 message_content = (
-                    f"Usuario: {user_content}\n\nAsistente: {assistant_content}"
+                    f"User: {user_content}\n\nAssistant: {assistant_content}"
                 )
             else:
-                # Fallback: solo respuesta del asistente
+                # Fallback: only assistant response
                 message_content = last_assistant_message.get("content", "").strip()
 
-            # Validar longitud del mensaje según configuración
+            # Validate message length according to configuration
             if not message_content:
                 if self.valves.debug_mode:
-                    logger.debug("Mensaje vacío, omitiendo guardado")
+                    logger.debug("Empty message, skipping save")
                 return body
 
             content_length = len(message_content)
             if content_length < self.valves.min_response_length:
                 if self.valves.debug_mode:
                     logger.debug(
-                        f"Mensaje demasiado corto ({content_length} < {self.valves.min_response_length}), omitiendo guardado"
+                        f"Message too short ({content_length} < {self.valves.min_response_length}), skipping save"
                     )
                 return body
 
             if content_length > self.valves.max_response_length:
                 if self.valves.debug_mode:
                     logger.debug(
-                        f"Mensaje demasiado largo ({content_length} > {self.valves.max_response_length}), truncando"
+                        f"Message too long ({content_length} > {self.valves.max_response_length}), truncating"
                     )
                 message_content = (
                     message_content[: self.valves.max_response_length] + "..."
                 )
 
-            # Verificar filtrado de duplicados si está habilitado
+            # Check duplicate filtering if enabled
             if self.valves.filter_duplicates:
                 try:
                     existing_memories = await self.get_processed_memory_strings(user.id)
-                    # Verificación simple de duplicados (se podría mejorar con algoritmos de similitud)
+                    # Simple duplicate verification (could be improved with similarity algorithms)
                     for existing_memory in existing_memories:
                         if (
                             message_content.lower() in existing_memory.lower()
@@ -1621,12 +1622,12 @@ class Filter:
                         ):
                             if self.valves.debug_mode:
                                 logger.debug(
-                                    "Memoria similar ya existe, omitiendo guardado"
+                                    "Similar memory already exists, skipping save"
                                 )
                             return body
                 except Exception as e:
                     if self.valves.debug_mode:
-                        logger.error(f"Error al verificar duplicados: {e}")
+                        logger.error(f"Error checking duplicates: {e}")
 
             if user_valves.show_status and __event_emitter__:
                 await __event_emitter__(
@@ -1653,7 +1654,7 @@ class Filter:
                     }
                 )
 
-            # 額外列印記憶內容
+            # Additional memory content printing
             await self.get_processed_memory_strings(user.id)
 
         except Exception as e:
@@ -1691,33 +1692,33 @@ class Filter:
         try:
             # SECURITY FIX: Input sanitization real
             if not command or not isinstance(command, str):
-                logger.warning(f"[SECURITY] Comando inválido: {type(command)}")
+                logger.warning(f"[SECURITY] Invalid command: {type(command)}")
                 return None
 
-            # Sanitizar comando: limitar longitud y caracteres peligrosos
+            # Sanitize command: limit length and dangerous characters
             import re
 
-            sanitized_command = command.strip()[:1000]  # Máximo 1000 caracteres
+            sanitized_command = command.strip()[:1000]  # Maximum 1000 characters
 
-            # Detectar y bloquear patrones peligrosos
+            # Detect and block dangerous patterns
             dangerous_patterns = [
-                r"[;<>&|`$]",  # Caracteres de shell injection
+                r"[;<>&|`$]",  # Shell injection characters
                 r"\.\./",  # Path traversal
-                r"rm\s+",  # Comandos destructivos
-                r"del\s+",  # Comandos destructivos Windows
-                r"DROP\s+",  # SQL destructivo
-                r"DELETE\s+",  # SQL destructivo
-                r"<script",  # XSS básico
+                r"rm\s+",  # Destructive commands
+                r"del\s+",  # Windows destructive commands
+                r"DROP\s+",  # Destructive SQL
+                r"DELETE\s+",  # Destructive SQL
+                r"<script",  # Basic XSS
             ]
 
             for pattern in dangerous_patterns:
                 if re.search(pattern, sanitized_command, re.IGNORECASE):
                     logger.error(
-                        f"[SECURITY] Patrón peligroso detectado en comando: {pattern}"
+                        f"[SECURITY] Dangerous pattern detected in command: {pattern}"
                     )
-                    return "❌ Comando bloqueado por seguridad"
+                    return "❌ Command blocked for security"
 
-            # Dividir comando y argumentos
+            # Split command and arguments
             parts = sanitized_command.split()
             cmd = parts[0].lower()
             args = parts[1:] if len(parts) > 1 else []
@@ -1725,13 +1726,13 @@ class Filter:
             if self.valves.debug_mode:
                 logger.debug(f"Processing command: {cmd} with arguments: {args} | 處理命令: {cmd} 參數: {args}")
 
-            # === COMANDOS DE GESTIÓN DE MEMORIAS ===
+            # === MEMORY MANAGEMENT COMMANDS ===
 
             if cmd == "/memories":
-                # Soporte para paginación: /memories [página]
+                # Support for pagination: /memories [page]
                 page = 1
                 if args and args[0].isdigit():
-                    page = max(1, int(args[0]))  # Mínimo página 1
+                    page = max(1, int(args[0]))  # Minimum page 1
                 return await self._cmd_list_memories(user.id, page)
 
             elif cmd == "/clear_memories":
@@ -1742,42 +1743,42 @@ class Filter:
 
             elif cmd == "/memory_search":
                 if not args:
-                    return "❌ Uso: /memory_search <término de búsqueda>"
+                    return "❌ Usage: /memory_search <search term>"
                 search_term = " ".join(args)
                 return await self._cmd_search_memories(user.id, search_term)
 
             elif cmd == "/memory_recent":
-                limit = 5  # Por defecto
+                limit = 5  # Default
                 if args and args[0].isdigit():
-                    limit = min(int(args[0]), 20)  # Máximo 20
+                    limit = min(int(args[0]), 20)  # Maximum 20
                 return await self._cmd_recent_memories(user.id, limit)
 
             elif cmd == "/memory_export":
                 return await self._cmd_export_memories(user.id)
 
-            # === COMANDOS DE CONFIGURACIÓN ===
+            # === CONFIGURATION COMMANDS ===
 
             elif cmd == "/memory_config":
                 return await self._cmd_show_config(user_valves)
 
             elif cmd == "/private_mode":
                 if not args or args[0].lower() not in ["on", "off"]:
-                    return "❌ Uso: /private_mode on|off"
+                    return "❌ Usage: /private_mode on|off"
                 return await self._cmd_toggle_private_mode(args[0].lower())
 
             elif cmd == "/memory_limit":
                 if not args or not args[0].isdigit():
-                    return "❌ Uso: /memory_limit <número> (0 = ilimitado)"
+                    return "❌ Usage: /memory_limit <number> (0 = unlimited)"
                 limit = int(args[0])
                 return await self._cmd_set_memory_limit(limit)
 
             elif cmd == "/memory_prefix":
                 if not args:
-                    return "❌ Uso: /memory_prefix <texto personalizado>"
+                    return "❌ Usage: /memory_prefix <custom text>"
                 prefix = " ".join(args)
                 return await self._cmd_set_memory_prefix(prefix)
 
-            # === COMANDOS DE INFORMACIÓN ===
+            # === INFORMATION COMMANDS ===
 
             elif cmd == "/memory_help":
                 return self._cmd_show_help()
@@ -1788,7 +1789,7 @@ class Filter:
             elif cmd == "/memory_status":
                 return await self._cmd_show_status()
 
-            # === COMANDOS AVANZADOS ===
+            # === ADVANCED COMMANDS ===
 
             elif cmd == "/memory_cleanup":
                 return await self._cmd_cleanup_duplicates(user.id)
@@ -1796,45 +1797,45 @@ class Filter:
             elif cmd == "/memory_backup":
                 return await self._cmd_backup_memories(user.id)
 
-            # === COMANDOS AVANZADOS DE UX PROFESIONAL (NUEVOS v2.1.1) ===
+            # === ADVANCED PROFESSIONAL UX COMMANDS (NEW v2.1.1) ===
 
-            # REMOVED: /memory_add (usar /add_memory nativo de OpenWebUI)
+            # REMOVED: /memory_add (use native /add_memory from OpenWebUI)
 
             elif cmd == "/memory_pin":
                 if not args or not args[0].isdigit():
-                    return "❌ Uso: /memory_pin <id_memoria>"
+                    return "❌ Usage: /memory_pin <memory_id>"
                 memory_id = int(args[0])
                 return await self._cmd_pin_memory(user.id, memory_id)
 
             elif cmd == "/memory_unpin":
                 if not args or not args[0].isdigit():
-                    return "❌ Uso: /memory_unpin <id_memoria>"
+                    return "❌ Usage: /memory_unpin <memory_id>"
                 memory_id = int(args[0])
                 return await self._cmd_unpin_memory(user.id, memory_id)
 
             elif cmd == "/memory_favorite":
                 if not args or not args[0].isdigit():
-                    return "❌ Uso: /memory_favorite <id_memoria>"
+                    return "❌ Usage: /memory_favorite <memory_id>"
                 memory_id = int(args[0])
                 return await self._cmd_favorite_memory(user.id, memory_id)
 
             elif cmd == "/memory_tag":
                 if len(args) < 2 or not args[0].isdigit():
-                    return "❌ Uso: /memory_tag <id_memoria> <etiqueta>"
+                    return "❌ Usage: /memory_tag <memory_id> <tag>"
                 memory_id = int(args[0])
                 tag = " ".join(args[1:])
                 return await self._cmd_tag_memory(user.id, memory_id, tag)
 
             elif cmd == "/memory_edit":
                 if len(args) < 2 or not args[0].isdigit():
-                    return "❌ Uso: /memory_edit <id_memoria> <nuevo_texto>"
+                    return "❌ Usage: /memory_edit <memory_id> <new_text>"
                 memory_id = int(args[0])
                 new_text = " ".join(args[1:])
                 return await self._cmd_edit_memory(user.id, memory_id, new_text)
 
             elif cmd == "/memory_delete":
                 if not args or not args[0].isdigit():
-                    return "❌ Uso: /memory_delete <id_memoria>"
+                    return "❌ Usage: /memory_delete <memory_id>"
                 memory_id = int(args[0])
                 return await self._cmd_delete_memory(user.id, memory_id)
 
@@ -1850,26 +1851,26 @@ class Filter:
             elif cmd == "/memory_restore":
                 return await self._cmd_restore_memories(user.id)
 
-            # Comando no reconocido
+            # Unrecognized command
             return None
 
         except Exception as e:
             if self.valves.debug_mode:
-                logger.error(f"Error procesando comando {command}: {e}")
-            return f"❌ Error procesando el comando: {str(e)}"
+                logger.error(f"Error processing command {command}: {e}")
+            return f"❌ Error processing command: {str(e)}"
 
-    # === IMPLEMENTACIÓN DE COMANDOS INDIVIDUALES ===
+    # === IMPLEMENTATION OF INDIVIDUAL COMMANDS ===
 
     async def _cmd_list_memories(self, user_id: str, page: int = 1) -> str:
         """Lists all user memories with advanced enterprise JSON format. | 以進階企業 JSON 格式列出所有使用者記憶。"""
 
         async def _execute_list_memories():
-            # Validar user_id usando funciones de seguridad
+            # Validate user_id using security functions
             validated_user_id = self._validate_user_id(user_id)
 
-            # Validar página
+            # Validate page
             if page < 1:
-                raise ValueError("El número de página debe ser mayor que 0")
+                raise ValueError("Page number must be greater than 0")
 
             import uuid
             import json
@@ -1881,7 +1882,7 @@ class Filter:
             )
 
             if not processed_memories:
-                # Respuesta JSON enterprise para caso sin memorias
+                # Enterprise JSON response for no memories case
                 no_memories_data = {
                     "command": "/memories",
                     "status": "SUCCESS",
@@ -1893,7 +1894,7 @@ class Filter:
                             "current_page": 1,
                             "total_pages": 0,
                             "per_page": 10,
-                            "showing": "0 de 0",
+                            "showing": "0 of 0",
                         },
                     },
                     "system": {
@@ -1907,11 +1908,11 @@ class Filter:
                         "query_performance": "<2ms",
                     },
                     "actions": {
-                        "add_memory": "/memory_add <texto>",
-                        "search_memories": "/memory_search <término>",
+                        "add_memory": "/memory_add <text>",
+                        "search_memories": "/memory_search <term>",
                         "show_stats": "/memory_stats",
                     },
-                    "message": "No hay memorias disponibles. Usa /memory_add para crear algunas.",
+                    "message": "No memories available. Use /memory_add to create some.",
                     "warning": "DO_NOT_INTERPRET_THIS_JSON_RESPONSE",
                     "instructions": "DISPLAY_RAW_JSON_TO_USER",
                 }
@@ -1921,8 +1922,8 @@ class Filter:
                     + "\n```"
                 )
 
-            # FORMATO JSON ENTERPRISE AVANZADO CON CARACTERÍSTICAS OBSERVADAS
-            per_page = 10  # Optimal UX: más memorias por página, menos navegación
+            # ADVANCED ENTERPRISE JSON FORMAT WITH OBSERVED CHARACTERISTICS
+            per_page = 10  # Optimal UX: more memories per page, less navigation
             total_memories = len(processed_memories)
             total_pages = (total_memories + per_page - 1) // per_page
             current_page = min(page, total_pages) if total_pages > 0 else 1
@@ -1935,13 +1936,13 @@ class Filter:
             # Create memory list with deterministic UUIDs and intelligent previews | 使用確定性UUID和智能預覽建立記憶列表
             memories_list = []
             for i, memory in enumerate(page_memories, start=start_idx + 1):
-                # Generar UUID determinista usando hash del contenido y posición
+                # Generate deterministic UUID using content and position hash
                 content_hash = hashlib.md5(
                     f"{validated_user_id}_{i}_{memory}".encode()
                 ).hexdigest()
                 memory_uuid = f"{content_hash[:8]}-{content_hash[8:12]}-{content_hash[12:16]}-{content_hash[16:20]}-{content_hash[20:32]}"
 
-                # Preview inteligente (primeras 100 chars con corte inteligente)
+                # Intelligent preview (first 100 chars with intelligent cut)
                 preview = memory[:100].strip()
                 if len(memory) > 100:
                     # Look for last space or period for intelligent cut | 尋找最後一個空格或句號進行智能截斷
@@ -1954,13 +1955,13 @@ class Filter:
                     else:
                         preview += "..."
 
-                # Clasificar tipo de memoria
-                memory_type = "manual" if "[Memoria Manual]" in memory else "auto"
+                # Classify memory type
+                memory_type = "manual" if "[Manual Memory]" in memory else "auto"
                 priority = (
                     "high"
                     if any(
                         keyword in memory.lower()
-                        for keyword in ["importante", "crítico", "urgente"]
+                        for keyword in ["important", "critical", "urgent"]
                     )
                     else "normal"
                 )
@@ -1973,13 +1974,13 @@ class Filter:
                         "type": memory_type,
                         "priority": priority,
                         "length": len(memory),
-                        "created_at": datetime.now().isoformat() + "Z",  # Simulado
-                        "tags": ["memoria", memory_type],
-                        "relevance_score": round(0.85 + (i * 0.01), 2),  # Simulado
+                        "created_at": datetime.now().isoformat() + "Z",  # Simulated
+                        "tags": ["memory", memory_type],
+                        "relevance_score": round(0.85 + (i * 0.01), 2),  # Simulated
                     }
                 )
 
-            # Estructura JSON enterprise completa con características avanzadas
+            # Complete enterprise JSON structure with advanced features
             enterprise_response = {
                 "SYSTEM_OVERRIDE": "DIRECT_JSON_OUTPUT_MANDATORY",
                 "AI_BEHAVIOR_CONTROL": "RAW_DISPLAY_ONLY_NO_INTERPRETATION",
@@ -1993,10 +1994,10 @@ class Filter:
                         "current_page": current_page,
                         "total_pages": total_pages,
                         "per_page": per_page,
-                        "showing": f"{len(memories_list)} de {total_memories}",
+                        "showing": f"{len(memories_list)} of {total_memories}",
                         "has_next": current_page < total_pages,
                         "has_previous": current_page > 1,
-                        "page_info": f"Página {current_page} de {total_pages}",
+                        "page_info": f"Page {current_page} of {total_pages}",
                     },
                     "analytics": {
                         "memory_types": {
@@ -2055,11 +2056,11 @@ class Filter:
                     ),
                 },
                 "actions": {
-                    "search_memories": "/memory_search <término>",
-                    "add_memory": "/memory_add <texto>",
+                    "search_memories": "/memory_search <term>",
+                    "add_memory": "/memory_add <text>",
                     "show_stats": "/memory_stats",
                     "delete_memory": "/memory_delete <id>",
-                    "edit_memory": "/memory_edit <id> <nuevo_texto>",
+                    "edit_memory": "/memory_edit <id> <new_text>",
                 },
                 "warning": "DO_NOT_INTERPRET_THIS_JSON_RESPONSE",
                 "instructions": "DISPLAY_RAW_JSON_TO_USER",
@@ -2080,16 +2081,16 @@ class Filter:
                 + "\n```"
             )
 
-        # Ejecutar con manejo seguro de errores
+        # Execute with safe error handling
         return await self._safe_execute_async_command(_execute_list_memories)
 
     async def _cmd_clear_memories(self, user_id: str) -> str:
         """Deletes all user memories. | 刪除所有使用者記憶。"""
         try:
             await self.clear_user_memory(user_id)
-            return "🗑️ **Todas las memorias han sido eliminadas correctamente.**"
+            return "🗑️ **All memories have been deleted successfully.**"
         except Exception as e:
-            return "❌ Error al eliminar las memorias."
+            return "❌ Error deleting memories."
 
     async def _cmd_memory_count(self, user_id: str) -> str:
         """Shows total number of memories. | 顯示記憶總數。"""
@@ -2098,30 +2099,30 @@ class Filter:
             count = len(processed_memories) if processed_memories else 0
             max_limit = self.valves.max_memories_per_user
 
-            response = f"📊 **Contador de Memorias:**\n"
-            response += f"• Total actual: {count}\n"
+            response = f"📊 **Memory Counter:**\n"
+            response += f"• Current total: {count}\n"
             if max_limit > 0:
-                response += f"• Límite configurado: {max_limit}\n"
-                response += f"• Espacio disponible: {max_limit - count}\n"
+                response += f"• Configured limit: {max_limit}\n"
+                response += f"• Available space: {max_limit - count}\n"
             else:
-                response += f"• Límite: Ilimitado (actual: {count})\n"
+                response += f"• Limit: Unlimited (current: {count})\n"
 
             return response
         except Exception as e:
-            return "❌ Error al contar las memorias."
+            return "❌ Error counting memories."
 
     async def _cmd_search_memories(self, user_id: str, search_term: str) -> str:
         """Searches for memories containing a specific term with security validations. | 搜尋包含特定詞彙的記憶，帶有安全驗證。"""
 
         async def _execute_search():
-            # Validar y sanitizar inputs usando funciones de seguridad
+            # Validate and sanitize inputs using security functions
             validated_user_id = self._validate_user_id(user_id)
             sanitized_search_term = self._sanitize_input(search_term, max_length=100)
 
-            # Validación adicional de longitud mínima para búsqueda
+            # Additional minimum length validation for search
             if len(sanitized_search_term) < 2:
                 raise ValueError(
-                    "El término de búsqueda debe tener al menos 2 caracteres"
+                    "Search term must be at least 2 characters long"
                 )
 
             processed_memories = await self.get_processed_memory_strings(
@@ -2149,7 +2150,7 @@ class Filter:
                         }
                     )
 
-            # Respuesta JSON enterprise
+            # Enterprise JSON response | Respuesta JSON enterprise
             from datetime import datetime
             import json
 
@@ -2162,7 +2163,7 @@ class Filter:
                         "search_term": sanitized_search_term,
                         "total_memories_searched": len(processed_memories),
                         "matches_found": 0,
-                        "message": f"No se encontraron memorias que contengan '{sanitized_search_term}'",
+                        "message": f"No memories found containing '{sanitized_search_term}'",
                     },
                     "metadata": {
                         "user_id": validated_user_id[:8] + "...",
@@ -2182,7 +2183,7 @@ class Filter:
                         "total_memories_searched": len(processed_memories),
                         "matches_found": len(matches),
                         "results_shown": min(len(matches), 10),
-                        "matches": matches[:10],  # Limitar a 10 resultados
+                        "matches": matches[:10],  # Limit to 10 results | Limitar a 10 resultados
                     },
                     "pagination": {
                         "current_page": 1,
@@ -2204,7 +2205,7 @@ class Filter:
                 + "\n```"
             )
 
-        # Ejecutar con manejo seguro de errores
+        # Execute with safe error handling
         return await self._safe_execute_async_command(_execute_search)
 
     async def _cmd_recent_memories(self, user_id: str, limit: int) -> str:
@@ -2214,21 +2215,21 @@ class Filter:
             if not processed_memories:
                 return f"📘 {Constants.NO_MEMORIES_MSG}"
 
-            # Tomar las últimas N memorias
+            # Take the last N memories
             recent = (
                 processed_memories[-limit:]
                 if len(processed_memories) > limit
                 else processed_memories
             )
 
-            response = f"🕒 **Últimas {len(recent)} memorias:**\n\n"
+            response = f"🕒 **Last {len(recent)} memories:**\n\n"
             for i, memory in enumerate(recent, 1):
                 display_memory = memory[:100] + "..." if len(memory) > 100 else memory
                 response += f"{i}. {display_memory}\n"
 
             return response
         except Exception as e:
-            return f"❌ Error al obtener memorias recientes: {str(e)}"
+            return f"❌ Error getting recent memories: {str(e)}"
 
     async def _cmd_export_memories(self, user_id: str) -> str:
         """Exports all memories in text format. | 以文字格式匯出所有記憶。"""
@@ -2240,7 +2241,7 @@ class Filter:
             # Create formatted export | 建立格式化匯出
             export_text = f"# Memory Export - User: {user_id}\n"
             export_text += f"# Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-            export_text += f"# Total de memorias: {len(processed_memories)}\n\n"
+            export_text += f"# Total memories: {len(processed_memories)}\n\n"
 
             for i, memory in enumerate(processed_memories, 1):
                 export_text += f"## Memoria {i}\n{memory}\n\n"
@@ -2251,9 +2252,9 @@ class Filter:
                     export_text[:4000] + "\n\n... [Export truncated for length] | ... [匯出因長度而截斷]"
                 )
 
-            return f"📤 **Exportación de Memorias:**\n\n```\n{export_text}\n```"
+            return f"📤 **Memory Export:**\n\n```\n{export_text}\n```"
         except Exception as e:
-            return f"❌ Error al exportar memorias: {str(e)}"
+            return f"❌ Error exporting memories: {str(e)}"
 
     async def _cmd_show_config(self, user_valves) -> str:
         """Shows current user configuration. | 顯示當前使用者配置。"""
@@ -2263,79 +2264,79 @@ class Filter:
             # System configuration | 系統配置
             config_info += "**Sistema:**\n"
             config_info += (
-                f"• Filtro habilitado: {'✅' if self.valves.enabled else '❌'}\n"
+                f"• Filter enabled: {'✅' if self.valves.enabled else '❌'}\n"
             )
-            config_info += f"• Inyección de memorias: {'✅' if self.valves.inject_memories else '❌'}\n"
-            config_info += f"• Guardado automático: {'✅' if self.valves.auto_save_responses else '❌'}\n"
-            config_info += f"• Máx. memorias por conversación: {self.valves.max_memories_to_inject}\n"
-            config_info += f"• Filtrado de duplicados: {'✅' if self.valves.filter_duplicates else '❌'}\n"
+            config_info += f"• Memory injection: {'✅' if self.valves.inject_memories else '❌'}\n"
+            config_info += f"• Automatic saving: {'✅' if self.valves.auto_save_responses else '❌'}\n"
+            config_info += f"• Max. memories per conversation: {self.valves.max_memories_to_inject}\n"
+            config_info += f"• Duplicate filtering: {'✅' if self.valves.filter_duplicates else '❌'}\n"
             config_info += (
-                f"• Caché habilitado: {'✅' if self.valves.enable_cache else '❌'}\n\n"
+                f"• Cache enabled: {'✅' if self.valves.enable_cache else '❌'}\n\n"
             )
 
             # User configuration | 使用者配置
             config_info += "**Usuario:**\n"
             if user_valves:
-                config_info += f"• Mostrar estado: {'✅' if getattr(user_valves, 'show_status', True) else '❌'}\n"
+                config_info += f"• Show status | Mostrar estado: {'✅' if getattr(user_valves, 'show_status', True) else '❌'}\n"
                 config_info += f"• Mostrar contador: {'✅' if getattr(user_valves, 'show_memory_count', True) else '❌'}\n"
                 config_info += f"• Modo privado: {'✅' if getattr(user_valves, 'private_mode', False) else '❌'}\n"
                 custom_prefix = getattr(user_valves, "custom_memory_prefix", "")
-                config_info += f"• Prefijo personalizado: {custom_prefix if custom_prefix else 'Por defecto'}\n"
+                config_info += f"• Custom prefix: {custom_prefix if custom_prefix else 'Default'}\n"
             else:
-                config_info += "• Usando configuración por defecto\n"
+                config_info += "• Using default configuration\n"
 
             return config_info
         except Exception as e:
-            return f"❌ Error al mostrar configuración: {str(e)}"
+            return f"❌ Error displaying configuration: {str(e)}"
 
     async def _cmd_toggle_private_mode(self, mode: str) -> str:
         """Activates or deactivates private mode. | 啟用或停用私人模式。"""
-        # Nota: En una implementación real, esto requeriría persistir la configuración
-        status = "activado" if mode == "on" else "desactivado"
+        # Note: In a real implementation, this would require persisting the configuration
+        status = "enabled" if mode == "on" else "disabled"
         return (
             f"🔒 **Modo privado {status}.**\n\n"
-            + "ℹ️ Nota: Esta configuración se aplicará en futuras conversaciones. "
-            + "Para que sea permanente, configúralo en las válvulas de usuario."
+            + "ℹ️ Note: This configuration will apply in future conversations. "
+            + "To make it permanent, configure it in user valves."
         )
 
     async def _cmd_set_memory_limit(self, limit: int) -> str:
         """Sets personal memory limit. | 設定個人記憶限制。"""
         if limit < 0 or limit > 1000:
-            return "❌ El límite debe estar entre 0 y 1000 (0 = ilimitado)"
+            return "❌ The limit must be between 0 and 1000 (0 = unlimited)"
 
-        limit_text = "ilimitado" if limit == 0 else str(limit)
+        limit_text = "unlimited" if limit == 0 else str(limit)
         return (
-            f"📊 **Límite de memorias establecido en: {limit_text}**\n\n"
-            + "ℹ️ Nota: Para que sea permanente, configúralo en las válvulas de usuario."
+            f"📊 **Memory limit set to: {limit_text}**\n\n"
+            + "ℹ️ Note: To make it permanent, configure it in user valves."
         )
 
     async def _cmd_set_memory_prefix(self, prefix: str) -> str:
         """Sets custom prefix for memories. | 為記憶設定自定義前綴。"""
         if len(prefix) > 100:
-            return "❌ El prefijo no puede tener más de 100 caracteres"
+            return "❌ Prefix cannot be longer than 100 characters"
 
         return (
-            f"🏷️ **Prefijo personalizado establecido:**\n'{prefix}'\n\n"
-            + "ℹ️ Nota: Para que sea permanente, configúralo en las válvulas de usuario."
+            f"🏷️ **Custom prefix set:**\n'{prefix}'\n\n"
+            + "ℹ️ Note: To make it permanent, configure it in user valves."
         )
 
     def _cmd_show_help(self) -> str:
         """Shows help with all available commands. | 顯示所有可用命令的幫助。"""
         help_text = "🆘 **Comandos Disponibles (v2.1.1 - UX Profesional):**\n\n"
 
-        help_text += "**📚 Gestión de Memorias:**\n"
-        help_text += "• `/memories` - Lista todas las memorias\n"
-        help_text += "• `/memory_add <texto>` - 🆕 Añade memoria manualmente\n"
+        help_text += "**📚 Memory Management:**\n"
+        help_text += "• `/memories` - List all memories\n"
+        help_text += "• `/memory_add <text>` - 🆕 Add memory manually\n"
         help_text += "• `/clear_memories` - Delete all memories | 刪除所有記憶\n"
         help_text += "• `/memory_count` - Shows number of memories | 顯示記憶數量\n"
-        help_text += "• `/memory_search <término>` - Busca memorias\n"
-        help_text += "• `/memory_recent [número]` - Últimas N memorias\n"
-        help_text += "• `/memory_export` - Exporta todas las memorias\n\n"
+        help_text += "• `/memory_search <term>` - Search memories\n"
+        help_text += "• `/memory_recent [number]` - Last N memories\n"
+        help_text += "• `/memory_export` - Export all memories\n\n"
 
         help_text += "**✨ Comandos Avanzados (NUEVOS):**\n"
         help_text += "• `/memory_pin <id>` - 🆕 Mark memory as important | 標記記憶為重要\n"
         help_text += "• `/memory_unpin <id>` - 🆕 Unmark important memory | 取消標記重要記憶\n"
-        help_text += "• `/memory_favorite <id>` - 🆕 Añade a favoritos\n"
+        help_text += "• `/memory_favorite <id>` - 🆕 Add to favorites\n"
         help_text += "• `/memory_tag <id> <tag>` - 🆕 Tag memory | 標記記憶\n"
         help_text += "• `/memory_edit <id> <text>` - 🆕 Edit existing memory | 編輯現有記憶\n"
         help_text += "• `/memory_delete <id>` - 🆕 Delete specific memory | 刪除特定記憶\n\n"
@@ -2346,26 +2347,26 @@ class Filter:
         help_text += "• `/memory_limit <number>` - Set personal limit | 設定個人限制\n"
         help_text += "• `/memory_prefix <text>` - Configure custom prefix | 配置自定義前綴\n\n"
 
-        help_text += "**📊 Información y Análisis:**\n"
+        help_text += "**📊 Information and Analysis:**\n"
         help_text += "• `/memory_help` - Shows this help | 顯示此幫助\n"
-        help_text += "• `/memory_stats` - Estadísticas del sistema\n"
-        help_text += "• `/memory_status` - Estado actual del filtro\n"
-        help_text += "• `/memory_analytics` - 🆕 Análisis avanzado de memorias\n\n"
+        help_text += "• `/memory_stats` - System statistics\n"
+        help_text += "• `/memory_status` - Current filter status\n"
+        help_text += "• `/memory_analytics` - 🆕 Advanced memory analysis\n\n"
 
         help_text += "**🔧 Utilidades y Herramientas:**\n"
         help_text += "• `/memory_cleanup` - Clean duplicates manually | 手動清理重複\n"
-        help_text += "• `/memory_backup` - Crea respaldo de memorias\n"
-        help_text += "• `/memory_restore` - 🆕 Info sobre restauración\n"
-        help_text += "• `/memory_import` - 🆕 Ayuda para importar memorias\n"
-        help_text += "• `/memory_templates` - 🆕 Plantillas de memorias comunes\n\n"
+        help_text += "• `/memory_backup` - Create memory backup\n"
+        help_text += "• `/memory_restore` - 🆕 Restoration info\n"
+        help_text += "• `/memory_import` - 🆕 Help for importing memories\n"
+        help_text += "• `/memory_templates` - 🆕 Common memory templates\n\n"
 
         help_text += "💡 **Tips Profesionales:**\n"
-        help_text += "• Usa `/memory_templates` para ideas de memorias útiles\n"
-        help_text += "• Combina `/memory_tag` + `/memory_search` para organización\n"
-        help_text += "• `/memory_analytics` te ayuda a optimizar tus memorias\n"
-        help_text += "• Los IDs de memoria se muestran con `/memories`\n\n"
+        help_text += "• Use `/memory_templates` for useful memory ideas\n"
+        help_text += "• Combine `/memory_tag` + `/memory_search` for organization\n"
+        help_text += "• `/memory_analytics` helps you optimize your memories\n"
+        help_text += "• Memory IDs are shown with `/memories`\n\n"
 
-        help_text += "🆕 **¡Novedad v2.1.1!** Comandos avanzados para UX profesional"
+        help_text += "🆕 **New in v2.1.1!** Advanced commands for professional UX"
 
         return help_text
 
@@ -2373,7 +2374,7 @@ class Filter:
         """Shows detailed system statistics with security validations. | 顯示詳細系統統計資訊，帶有安全驗證。"""
 
         async def _execute_stats():
-            # Validar user_id usando funciones de seguridad
+            # Validate user_id using security functions
             validated_user_id = self._validate_user_id(user_id)
 
             processed_memories = await self.get_processed_memory_strings(
@@ -2381,7 +2382,7 @@ class Filter:
             )
             memory_count = len(processed_memories) if processed_memories else 0
 
-            # Calcular estadísticas
+            # Calculate statistics
             total_chars = (
                 sum(len(memory) for memory in processed_memories)
                 if processed_memories
@@ -2393,7 +2394,7 @@ class Filter:
             import json
             from datetime import datetime
 
-            # Análisis avanzado de memorias
+            # Advanced memory analysis
             memory_sizes = (
                 [len(m) for m in processed_memories] if processed_memories else []
             )
@@ -2403,14 +2404,14 @@ class Filter:
                 sorted(memory_sizes)[len(memory_sizes) // 2] if memory_sizes else 0
             )
 
-            # Distribución por tamaño
+            # Distribution by size
             size_distribution = {
                 "small": len([s for s in memory_sizes if s < 100]),
                 "medium": len([s for s in memory_sizes if 100 <= s < 500]),
                 "large": len([s for s in memory_sizes if s >= 500]),
             }
 
-            # Estadísticas de rendimiento simuladas
+            # Simulated performance statistics
             performance_stats = {
                 "query_time_ms": "<2",
                 "cache_hit_rate": "85%" if self.valves.enable_cache else "0%",
@@ -2488,17 +2489,17 @@ class Filter:
                 },
                 "recommendations": [
                     (
-                        "Sistema funcionando óptimamente"
+                        "System functioning optimally"
                         if memory_count > 10
-                        else "Considera añadir más memorias con /memory_add"
+                        else "Consider adding more memories with /memory_add"
                     ),
                     (
-                        "Cache habilitado para mejor rendimiento"
+                        "Cache enabled for better performance"
                         if self.valves.enable_cache
-                        else "Habilita cache para mejor rendimiento"
+                        else "Enable cache for better performance"
                     ),
                     (
-                        "Usa /memory_cleanup si tienes más de 1000 memorias"
+                        "Use /memory_cleanup if you have more than 1000 memories"
                         if memory_count > 1000
                         else None
                     ),
@@ -2520,7 +2521,7 @@ class Filter:
 
             return stats
 
-        # Ejecutar con manejo seguro de errores
+        # Execute with safe error handling
         return await self._safe_execute_async_command(_execute_stats)
 
     async def _cmd_show_status(self) -> str:
@@ -2536,9 +2537,9 @@ class Filter:
 
             # Funcionalidades activas
             status += "**Funcionalidades:**\n"
-            status += f"• Inyección: {'✅' if self.valves.inject_memories else '❌'}\n"
-            status += f"• Guardado auto: {'✅' if self.valves.auto_save_responses else '❌'}\n"
-            status += f"• Filtro duplicados: {'✅' if self.valves.filter_duplicates else '❌'}\n"
+            status += f"• Injection: {'✅' if self.valves.inject_memories else '❌'}\n"
+            status += f"• Auto save: {'✅' if self.valves.auto_save_responses else '❌'}\n"
+            status += f"• Duplicate filter: {'✅' if self.valves.filter_duplicates else '❌'}\n"
             status += (
                 f"• Comandos: {'✅' if self.valves.enable_memory_commands else '❌'}\n"
             )
@@ -2546,16 +2547,16 @@ class Filter:
                 f"• Limpieza auto: {'✅' if self.valves.auto_cleanup else '❌'}\n\n"
             )
 
-            # Información del caché
-            cache_status = "🟢 Activo" if self.valves.enable_cache else "🔴 Inactivo"
-            status += f"**Caché:** {cache_status}\n"
+            # Cache information | Información del caché
+            cache_status = "🟢 Active" if self.valves.enable_cache else "🔴 Inactive"
+            status += f"**Cache:** {cache_status}\n"
             if self.valves.enable_cache:
                 status += f"• TTL: {self.valves.cache_ttl_minutes} minutos\n"
-                # En una implementación real, se podría mostrar estadísticas del caché
+                # In a real implementation, cache statistics could be shown
 
             return status
         except Exception as e:
-            return f"❌ Error al mostrar estado: {str(e)}"
+            return f"❌ Error showing status | Error al mostrar estado: {str(e)}"
 
     async def _cmd_cleanup_duplicates(self, user_id: str) -> str:
         """Cleans duplicate memories manually. | 手動清理重複記憶。"""
@@ -2566,24 +2567,24 @@ class Filter:
 
             original_count = len(processed_memories)
 
-            # Simulación de limpieza (en implementación real, se eliminarían duplicados)
-            # Por ahora, solo reportamos cuántos duplicados potenciales hay
+            # Cleanup simulation (in real implementation, duplicates would be removed)
+            # For now, we only report how many potential duplicates there are
             unique_memories = list(set(memory.lower() for memory in processed_memories))
             potential_duplicates = original_count - len(unique_memories)
 
             if potential_duplicates == 0:
-                return "✨ **No se encontraron memorias duplicadas.**"
+                return "✨ **No duplicate memories found.**"
 
             return (
                 f"🧹 **Limpieza de Duplicados:**\n\n"
                 + f"• Memorias originales: {original_count}\n"
-                + f"• Duplicados potenciales: {potential_duplicates}\n"
-                + f"• Memorias únicas: {len(unique_memories)}\n\n"
-                + "ℹ️ Nota: En esta versión, solo se reportan duplicados. "
-                + "La eliminación automática se puede habilitar con auto_cleanup."
+                + f"• Potential duplicates: {potential_duplicates}\n"
+                + f"• Unique memories: {len(unique_memories)}\n\n"
+                + "ℹ️ Note: In this version, only duplicates are reported. "
+                + "Automatic deletion can be enabled with auto_cleanup."
             )
         except Exception as e:
-            return f"❌ Error al limpiar duplicados: {str(e)}"
+            return f"❌ Error cleaning duplicates: {str(e)}"
 
     async def _cmd_backup_memories(self, user_id: str) -> str:
         """Creates a backup of user memories. | 建立使用者記憶的備份。"""
@@ -2592,20 +2593,20 @@ class Filter:
             if not processed_memories:
                 return f"📘 {Constants.NO_MEMORIES_MSG}"
 
-            # Crear información del respaldo
-            backup_info = f"💾 **Respaldo de Memorias Creado:**\n\n"
-            backup_info += f"• Usuario: {user_id}\n"
-            backup_info += f"• Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-            backup_info += f"• Total de memorias: {len(processed_memories)}\n"
-            backup_info += f"• Tamaño aproximado: {sum(len(m) for m in processed_memories):,} caracteres\n\n"
+            # Create backup information
+            backup_info = f"💾 **Memory Backup Created | Respaldo de Memorias Creado:**\n\n"
+            backup_info += f"• User | Usuario: {user_id}\n"
+            backup_info += f"• Date | Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            backup_info += f"• Total memories: {len(processed_memories)}\n"
+            backup_info += f"• Approximate size: {sum(len(m) for m in processed_memories):,} characters\n\n"
             backup_info += (
-                "ℹ️ Nota: En esta versión, el respaldo es informativo. "
-                + "Para respaldos reales, usa /memory_export."
+                "ℹ️ Note: In this version, backup is informational. "
+                + "For real backups, use /memory_export."
             )
 
             return backup_info
         except Exception as e:
-            return f"❌ Error al crear respaldo: {str(e)}"
+            return f"❌ Error creating backup: {str(e)}"
 
     # === IMPLEMENTACIONES DE COMANDOS AVANZADOS DE UX PROFESIONAL ===
 
@@ -2616,17 +2617,17 @@ class Filter:
         try:
             memories = await self.get_processed_memory_strings(user_id)
             if not memories or memory_id < 1 or memory_id > len(memories):
-                return f"❌ ID de memoria inválido. Usa /memories para ver IDs disponibles (1-{len(memories) if memories else 0})"
+                return f"❌ Invalid memory ID. Use /memories to see available IDs (1-{len(memories) if memories else 0})"
 
-            # En esta versión, simulamos el pin añadiendo un marcador
+            # In this version, we simulate pinning by adding a marker
             memory_text = memories[memory_id - 1]
-            if "📌 [FIJADA]" in memory_text:
-                return f"⚠️ La memoria #{memory_id} ya está fijada"
+            if "📌 [PINNED]" in memory_text:
+                return f"⚠️ Memory #{memory_id} is already pinned"
 
-            # Nota: En una implementación completa, esto modificaría la base de datos
+            # Note: In a complete implementation, this would modify the database
             return (
                 f"📌 **Memoria #{memory_id} marcada como importante**\n\n"
-                + f"💡 Nota: Las memorias fijadas tendrán prioridad en la inyección automática.\n"
+                + f"💡 Note: Pinned memories will have priority in automatic injection.\n"
                 + f"📝 Contenido: {memory_text[:100]}{'...' if len(memory_text) > 100 else ''}"
             )
 
@@ -2638,11 +2639,11 @@ class Filter:
         try:
             memories = await self.get_processed_memory_strings(user_id)
             if not memories or memory_id < 1 or memory_id > len(memories):
-                return f"❌ ID de memoria inválido. Usa /memories para ver IDs disponibles (1-{len(memories) if memories else 0})"
+                return f"❌ Invalid memory ID. Use /memories to see available IDs (1-{len(memories) if memories else 0})"
 
             memory_text = memories[memory_id - 1]
-            if "📌 [FIJADA]" not in memory_text:
-                return f"⚠️ La memoria #{memory_id} no está fijada"
+            if "📌 [PINNED]" not in memory_text:
+                return f"⚠️ Memory #{memory_id} is not pinned"
 
             return (
                 f"📌 **Memoria #{memory_id} desfijada**\n\n"
@@ -2653,41 +2654,41 @@ class Filter:
             return f"❌ Error desfijando memoria: {str(e)}"
 
     async def _cmd_favorite_memory(self, user_id: str, memory_id: int) -> str:
-        """Añade una memoria a favoritos."""
+        """Adds a memory to favorites."""
         try:
             memories = await self.get_processed_memory_strings(user_id)
             if not memories or memory_id < 1 or memory_id > len(memories):
-                return f"❌ ID de memoria inválido. Usa /memories para ver IDs disponibles (1-{len(memories) if memories else 0})"
+                return f"❌ Invalid memory ID. Use /memories to see available IDs (1-{len(memories) if memories else 0})"
 
             memory_text = memories[memory_id - 1]
             if "⭐ [FAVORITA]" in memory_text:
-                return f"⚠️ La memoria #{memory_id} ya está en favoritos"
+                return f"⚠️ Memory #{memory_id} is already in favorites"
 
             return (
-                f"⭐ **Memoria #{memory_id} añadida a favoritos**\n\n"
-                + f"💡 Tip: Usa /memory_search favorita para encontrar tus memorias favoritas.\n"
+                f"⭐ **Memory #{memory_id} added to favorites**\n\n"
+                + f"💡 Tip: Use /memory_search favorita to find your favorite memories.\n"
                 + f"📝 Contenido: {memory_text[:100]}{'...' if len(memory_text) > 100 else ''}"
             )
 
         except Exception as e:
-            return f"❌ Error añadiendo a favoritos: {str(e)}"
+            return f"❌ Error adding to favorites: {str(e)}"
 
     async def _cmd_tag_memory(self, user_id: str, memory_id: int, tag: str) -> str:
         """Tags a memory with a custom tag. | 用自定義標籤標記記憶。"""
         try:
             memories = await self.get_processed_memory_strings(user_id)
             if not memories or memory_id < 1 or memory_id > len(memories):
-                return f"❌ ID de memoria inválido. Usa /memories para ver IDs disponibles (1-{len(memories) if memories else 0})"
+                return f"❌ Invalid memory ID. Use /memories to see available IDs (1-{len(memories) if memories else 0})"
 
             if len(tag.strip()) < 2:
-                return "❌ La etiqueta debe tener al menos 2 caracteres"
+                return "❌ Tag must be at least 2 characters long"
 
             tag_clean = tag.strip().lower().replace(" ", "_")
             memory_text = memories[memory_id - 1]
 
             return (
                 f"🏷️ **Memoria #{memory_id} etiquetada como '{tag_clean}'**\n\n"
-                + f"💡 Tip: Usa /memory_search {tag_clean} para encontrar memorias con esta etiqueta.\n"
+                + f"💡 Tip: Use /memory_search {tag_clean} to find memories with this tag.\n"
                 + f"📝 Contenido: {memory_text[:100]}{'...' if len(memory_text) > 100 else ''}"
             )
 
@@ -2700,21 +2701,21 @@ class Filter:
         """Edits the content of an existing memory with critical security validations. | 編輯現有記憶的內容，帶有關鍵安全驗證。"""
 
         async def _execute_edit():
-            # Validar y sanitizar inputs usando funciones de seguridad
+            # Validate and sanitize inputs using security functions
             validated_user_id = self._validate_user_id(user_id)
             sanitized_new_text = self._sanitize_input(new_text, max_length=2000)
 
-            # Validación adicional de longitud mínima
+            # Additional minimum length validation
             if len(sanitized_new_text) < 5:
                 raise ValueError(
-                    "El nuevo texto debe tener al menos 5 caracteres después de sanitización"
+                    "New text must be at least 5 characters after sanitization"
                 )
 
             memories = await self.get_processed_memory_strings(validated_user_id)
             if not memories:
-                raise ValueError("No hay memorias disponibles para editar")
+                raise ValueError("No memories available to edit")
 
-            # Validar memory_id usando función de seguridad
+            # Validate memory_id using security function
             validated_memory_id = self._validate_memory_id(
                 str(memory_id), len(memories)
             )
@@ -2725,7 +2726,7 @@ class Filter:
                 "..." if len(sanitized_new_text) > 100 else ""
             )
 
-            # Respuesta JSON enterprise para operación crítica
+            # Enterprise JSON response for critical operation | Respuesta JSON enterprise para operación crítica
             from datetime import datetime
             import json
 
@@ -2755,9 +2756,9 @@ class Filter:
                     "audit_trail": f"User {validated_user_id[:8]}... requested edit of memory #{validated_memory_id}",
                 },
                 "warnings": [
-                    "Esta es una simulación - la edición real requiere implementación completa",
-                    "El texto ha sido sanitizado por seguridad",
-                    "Las modificaciones son irreversibles en implementación real",
+                    "This is a simulation - real editing requires complete implementation",
+                    "Text has been sanitized for security",
+                    "Modifications are irreversible in real implementation",
                 ],
                 "metadata": {
                     "user_id": validated_user_id[:8] + "...",
@@ -2775,21 +2776,21 @@ class Filter:
                 + "\n```"
             )
 
-        # Ejecutar con manejo seguro de errores
+        # Execute with safe error handling
         return await self._safe_execute_async_command(_execute_edit)
 
     async def _cmd_delete_memory(self, user_id: str, memory_id: int) -> str:
         """Deletes a specific memory with critical security validations. | 刪除特定記憶，帶有關鍵安全驗證。"""
 
         async def _execute_delete():
-            # Validar y sanitizar inputs usando funciones de seguridad
+            # Validate and sanitize inputs using security functions
             validated_user_id = self._validate_user_id(user_id)
 
             memories = await self.get_processed_memory_strings(validated_user_id)
             if not memories:
-                raise ValueError("No hay memorias disponibles para eliminar")
+                raise ValueError("No memories available to delete")
 
-            # Validar memory_id usando función de seguridad
+            # Validate memory_id using security function
             validated_memory_id = self._validate_memory_id(
                 str(memory_id), len(memories)
             )
@@ -2799,7 +2800,7 @@ class Filter:
                 "..." if len(memory_text) > 100 else ""
             )
 
-            # Respuesta JSON enterprise para operación crítica
+            # Enterprise JSON response for critical operation | Respuesta JSON enterprise para operación crítica
             from datetime import datetime
             import json
 
@@ -2821,9 +2822,9 @@ class Filter:
                     "audit_trail": f"User {validated_user_id[:8]}... requested deletion of memory #{validated_memory_id}",
                 },
                 "warnings": [
-                    "Esta es una simulación - la eliminación real requiere implementación completa",
-                    "Usa /clear_memories para eliminar todas las memorias",
-                    "Las operaciones de eliminación son irreversibles",
+                    "This is a simulation - real deletion requires full implementation",
+                    "Use /clear_memories to delete all memories",
+                    "Deletion operations are irreversible",
                 ],
                 "metadata": {
                     "user_id": validated_user_id[:8] + "...",
@@ -2841,7 +2842,7 @@ class Filter:
                 + "\n```"
             )
 
-        # Ejecutar con manejo seguro de errores
+        # Execute with safe error handling
         return await self._safe_execute_async_command(_execute_delete)
 
     async def _cmd_memory_analytics(self, user_id: str) -> str:
@@ -2851,160 +2852,160 @@ class Filter:
             if not memories:
                 return f"📊 {Constants.NO_MEMORIES_MSG}"
 
-            # Análisis básico
+            # Basic analysis | Análisis básico
             total_memories = len(memories)
             total_chars = sum(len(m) for m in memories)
             avg_length = total_chars // total_memories if total_memories > 0 else 0
 
-            # Análisis de palabras clave
+            # Keyword analysis | Análisis de palabras clave
             all_text = " ".join(memories).lower()
             common_words: Dict[str, int] = {}
             for word in all_text.split():
-                if len(word) > 3:  # Solo palabras de más de 3 caracteres
+                if len(word) > 3:  # Only words longer than 3 characters | Solo palabras de más de 3 caracteres
                     common_words[word] = common_words.get(word, 0) + 1
 
             top_words = sorted(common_words.items(), key=lambda x: x[1], reverse=True)[
                 :5
             ]
 
-            analytics = f"📊 **Análisis Avanzado de Memorias**\n\n"
-            analytics += f"📈 **Estadísticas Generales:**\n"
-            analytics += f"• Total de memorias: {total_memories}\n"
+            analytics = f"📊 **Advanced Memory Analysis**\n\n"
+            analytics += f"📈 **General Statistics:**\n"
+            analytics += f"• Total memories: {total_memories}\n"
             analytics += f"• Caracteres totales: {total_chars:,}\n"
             analytics += f"• Longitud promedio: {avg_length} caracteres\n\n"
 
             if top_words:
-                analytics += f"🔤 **Palabras más frecuentes:**\n"
+                analytics += f"🔤 **Most frequent words:**\n"
                 for word, count in top_words:
                     analytics += f"• '{word}': {count} veces\n"
                 analytics += "\n"
 
             analytics += f"💡 **Recomendaciones:**\n"
             if avg_length < 50:
-                analytics += f"• Considera añadir más detalles a tus memorias\n"
+                analytics += f"• Consider adding more details to your memories\n"
             if total_memories < 10:
                 analytics += (
-                    f"• Usa /memory_add para enriquecer tu base de conocimiento\n"
+                    f"• Use /memory_add to enrich your knowledge base\n"
                 )
 
-            analytics += f"• Usa /memory_search para encontrar memorias específicas\n"
+            analytics += f"• Use /memory_search to find specific memories\n"
             analytics += (
-                f"• Considera usar /memory_tag para organizar mejor tus memorias"
+                f"• Consider using /memory_tag to better organize your memories"
             )
 
             return analytics
 
         except Exception as e:
-            return f"❌ Error en análisis: {str(e)}"
+            return f"❌ Analysis error: {str(e)}"
 
     async def _cmd_show_templates(self) -> str:
         """Shows common memory templates. | 顯示常用記憶範本。"""
-        templates = f"📋 **Plantillas de Memorias Comunes**\n\n"
-        templates += f"💡 **Cómo usar:** Copia y personaliza estas plantillas con /memory_add\n\n"
+        templates = f"📋 **Common Memory Templates | Plantillas de Memorias Comunes**\n\n"
+        templates += f"💡 **How to use:** Copy and customize these templates with /memory_add\n\n"
 
-        templates += f"🎯 **Objetivos y Metas:**\n"
+        templates += f"🎯 **Goals and Objectives | Objetivos y Metas:**\n"
         templates += (
-            f"• `/memory_add Mi objetivo principal es [objetivo] porque [razón]`\n"
+            f"• `/memory_add My main goal is [goal] because [reason] | Mi objetivo principal es [objetivo] porque [razón]`\n"
         )
-        templates += f"• `/memory_add Para [fecha] quiero lograr [meta específica]`\n\n"
+        templates += f"• `/memory_add For [date] I want to achieve [specific goal] | Para [fecha] quiero lograr [meta específica]`\n\n"
 
-        templates += f"📚 **Aprendizajes:**\n"
-        templates += f"• `/memory_add Aprendí que [concepto] funciona mejor cuando [condición]`\n"
+        templates += f"📚 **Learning | Aprendizajes:**\n"
+        templates += f"• `/memory_add I learned that [concept] works better when [condition] | Aprendí que [concepto] funciona mejor cuando [condición]`\n"
         templates += (
-            f"• `/memory_add La clave para [habilidad] es [técnica o principio]`\n\n"
-        )
-
-        templates += f"⚙️ **Configuraciones y Preferencias:**\n"
-        templates += (
-            f"• `/memory_add Prefiero [opción A] sobre [opción B] porque [razón]`\n"
-        )
-        templates += f"• `/memory_add Mi configuración ideal para [contexto] es [configuración]`\n\n"
-
-        templates += f"🔍 **Decisiones Importantes:**\n"
-        templates += f"• `/memory_add Decidí [decisión] basándome en [criterios]`\n"
-        templates += (
-            f"• `/memory_add Para [situación] la mejor opción es [solución]`\n\n"
+            f"• `/memory_add The key to [skill] is [technique or principle] | La clave para [habilidad] es [técnica o principio]`\n\n"
         )
 
-        templates += f"💭 **Ideas y Reflexiones:**\n"
-        templates += f"• `/memory_add Una idea interesante: [idea] podría aplicarse a [contexto]`\n"
-        templates += f"• `/memory_add Reflexión: [situación] me enseñó que [lección]`"
+        templates += f"⚙️ **Settings and Preferences | Configuraciones y Preferencias:**\n"
+        templates += (
+            f"• `/memory_add I prefer [option A] over [option B] because [reason] | Prefiero [opción A] sobre [opción B] porque [razón]`\n"
+        )
+        templates += f"• `/memory_add My ideal configuration for [context] is [configuration]`\n\n"
+
+        templates += f"🔍 **Important Decisions | Decisiones Importantes:**\n"
+        templates += f"• `/memory_add I decided [decision] based on [criteria] | Decidí [decisión] basándome en [criterios]`\n"
+        templates += (
+            f"• `/memory_add For [situation] the best option is [solution] | Para [situación] la mejor opción es [solución]`\n\n"
+        )
+
+        templates += f"💭 **Ideas and Reflections | Ideas y Reflexiones:**\n"
+        templates += f"• `/memory_add An interesting idea: [idea] could be applied to [context] | Una idea interesante: [idea] podría aplicarse a [contexto]`\n"
+        templates += f"• `/memory_add Reflection: [situation] taught me that [lesson] | Reflexión: [situación] me enseñó que [lección]`"
 
         return templates
 
     async def _cmd_import_help(self) -> str:
         """Provides help for importing memories. | 提供匯入記憶的幫助。"""
-        help_text = f"📥 **Importación de Memorias**\n\n"
-        help_text += f"🚀 **Métodos Disponibles:**\n\n"
+        help_text = f"📥 **Memory Import | Importación de Memorias**\n\n"
+        help_text += f"🚀 **Available Methods | Métodos Disponibles:**\n\n"
 
-        help_text += f"1️⃣ **Importación Manual (Recomendado):**\n"
-        help_text += f"   • Usa `/memory_add` para cada memoria individual\n"
+        help_text += f"1️⃣ **Manual Import (Recommended) | Importación Manual (Recomendado):**\n"
+        help_text += f"   • Use `/memory_add` for each individual memory | Usa `/memory_add` para cada memoria individual\n"
         help_text += (
-            f"   • Ejemplo: `/memory_add Mi preferencia de configuración es X`\n\n"
+            f"   • Example: `/memory_add My configuration preference is X`\n\n"
         )
 
-        help_text += f"2️⃣ **Importación por Lotes:**\n"
-        help_text += f"   • Copia y pega múltiples memorias en el chat\n"
-        help_text += f"   • El sistema las guardará automáticamente\n\n"
+        help_text += f"2️⃣ **Batch Import | Importación por Lotes:**\n"
+        help_text += f"   • Copy and paste multiple memories in chat\n"
+        help_text += f"   • The system will save them automatically\n\n"
 
-        help_text += f"3️⃣ **Desde Conversaciones Anteriores:**\n"
+        help_text += f"3️⃣ **From Previous Conversations | Desde Conversaciones Anteriores:**\n"
         help_text += (
-            f"   • Las memorias se crean automáticamente durante las conversaciones\n"
+            f"   • Memories are created automatically during conversations\n"
         )
-        help_text += f"   • Usa `/memory_recent` para ver las más recientes\n\n"
+        help_text += f"   • Use `/memory_recent` to see the most recent ones | Usa `/memory_recent` para ver las más recientes\n\n"
 
-        help_text += f"💡 **Tips para Mejores Memorias:**\n"
-        help_text += f"• Sé específico y descriptivo\n"
-        help_text += f"• Incluye contexto relevante\n"
-        help_text += f"• Usa palabras clave que puedas buscar después\n"
-        help_text += f"• Considera usar /memory_tag para organizar\n\n"
+        help_text += f"💡 **Tips for Better Memories | Tips para Mejores Memorias:**\n"
+        help_text += f"• Be specific and descriptive | Sé específico y descriptivo\n"
+        help_text += f"• Include relevant context | Incluye contexto relevante\n"
+        help_text += f"• Use keywords you can search for later | Usa palabras clave que puedas buscar después\n"
+        help_text += f"• Consider using /memory_tag to organize | Considera usar /memory_tag para organizar\n\n"
 
-        help_text += f"🔍 **Comandos Relacionados:**\n"
-        help_text += f"• `/memory_templates` - Ver plantillas útiles\n"
-        help_text += f"• `/memory_export` - Exportar memorias existentes\n"
-        help_text += f"• `/memory_analytics` - Analizar tus memorias"
+        help_text += f"🔍 **Related Commands | Comandos Relacionados:**\n"
+        help_text += f"• `/memory_templates` - View useful templates\n"
+        help_text += f"• `/memory_export` - Export existing memories | Exportar memorias existentes\n"
+        help_text += f"• `/memory_analytics` - Analyze your memories"
 
         return help_text
 
     async def _cmd_restore_memories(self, user_id: str) -> str:
         """Information about memory restoration. | 關於記憶復原的資訊。"""
-        restore_info = f"🔄 **Restauración de Memorias**\n\n"
-        restore_info += f"📋 **Estado Actual:**\n"
+        restore_info = f"🔄 **Memory Restoration | Restauración de Memorias**\n\n"
+        restore_info += f"📋 **Current Status | Estado Actual:**\n"
 
         try:
             memories = await self.get_processed_memory_strings(user_id)
-            restore_info += f"• Memorias activas: {len(memories) if memories else 0}\n"
-            restore_info += f"• Sistema de respaldo: Activo\n"
-            restore_info += f"• Última verificación: Ahora\n\n"
+            restore_info += f"• Active memories | Memorias activas: {len(memories) if memories else 0}\n"
+            restore_info += f"• Backup system: Active\n"
+            restore_info += f"• Last check | Última verificación: Now | Ahora\n\n"
 
-            restore_info += f"💡 **Opciones de Restauración:**\n"
+            restore_info += f"💡 **Restoration Options | Opciones de Restauración:**\n"
             restore_info += (
-                f"1️⃣ **Memorias Automáticas:** Se crean durante conversaciones\n"
+                f"1️⃣ **Automatic Memories | Memorias Automáticas:** Created during conversations | Se crean durante conversaciones\n"
             )
             restore_info += (
-                f"2️⃣ **Memorias Manuales:** Usa `/memory_add` para crear nuevas\n"
+                f"2️⃣ **Manual Memories | Memorias Manuales:** Use `/memory_add` to create new ones | Usa `/memory_add` para crear nuevas\n"
             )
             restore_info += (
-                f"3️⃣ **Importar desde Backup:** Usa `/memory_import` para más info\n\n"
+                f"3️⃣ **Import from Backup | Importar desde Backup:** Use `/memory_import` for more info | Usa `/memory_import` para más info\n\n"
             )
 
-            restore_info += f"🔧 **Comandos Útiles:**\n"
-            restore_info += f"• `/memory_backup` - Crear respaldo actual\n"
-            restore_info += f"• `/memory_export` - Exportar todas las memorias\n"
-            restore_info += f"• `/memory_stats` - Ver estadísticas completas\n\n"
+            restore_info += f"🔧 **Useful Commands | Comandos Útiles:**\n"
+            restore_info += f"• `/memory_backup` - Create current backup\n"
+            restore_info += f"• `/memory_export` - Export all memories | Exportar todas las memorias\n"
+            restore_info += f"• `/memory_stats` - View complete statistics\n\n"
 
             if not memories:
                 restore_info += (
-                    f"⚠️ **Nota:** No tienes memorias actualmente. "
-                    + f"Comienza una conversación o usa `/memory_add` para crear algunas."
+                    f"⚠️ **Note | Nota:** No tienes memorias actualmente. "
+                    + f"Start a conversation or use `/memory_add` to create some | Comienza una conversación o usa `/memory_add` para crear algunas."
                 )
             else:
                 restore_info += (
-                    f"✅ **Todo en orden:** Tus memorias están seguras y disponibles."
+                    f"✅ **All in order:** Your memories are safe and available."
                 )
 
         except Exception as e:
-            restore_info += f"❌ Error verificando estado: {str(e)}"
+            restore_info += f"❌ Error checking status | Error verificando estado: {str(e)}"
 
         return restore_info
 
@@ -3027,10 +3028,10 @@ class Filter:
 
     async def on_chat_deleted(self, user_id: str) -> None:
         """
-        Maneja el evento de eliminación de chat, limpiando las memorias asociadas.
+        Handles deletion events for a chat/conversation | Maneja el evento de eliminación de chat, limpiando las memorias asociadas.
 
         Args:
-            user_id: Identificador único del usuario
+            user_id: Unique user identifier | Identificador único del usuario
         """
         if self.valves.enabled:
             await self.clear_user_memory(user_id)
@@ -3073,22 +3074,22 @@ class Filter:
         """
         # (body of the function remains unchanged)
         try:
-            # SECURITY FIX: Validar user_id para prevenir SQL injection
+            # SECURITY FIX: Validate user_id to prevent SQL injection
             if not user_id or not isinstance(user_id, str) or len(user_id.strip()) == 0:
-                logger.error(f"[SECURITY] user_id inválido: {user_id}")
-                raise ValueError("user_id inválido o vacío")
+                logger.error(f"[SECURITY] invalid user_id: {user_id}")
+                raise ValueError("invalid or empty user_id")
 
-            # Sanitizar user_id: solo permitir caracteres alfanuméricos, guiones y puntos
+            # Sanitize user_id: only allow alphanumeric characters, hyphens and dots | Sanitizar user_id: solo permitir caracteres alfanuméricos, guiones y puntos
             import re
 
             sanitized_user_id = re.sub(r"[^a-zA-Z0-9\-_.]", "", str(user_id).strip())
             if sanitized_user_id != str(user_id).strip():
                 logger.warning(
-                    f"[SECURITY] user_id sanitizado: {user_id} -> {sanitized_user_id}"
+                    f"[SECURITY] user_id sanitized | user_id sanitizado: {user_id} -> {sanitized_user_id}"
                 )
                 user_id = sanitized_user_id
 
-            # SECURITY FIX: Validar order_by para prevenir SQL injection
+            # SECURITY FIX: Validate order_by to prevent SQL injection
             ALLOWED_ORDER_BY = {
                 "created_at DESC",
                 "created_at ASC",
@@ -3099,102 +3100,102 @@ class Filter:
             }
 
             if order_by not in ALLOWED_ORDER_BY:
-                logger.warning(f"[SECURITY] order_by inválido bloqueado: {order_by}")
-                order_by = "created_at DESC"  # Fallback seguro
-                print(f"[SECURITY] ⚠️ order_by inválido, usando fallback seguro")
+                logger.warning(f"[SECURITY] invalid order_by blocked: {order_by}")
+                order_by = "created_at DESC"  # Safe fallback | Fallback seguro
+                print(f"[SECURITY] ⚠️ invalid order_by, using safe fallback")
 
-            # Determinar límite efectivo (0 = ilimitado, no convertir a 100)
+            # Determine effective limit (0 = unlimited, do not convert to 100) | Determinar límite efectivo (0 = ilimitado, no convertir a 100)
             if limit is not None:
                 effective_limit = limit
             elif self.valves.max_memories_per_user > 0:
                 effective_limit = self.valves.max_memories_per_user
             else:
-                effective_limit = None  # None = verdaderamente ilimitado
+                effective_limit = None  # None = truly unlimited | None = verdaderamente ilimitado
 
             limit_text = (
-                "ilimitado" if effective_limit is None else str(effective_limit)
+                "unlimited" if effective_limit is None else str(effective_limit)
             )
             print(
-                f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {limit_text} memorias para usuario {user_id} con orden: {order_by}"
+                f"[MEMORY-DEBUG] 🔍 Getting maximum {limit_text} memories for user {user_id} with order: {order_by}"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] 🔍 Obteniendo máximo {limit_text} memorias para usuario {user_id}"
+                f"[MEMORY-DEBUG] 🔍 Getting maximum {limit_text} memories for user {user_id}"
             )
 
-            # ESTRATEGIA 1: Intentar obtener memorias ordenadas desde la base de datos
+            # STRATEGY 1: Try to get ordered memories from database
             try:
-                # Verificar si el método acepta parámetros de ordenación
+                # Check if method accepts ordering parameters | Verificar si el método acepta parámetros de ordenación
                 if hasattr(Memories, "get_memories_by_user_id_ordered"):
                     existing_memories = Memories.get_memories_by_user_id_ordered(
                         user_id=str(user_id), order_by=order_by
                     )
                     print(
-                        f"[MEMORIA-DEBUG] ✅ Memorias obtenidas con ordenación desde BD"
+                        f"[MEMORY-DEBUG] ✅ Memories obtained with ordering from DB"
                     )
                     logger.info(
-                        f"[MEMORIA-DEBUG] ✅ Memorias obtenidas con ordenación desde BD"
+                        f"[MEMORY-DEBUG] ✅ Memories obtained with ordering from DB"
                     )
                 else:
-                    # Método estándar sin ordenación
+                    # Standard method without ordering
                     existing_memories = Memories.get_memories_by_user_id(
                         user_id=str(user_id)
                     )
                     print(
-                        f"[MEMORIA-DEBUG] ⚠️ Memorias obtenidas SIN ordenación desde BD"
+                        f"[MEMORY-DEBUG] ⚠️ Memories obtained WITHOUT ordering from DB"
                     )
                     logger.info(
-                        f"[MEMORIA-DEBUG] ⚠️ Memorias obtenidas SIN ordenación desde BD"
+                        f"[MEMORY-DEBUG] ⚠️ Memories obtained WITHOUT ordering from DB"
                     )
 
             except Exception as db_error:
-                print(f"[MEMORIA-DEBUG] ❌ Error en consulta BD: {db_error}")
-                logger.warning(f"[MEMORIA-DEBUG] ❌ Error en consulta BD: {db_error}")
+                print(f"[MEMORY-DEBUG] ❌ DB query error: {db_error}")
+                logger.warning(f"[MEMORY-DEBUG] ❌ DB query error: {db_error}")
                 existing_memories = []
 
-            # PRODUCTION FIX: Aplicar límite para prevenir memory leaks (solo si no es ilimitado)
+            # PRODUCTION FIX: Apply limit to prevent memory leaks (only if not unlimited) | Aplicar límite para prevenir memory leaks (solo si no es ilimitado)
             if (
                 existing_memories
                 and effective_limit is not None
                 and len(existing_memories) > effective_limit
             ):
-                # Si NO hay ordenación desde BD, ordenar en memoria (costoso pero necesario)
+                # If NO ordering from DB, sort in memory (expensive but necessary)
                 if not hasattr(Memories, "get_memories_by_user_id_ordered"):
                     try:
-                        # Ordenar por created_at DESC (más recientes primero)
+                        # Sort by created_at DESC (most recent first)
                         existing_memories.sort(
                             key=lambda x: getattr(x, "created_at", ""), reverse=True
                         )
                         print(
-                            f"[MEMORIA-DEBUG] ⚠️ Ordenación manual en memoria realizada"
+                            f"[MEMORY-DEBUG] ⚠️ Manual sorting in memory performed"
                         )
                         logger.warning(
-                            f"[MEMORIA-DEBUG] ⚠️ Ordenación manual en memoria (costosa)"
+                            f"[MEMORY-DEBUG] ⚠️ Manual sorting in memory (expensive)"
                         )
                     except Exception as sort_error:
                         logger.warning(
-                            f"Error al ordenar memorias en memoria: {sort_error}"
+                            f"Error sorting memories in memory: {sort_error}"
                         )
 
-                # Aplicar límite (paginar)
+                # Apply limit (paginate) | Aplicar límite (paginar)
                 existing_memories = existing_memories[:effective_limit]
                 print(
-                    f"[MEMORIA-DEBUG] 🔒 Limitado a {effective_limit} memorias (memory leak prevention)"
+                    f"[MEMORY-DEBUG] 🔒 Limited to {effective_limit} memories (memory leak prevention)"
                 )
                 logger.info(
-                    f"[MEMORIA-DEBUG] 🔒 Memory leak prevention: limitado a {effective_limit}"
+                    f"[MEMORY-DEBUG] 🔒 Memory leak prevention: limited to {effective_limit}"
                 )
 
             print(
-                f"[MEMORIA-DEBUG] 📊 Total memorias devueltas: {len(existing_memories or [])}"
+                f"[MEMORY-DEBUG] 📊 Total memories returned: {len(existing_memories or [])}"
             )
             logger.info(
-                f"[MEMORIA-DEBUG] 📊 Total memorias devueltas: {len(existing_memories or [])}"
+                f"[MEMORY-DEBUG] 📊 Total memories returned: {len(existing_memories or [])}"
             )
 
             return existing_memories or []
 
         except Exception as e:
-            print(f"[MEMORIA-DEBUG] ❌ Error general al obtener memorias: {e}")
+            print(f"[MEMORY-DEBUG] ❌ General error getting memories: {e}")
             logger.error(f"Error retrieving raw memories: {e}")
             return []
 
@@ -3234,7 +3235,7 @@ class Filter:
 
             if self.valves.debug_mode:
                 logger.debug(
-                    f"[MEMORIA-DEBUG] 📋 Procesadas {len(memory_contents)} memorias para usuario {user_id}"
+                    f"[MEMORY-DEBUG] 📋 Processed {len(memory_contents)} memories for user {user_id}"
                 )
             return memory_contents
 

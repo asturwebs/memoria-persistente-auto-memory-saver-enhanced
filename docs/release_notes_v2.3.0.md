@@ -1,93 +1,93 @@
-# Notas de Versión v2.3.0 - AI Behavior Control Universal
+# Release Notes v2.3.0 - Universal AI Behavior Control
 
-**Fecha de Lanzamiento**: 25 de Julio, 2025  
-**Autor**: Pedro Luis Cuevas Villarrubia (@AsturWebs)  
-**Tipo**: Breakthrough Histórico - Testing Exhaustivo de Compatibilidad
-
----
-
-## 🌟 Breakthrough Disruptivo: Testing de 30 Modelos
-
-### El Logro Histórico
-
-**Auto Memory Saver Enhanced v2.3.0** establece un nuevo estándar en la industria con el **testing de compatibilidad más exhaustivo jamás realizado** para un filtro OpenWebUI:
-
-- **30 MODELOS IA EVALUADOS** - Cobertura sin precedentes
-- **11 MODELOS EXCELENTES** - JSON perfecto garantizado
-- **3 MODELOS FUNCIONALES** - Compatibles con particularidades  
-- **16 MODELOS PROBLEMÁTICOS** - Documentados para transparencia total
-
-### Metodología de Testing
-
-**Comando Evaluado**: `/memories`  
-**Criterio de Éxito**: JSON estructurado directo sin interpretación  
-**AI Behavior Control**: Sistema de directivas para forzar consistencia  
-**Período**: Julio 2025  
-**Alcance**: 8 familias de modelos diferentes
+**Release Date**: July 25, 2025  
+**Author**: Pedro Luis Cuevas Villarrubia (@AsturWebs)  
+**Type**: Historic Breakthrough - Exhaustive Compatibility Testing
 
 ---
 
-## 📊 Resultados Detallados del Testing
+## 🌟 Disruptive Breakthrough: Testing of 30 Models
 
-### ✅ **Modelos Excelentes (11 de 30 - 36.7%)**
+### The Historic Achievement
 
-| Modelo | Familia | Comportamiento | Performance |
+**Auto Memory Saver Enhanced v2.3.0** establishes a new industry standard with the **most exhaustive compatibility testing ever performed** for an OpenWebUI filter:
+
+- **30 AI MODELS EVALUATED** - Unprecedented coverage
+- **11 EXCELLENT MODELS** - Perfect JSON guaranteed
+- **3 FUNCTIONAL MODELS** - Compatible with quirks  
+- **16 PROBLEMATIC MODELS** - Documented for total transparency
+
+### Testing Methodology
+
+**Evaluated Command**: `/memories`  
+**Success Criteria**: Direct structured JSON without interpretation  
+**AI Behavior Control**: Directive system to force consistency  
+**Period**: July 2025  
+**Scope**: 8 different model families
+
+---
+
+## 📊 Detailed Testing Results
+
+### ✅ **Excellent Models (11 of 30 - 36.7%)**
+
+| Model | Family | Behavior | Performance |
 |--------|---------|----------------|-------------|
-| **Claude 3.5 Sonnet** | Anthropic | JSON limpio directo | Ideal |
-| **Grok 4 (xAI)** | xAI | JSON idéntico a Claude | Perfecto |
-| **Grok-3** | xAI | JSON perfecto directo | Ideal |
-| **Grok-3-fast** | xAI | JSON perfecto directo | Impecable |
-| **Grok-3-mini-fast** | xAI | JSON perfecto + rápido | <2ms |
-| **Gemini 2.5 Pro** | Google | JSON perfecto directo | Superior |
-| **Gemini 2.5 Flash** | Google | Respuesta rápida + precisa | Excepcional |
-| **Gemini 2.5 Flash Lite** | Google | Respuesta rápida + precisa | Excepcional |
-| **GPT-4.1-mini** | OpenAI | JSON directo consistente | Perfecto |
-| **Gemma 3n 4B** | Google | JSON perfecto directo | Completa |
-| **Gemma 3.27B** | Google | JSON + SYSTEM_OVERRIDE visible | Control visible |
+| **Claude 3.5 Sonnet** | Anthropic | Clean direct JSON | Ideal |
+| **Grok 4 (xAI)** | xAI | JSON identical to Claude | Perfect |
+| **Grok-3** | xAI | Perfect direct JSON | Ideal |
+| **Grok-3-fast** | xAI | Perfect direct JSON | Impeccable |
+| **Grok-3-mini-fast** | xAI | Perfect JSON + fast | <2ms |
+| **Gemini 2.5 Pro** | Google | Perfect direct JSON | Superior |
+| **Gemini 2.5 Flash** | Google | Fast + precise response | Exceptional |
+| **Gemini 2.5 Flash Lite** | Google | Fast + precise response | Exceptional |
+| **GPT-4.1-mini** | OpenAI | Consistent direct JSON | Perfect |
+| **Gemma 3n 4B** | Google | Perfect direct JSON | Complete |
+| **Gemma 3.27B** | Google | JSON + visible SYSTEM_OVERRIDE | Visible control |
 
-### ⚠️ **Modelos Funcionales (3 de 30 - 10%)**
+### ⚠️ **Functional Models (3 of 30 - 10%)**
 
-| Modelo | Comportamiento | Particularidad |
+| Model | Behavior | Quirk |
 |--------|----------------|----------------|
-| **Claude 3.7 Thinking** | Análisis 8s + JSON | Verboso pero usable |
-| **Claude 3.7 Sonnet** | Reconoce system command | Mejor que Claude 4 |
-| **DeepSeek Reasoner** | Reasoning 23s + interpretación | Formato propio |
+| **Claude 3.7 Thinking** | 8s analysis + JSON | Verbose but usable |
+| **Claude 3.7 Sonnet** | Recognizes system command | Better than Claude 4 |
+| **DeepSeek Reasoner** | 23s reasoning + interpretation | Own format |
 
-### ❌ **Modelos Problemáticos (16 de 30 - 53.3%)**
+### ❌ **Problematic Models (16 of 30 - 53.3%)**
 
-**Categoría: Interpretación Narrativa**
+**Category: Narrative Interpretation**
 - Claude Opus 4, Claude Sonnet 4, GPT-4.1, DeepSeek v3, MiniMax M1
 
-**Categoría: No Responde**  
+**Category: No Response**  
 - Amazon Nova (Lite/Micro/Pro), Phi 4, LLaMA 3 70B
 
-**Categoría: Conversación Casual**
-- MoonshotAI Kimi K2, múltiples variantes OpenAI
+**Category: Casual Conversation**
+- MoonshotAI Kimi K2, multiple OpenAI variants
 
 ---
 
-## 🏆 Revelaciones Técnicas Clave
+## 🏆 Key Technical Revelations
 
-### Google/Gemini: Liderazgo Absoluto (vía OpenRouter)
-- **5 de 11 modelos excelentes** pertenecen a la familia Google
-- **Consistencia perfecta** en AI Behavior Control
-- **Rango completo**: Desde Gemma 3.27B hasta Gemini 2.5 Pro
-- **⚠️ IMPORTANTE**: Solo funciona vía OpenRouter/APIs intermedias, Google API directa tiene bugs
+### Google/Gemini: Absolute Leadership (via OpenRouter)
+- **5 of 11 excellent models** belong to the Google family
+- **Perfect consistency** in AI Behavior Control
+- **Complete range**: From Gemma 3.27B to Gemini 2.5 Pro
+- **⚠️ IMPORTANT**: Only works via OpenRouter/intermediate APIs, Google direct API has bugs
 
-### Claude 4: Regresión Inesperada  
-- **Claude 4 Opus/Sonnet**: Peor rendimiento que Claude 3.5 Sonnet
-- **Interpretación casual**: "¡Ah, qué bonito!" vs JSON estructurado
-- **Claude 3.5 Sonnet**: Mantiene posición #1 para comandos sistema
+### Claude 4: Unexpected Regression  
+- **Claude 4 Opus/Sonnet**: Worse performance than Claude 3.5 Sonnet
+- **Casual interpretation**: "Oh, how nice!" vs structured JSON
+- **Claude 3.5 Sonnet**: Maintains #1 position for system commands
 
-### Familia Grok: Perfección Total
-- **4 variantes evaluadas**: Grok 4, Grok-3, Grok-3-fast, Grok-3-mini-fast
-- **100% compatibilidad**: Todas las variantes excelentes
-- **Consistencia arquitectural**: JSON perfecto en toda la familia
+### Grok Family: Total Perfection
+- **4 variants evaluated**: Grok 4, Grok-3, Grok-3-fast, Grok-3-mini-fast
+- **100% compatibility**: All variants excellent
+- **Architectural consistency**: Perfect JSON across the entire family
 
-### OpenAI: Fragmentación
-- **GPT-4.1-mini**: Excelente performance  
-- **Versiones completas**: Fallan consistentemente
-- **Patrón identificado**: Mini variants > Full variants para comandos
+### OpenAI: Fragmentation
+- **GPT-4.1-mini**: Excellent performance  
+- **Full versions**: Consistently fail
+- **Identified pattern**: Mini variants > Full variants for commands
 
 ### Google API Directa: Bug Crítico Identificado
 - **Síntomas**: Slash commands no responden en primera instancia
@@ -105,11 +105,11 @@
 
 ---
 
-## 🔧 Mejoras Técnicas v2.3.0
+## 🔧 Technical Improvements v2.3.0
 
-### AI Behavior Control Universal
+### Universal AI Behavior Control
 
-**Sistema de Directivas Implementado:**
+**Implemented Directive System:**
 ```json
 {
   "ai_behavior_control": {
@@ -121,58 +121,58 @@
 }
 ```
 
-**Efectividad del Sistema:**
-- ✅ **11 modelos**: Respetan directivas perfectamente
-- ⚠️ **3 modelos**: Procesan pero con formato propio  
-- ❌ **16 modelos**: Ignoran directivas completamente
+**System Effectiveness:**
+- ✅ **11 models**: Respect directives perfectly
+- ⚠️ **3 models**: Process but with own format  
+- ❌ **16 models**: Ignore directives completely
 
-### Compatibilidad OpenAI Mejorada
+### Improved OpenAI Compatibility
 
-**Problema Identificado:**
+**Identified Problem:**
 ```javascript
-// ANTES (Error 400)
+// BEFORE (Error 400)
 body["_memory_command_processed"] = True  
 
-// DESPUÉS (Funcional) 
+// AFTER (Functional) 
 self._command_processed_in_inlet = True
 ```
 
-**Impacto:**
-- ✅ **GPT-4.1-mini**: Ahora funciona perfectamente
-- ✅ **Otros modelos OpenAI**: Compatibilidad mejorada
-- ✅ **Sin errores 400**: Requests limpios garantizados
+**Impact:**
+- ✅ **GPT-4.1-mini**: Now works perfectly
+- ✅ **Other OpenAI models**: Improved compatibility
+- ✅ **No 400 errors**: Clean requests guaranteed
 
-### Terminología Enterprise-Safe
+### Enterprise-Safe Terminology
 
-**Cambios de Nomenclatura:**
+**Nomenclature Changes:**
 - `ai_mind_hack` → `ai_behavior_control`
 - "Mind Hacking" → "AI Behavior Control"
-- Referencias técnicas → Terminología empresarial
+- Technical references → Enterprise terminology
 
-**Beneficios:**
-- 🏢 **Enterprise-ready**: Apropiado para entornos corporativos
-- 🔒 **Security scanners**: No triggers de seguridad automáticos  
-- 📋 **Professional documentation**: Estándares industriales
+**Benefits:**
+- 🏢 **Enterprise-ready**: Appropriate for corporate environments
+- 🔒 **Security scanners**: No automatic security triggers  
+- 📋 **Professional documentation**: Industry standards
 
 ---
 
-## 🚀 Funcionalidad Dual Clarificada
+## 🚀 Clarified Dual Functionality
 
-### Memoria Persistente Automática (Universal)
+### Universal Automatic Persistent Memory
 
-**✅ FUNCIONA EN TODOS LOS 30 MODELOS:**
-- **inlet()**: Inyección inteligente de memorias relevantes
-- **outlet()**: Guardado automático de preguntas usuario + respuestas asistente  
-- **Filtrado**: Anti-duplicados, relevancia contextual, límites configurables
-- **Performance**: Transparente, sin impacto en velocidad
+**✅ WORKS ON ALL 30 MODELS:**
+- **inlet()**: Intelligent injection of relevant memories
+- **outlet()**: Automatic saving of user questions + assistant responses  
+- **Filtering**: Anti-duplicates, contextual relevance, configurable limits
+- **Performance**: Transparent, no impact on speed
 
-### Slash Commands (Selectivos)
+### Selective Slash Commands
 
-**✅ FUNCIONA PERFECTAMENTE EN 11 MODELOS:**
-- `/memories` - Lista paginada con formato JSON estructurado
-- `/memory_search <término>` - Búsqueda semántica avanzada
-- `/memory_stats` - Estadísticas del sistema en tiempo real  
-- **Limitación**: Requiere modelos con AI Behavior Control compatible
+**✅ WORKS PERFECTLY ON 11 MODELS:**
+- `/memories` - Paginated list with structured JSON format
+- `/memory_search <term>` - Advanced semantic search
+- `/memory_stats` - Real-time system statistics  
+- **Limitation**: Requires models with compatible AI Behavior Control
 
 ---
 

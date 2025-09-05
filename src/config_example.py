@@ -1,54 +1,54 @@
-# Archivo de Configuración de Ejemplo para Auto Memory Saver Enhanced v2.3.0
-# Copia este archivo y ajusta los valores según tus necesidades
+# Example Configuration File for Auto Memory Saver Enhanced v2.3.0
+# Copy this file and adjust values according to your needs
 
 """
-CONFIGURACIÓN DE EJEMPLO PARA AUTO MEMORY SAVER ENHANCED v2.3.0
+EXAMPLE CONFIGURATION FOR AUTO MEMORY SAVER ENHANCED v2.3.0
 ===============================================================
 
-Con AI Behavior Control Universal y compatibilidad con 30+ modelos IA.
+With Universal AI Behavior Control and compatibility with 30+ AI models.
 
-Este archivo contiene ejemplos de configuración para diferentes escenarios de uso.
-Copia las configuraciones que necesites y ajústalas según tu entorno.
+This file contains configuration examples for different usage scenarios.
+Copy the configurations you need and adjust them according to your environment.
 
-IMPORTANTE: Este es solo un archivo de ejemplo. Las configuraciones reales
-se realizan a través de las válvulas en la interfaz de OpenWebUI.
+IMPORTANT: This is only an example file. Real configurations
+are performed through valves in the OpenWebUI interface.
 
-FUNCIONALIDAD DUAL v2.3.0:
-- Memoria Persistente Automática: FUNCIONA EN TODOS LOS MODELOS IA
-- Slash Commands: Funcionan perfectamente en 11 modelos excelentes
+DUAL FUNCTIONALITY v2.3.0:
+- Automatic Persistent Memory: WORKS ON ALL AI MODELS
+- Slash Commands: Work perfectly on 11 excellent models
 
-MODELOS EXCELENTES (Slash Commands):
-- Claude 3.5 Sonnet, Grok familia, GPT-4.1-mini (APIs directas)
-- ChatGPT-4o, GPT-4.1, Gemini familia, Gemma familia (vía OpenRouter)
-- OPENROUTER EFFECT: ~25+ modelos excelentes vs 11 APIs directas
-- IMPORTANTE: Usar OpenRouter para máxima compatibilidad
+EXCELLENT MODELS (Slash Commands):
+- Claude 3.5 Sonnet, Grok family, GPT-4.1-mini (direct APIs)
+- ChatGPT-4o, GPT-4.1, Gemini family, Gemma family (via OpenRouter)
+- OPENROUTER EFFECT: ~25+ excellent models vs 11 direct APIs
+- IMPORTANT: Use OpenRouter for maximum compatibility
 """
 
 # =============================================================================
-# CONFIGURACIONES PREDEFINIDAS PARA DIFERENTES CASOS DE USO
+# PREDEFINED CONFIGURATIONS FOR DIFFERENT USE CASES
 # =============================================================================
 
 # -----------------------------------------------------------------------------
-# CONFIGURACIÓN BÁSICA (Recomendada para la mayoría de usuarios)
+# BASIC CONFIGURATION (Recommended for most users)
 # -----------------------------------------------------------------------------
 BASIC_CONFIG = {
     "valves": {
-        # Configuración principal
+        # Main configuration
         "enabled": True,
         "inject_memories": True,
         "auto_save_responses": True,
-        # Límites conservadores
+        # Conservative limits
         "max_memories_to_inject": 3,
         "min_response_length": 20,
         "max_response_length": 1000,
-        # Funcionalidades básicas
+        # Basic functionalities
         "enable_cache": True,
         "cache_ttl_minutes": 30,
         "filter_duplicates": True,
         "filter_short_responses": True,
         "enable_memory_commands": True,
         "show_injection_status": True,
-        # Sin limpieza automática por seguridad
+        # No automatic cleanup for safety
         "debug_mode": False,
     },
     "user_valves": {
@@ -60,27 +60,27 @@ BASIC_CONFIG = {
 }
 
 # -----------------------------------------------------------------------------
-# CONFIGURACIÓN PARA DESARROLLO (Con logging detallado)
+# DEVELOPMENT CONFIGURATION (With detailed logging)
 # -----------------------------------------------------------------------------
 DEVELOPMENT_CONFIG = {
     "valves": {
-        # Configuración principal
+        # Main configuration
         "enabled": True,
         "inject_memories": True,
         "auto_save_responses": True,
-        # Límites para testing
+        # Testing limits
         "max_memories_to_inject": 2,
         "min_response_length": 5,
         "max_response_length": 500,
-        # Caché rápido para desarrollo
+        # Fast cache for development
         "enable_cache": True,
         "cache_ttl_minutes": 5,
         "filter_duplicates": True,
         "enable_memory_commands": True,
-        # Limpieza automática para testing
+        # Automatic cleanup for testing
         "auto_cleanup": True,
         "max_memories_per_user": 10,
-        # DEBUG ACTIVADO
+        # DEBUG ENABLED
         "debug_mode": True,
     },
     "user_valves": {
@@ -94,32 +94,32 @@ DEVELOPMENT_CONFIG = {
 }
 
 # -----------------------------------------------------------------------------
-# CONFIGURACIÓN PARA PRODUCCIÓN (Optimizada para rendimiento)
+# PRODUCTION CONFIGURATION (Optimized for performance)
 # -----------------------------------------------------------------------------
 PRODUCTION_CONFIG = {
     "valves": {
-        # Configuración principal
+        # Main configuration
         "enabled": True,
         "inject_memories": True,
         "auto_save_responses": True,
-        # Límites optimizados para producción
+        # Optimized limits for production
         "max_memories_to_inject": 5,
         "min_response_length": 15,
         "max_response_length": 2000,
-        # Caché optimizado
+        # Optimized cache
         "enable_cache": True,
         "cache_ttl_minutes": 60,
         "filter_duplicates": True,
         "similarity_threshold": 0.85,
         "enable_memory_commands": True,
-        # Limpieza automática habilitada
+        # Automatic cleanup enabled
         "auto_cleanup": True,
         "max_memories_per_user": 100,
-        # Sin debug en producción
+        # No debug in production
         "debug_mode": False,
     },
     "user_valves": {
-        "show_status": False,  # Menos notificaciones en producción
+        "show_status": False,  # Fewer notifications in production
         "show_memory_count": False,
         "show_save_confirmation": False,
         "notify_on_error": True,
@@ -129,62 +129,62 @@ PRODUCTION_CONFIG = {
 }
 
 # -----------------------------------------------------------------------------
-# CONFIGURACIÓN PARA ALTA PRIVACIDAD
+# HIGH PRIVACY CONFIGURATION
 # -----------------------------------------------------------------------------
 PRIVACY_CONFIG = {
     "valves": {
-        # Configuración principal
+        # Main configuration
         "enabled": True,
-        "inject_memories": False,  # No inyectar por defecto
-        "auto_save_responses": False,  # No guardar por defecto
-        # Límites estrictos
+        "inject_memories": False,  # Do not inject by default
+        "auto_save_responses": False,  # Do not save by default
+        # Strict limits
         "max_memories_to_inject": 1,
         "min_response_length": 50,
         "max_response_length": 500,
-        # Caché deshabilitado por privacidad
+        # Cache disabled for privacy
         "enable_cache": False,
         "filter_duplicates": True,
-        "similarity_threshold": 0.95,  # Muy estricto
-        "enable_memory_commands": True,  # Permitir control manual
-        # Limpieza automática agresiva
+        "similarity_threshold": 0.95,  # Very strict
+        "enable_memory_commands": True,  # Allow manual control
+        # Aggressive automatic cleanup
         "auto_cleanup": True,
         "max_memories_per_user": 20,
-        # Sin debug por privacidad
+        # No debug for privacy
         "debug_mode": False,
     },
     "user_valves": {
         "show_status": True,
         "show_memory_count": True,
-        "show_save_confirmation": True,  # Confirmar siempre
+        "show_save_confirmation": True,  # Always confirm
         "notify_on_error": True,
         "notify_on_cleanup": True,
-        "private_mode": True,  # MODO PRIVADO ACTIVADO
+        "private_mode": True,  # PRIVATE MODE ENABLED
     },
 }
 
 # -----------------------------------------------------------------------------
-# CONFIGURACIÓN PARA EMPRESAS (Balanceada y segura)
+# ENTERPRISE CONFIGURATION (Balanced and secure)
 # -----------------------------------------------------------------------------
 ENTERPRISE_CONFIG = {
     "valves": {
-        # Configuración principal
+        # Main configuration
         "enabled": True,
         "inject_memories": True,
         "auto_save_responses": True,
-        # Límites empresariales
+        # Enterprise limits
         "max_memories_to_inject": 7,
         "min_response_length": 25,
         "max_response_length": 3000,
-        # Caché empresarial
+        # Enterprise cache
         "enable_cache": True,
         "cache_ttl_minutes": 120,
         "filter_duplicates": True,
         "similarity_threshold": 0.8,
         "enable_memory_commands": True,
-        # Gestión automática
+        # Automatic management
         "auto_cleanup": True,
         "max_memories_per_user": 200,
-        # Debug condicional
+        # Conditional debug
         "debug_mode": False,
     },
     "user_valves": {
@@ -198,51 +198,51 @@ ENTERPRISE_CONFIG = {
 }
 
 # =============================================================================
-# VARIABLES DE ENTORNO RECOMENDADAS
+# RECOMMENDED ENVIRONMENT VARIABLES
 # =============================================================================
 
 ENVIRONMENT_VARIABLES = {
     # Logging
     "LOG_LEVEL": "INFO",  # DEBUG, INFO, WARNING, ERROR
     "LOG_FORMAT": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    # Caché
-    "DEFAULT_CACHE_TTL": "3600",  # 1 hora en segundos
+    # Cache
+    "DEFAULT_CACHE_TTL": "3600",  # 1 hour in seconds
     "MAX_CACHE_SIZE": "128",
-    # Límites globales
+    # Global limits
     "GLOBAL_MAX_MEMORIES": "1000",
     "GLOBAL_MAX_RESPONSE_LENGTH": "5000",
-    # Seguridad
+    # Security
     "ENABLE_RATE_LIMITING": "true",
     "MAX_REQUESTS_PER_MINUTE": "60",
-    # Base de datos (si aplicable)
+    # Database (if applicable)
     "DB_POOL_SIZE": "10",
     "DB_TIMEOUT": "30",
 }
 
 # =============================================================================
-# CONFIGURACIÓN PARA EASYPANEL
+# CONFIGURATION FOR EASYPANEL
 # =============================================================================
 
 EASYPANEL_CONFIG = {
     "environment": {
-        # Variables específicas para EasyPanel
+        # EasyPanel specific variables
         "PYTHONPATH": "/app",
         "PYTHONUNBUFFERED": "1",
-        # OpenWebUI específico
+        # OpenWebUI specific
         "OPENWEBUI_LOG_LEVEL": "INFO",
         "OPENWEBUI_MEMORY_FILTER_ENABLED": "true",
-        # Configuración de memoria
+        # Memory configuration
         "MEMORY_CACHE_SIZE": "64",  # MB
-        "MEMORY_CACHE_TTL": "1800",  # 30 minutos
-        # Configuración de red
+        "MEMORY_CACHE_TTL": "1800",  # 30 minutes
+        # Network configuration
         "PORT": "8080",
         "HOST": "0.0.0.0",
     },
     "resources": {
-        # Recursos recomendados para VPS
-        "memory": "512MB",  # Mínimo recomendado
-        "cpu": "0.5",  # Medio core
-        "storage": "1GB",  # Para logs y caché
+        # Recommended resources for VPS
+        "memory": "512MB",  # Minimum recommended
+        "cpu": "0.5",  # Half core
+        "storage": "1GB",  # For logs and cache
     },
     "health_check": {
         "path": "/health",
@@ -253,20 +253,20 @@ EASYPANEL_CONFIG = {
 }
 
 # =============================================================================
-# FUNCIONES DE UTILIDAD PARA CONFIGURACIÓN
+# UTILITY FUNCTIONS FOR CONFIGURATION
 # =============================================================================
 
 
 def get_config_by_environment(env_type="basic"):
     """
-    Obtiene la configuración según el tipo de entorno.
+    Gets configuration according to environment type.
 
     Args:
-        env_type (str): Tipo de entorno ('basic', 'development', 'production',
+        env_type (str): Environment type ('basic', 'development', 'production',
                        'privacy', 'enterprise')
 
     Returns:
-        dict: Configuración correspondiente
+        dict: Corresponding configuration
     """
     configs = {
         "basic": BASIC_CONFIG,
@@ -281,132 +281,132 @@ def get_config_by_environment(env_type="basic"):
 
 def validate_config(config):
     """
-    Valida una configuración antes de aplicarla.
+    Validates a configuration before applying it.
 
     Args:
-        config (dict): Configuración a validar
+        config (dict): Configuration to validate
 
     Returns:
-        tuple: (es_válida, errores)
+        tuple: (is_valid, errors)
     """
     errors = []
 
-    # Validar válvulas principales
+    # Validate main valves
     valves = config.get("valves", {})
 
-    # Validar rangos numéricos
+    # Validate numerical ranges
     if valves.get("max_memories_to_inject", 0) > 20:
-        errors.append("max_memories_to_inject no puede ser mayor a 20")
+        errors.append("max_memories_to_inject cannot be greater than 20")
 
     if valves.get("min_response_length", 0) > valves.get("max_response_length", 1000):
-        errors.append("min_response_length no puede ser mayor a max_response_length")
+        errors.append("min_response_length cannot be greater than max_response_length")
 
     if not 0 <= valves.get("similarity_threshold", 0.8) <= 1:
-        errors.append("similarity_threshold debe estar entre 0.0 y 1.0")
+        errors.append("similarity_threshold must be between 0.0 and 1.0")
 
     return len(errors) == 0, errors
 
 
 def apply_config_to_filter(filter_instance, config):
     """
-    Aplica una configuración a una instancia del filtro.
+    Applies a configuration to a filter instance.
 
     Args:
-        filter_instance: Instancia del filtro Auto Memory Saver
-        config (dict): Configuración a aplicar
+        filter_instance: Auto Memory Saver filter instance
+        config (dict): Configuration to apply
     """
-    # Aplicar válvulas principales
+    # Apply main valves
     valves_config = config.get("valves", {})
     for key, value in valves_config.items():
         if hasattr(filter_instance.valves, key):
             setattr(filter_instance.valves, key, value)
 
-    print(f"Configuración aplicada: {len(valves_config)} válvulas configuradas")
+    print(f"Configuration applied: {len(valves_config)} valves configured")
 
 
 # =============================================================================
-# EJEMPLOS DE USO
+# USAGE EXAMPLES
 # =============================================================================
 
 if __name__ == "__main__":
-    # Ejemplo 1: Obtener configuración básica
+    # Example 1: Get basic configuration
     basic_config = get_config_by_environment("basic")
-    print("Configuración básica:")
-    print(f"- Memorias máximas: {basic_config['valves']['max_memories_to_inject']}")
-    print(f"- Caché habilitado: {basic_config['valves']['enable_cache']}")
+    print("Basic configuration:")
+    print(f"- Max memories: {basic_config['valves']['max_memories_to_inject']}")
+    print(f"- Cache enabled: {basic_config['valves']['enable_cache']}")
 
-    # Ejemplo 2: Validar configuración
+    # Example 2: Validate configuration
     is_valid, errors = validate_config(basic_config)
-    print(f"\nConfiguración válida: {is_valid}")
+    print(f"\nConfiguration valid: {is_valid}")
     if errors:
-        print("Errores encontrados:")
+        print("Errors found:")
         for error in errors:
             print(f"- {error}")
 
-    # Ejemplo 3: Mostrar configuración para EasyPanel
-    print("\nConfiguración recomendada para EasyPanel:")
-    print(f"- Memoria: {EASYPANEL_CONFIG['resources']['memory']}")
+    # Example 3: Show EasyPanel configuration
+    print("\nRecommended configuration for EasyPanel:")
+    print(f"- Memory: {EASYPANEL_CONFIG['resources']['memory']}")
     print(f"- CPU: {EASYPANEL_CONFIG['resources']['cpu']}")
-    print(f"- Puerto: {EASYPANEL_CONFIG['environment']['PORT']}")
+    print(f"- Port: {EASYPANEL_CONFIG['environment']['PORT']}")
 
 # =============================================================================
-# NOTAS IMPORTANTES
+# IMPORTANT NOTES
 # =============================================================================
 
 """
-INSTRUCCIONES DE DESPLIEGUE:
+DEPLOYMENT INSTRUCTIONS:
 
-1. Para VPS con EasyPanel:
-   - Usar PRODUCTION_CONFIG como base
-   - Configurar variables de entorno de EASYPANEL_CONFIG
-   - Asignar recursos según EASYPANEL_CONFIG['resources']
+1. For VPS with EasyPanel:
+   - Use PRODUCTION_CONFIG as base
+   - Configure EASYPANEL_CONFIG environment variables
+   - Assign resources according to EASYPANEL_CONFIG['resources']
 
-2. Para desarrollo local:
-   - Usar DEVELOPMENT_CONFIG
-   - Habilitar debug_mode para troubleshooting
+2. For local development:
+   - Use DEVELOPMENT_CONFIG
+   - Enable debug_mode for troubleshooting
 
-3. Para entornos con alta privacidad:
-   - Usar PRIVACY_CONFIG
-   - Considerar deshabilitar caché completamente
+3. For high privacy environments:
+   - Use PRIVACY_CONFIG
+   - Consider completely disabling cache
 
-4. Personalización:
-   - Copiar la configuración más cercana a tus necesidades
-   - Ajustar valores específicos
-   - Validar con validate_config() antes de aplicar
+4. Customization:
+   - Copy the configuration closest to your needs
+   - Adjust specific values
+   - Validate with validate_config() before applying
 
-COMANDOS DISPONIBLES PARA USUARIOS:
+COMMANDS AVAILABLE FOR USERS:
 
-📚 GESTIÓN DE MEMORIAS:
-- /memories: Lista todas las memorias con numeración
-- /clear_memories: Elimina todas las memorias del usuario
-- /memory_count: Muestra contador detallado con límites
-- /memory_search <término>: Busca memorias por contenido
-- /memory_recent [número]: Últimas N memorias (def: 5, máx: 20)
-- /memory_export: Exporta memorias en formato texto
+📚 MEMORY MANAGEMENT:
+- /memories: List all memories with numbering
+- /clear_memories: Delete all user memories
+- /memory_count: Show detailed counter with limits
+- /memory_search <term>: Search memories by content
+- /memory_recent [number]: Last N memories (def: 5, max: 20)
+- /memory_export: Export memories in text format
 
-⚙️ CONFIGURACIÓN:
-- /memory_config: Muestra configuración completa
-- /private_mode on|off: Activa/desactiva modo privado
-- /memory_limit <número>: Establece límite personal (0 = ilimitado)
-- /memory_prefix <texto>: Configura prefijo personalizado
+⚙️ CONFIGURATION:
+- /memory_config: Show complete configuration
+- /private_mode on|off: Enable/disable private mode
+- /memory_limit <number>: Set personal limit (0 = unlimited)
+- /memory_prefix <text>: Set custom prefix
 
-📊 INFORMACIÓN:
-- /memory_help: Ayuda completa con todos los comandos
-- /memory_stats: Estadísticas detalladas del sistema
-- /memory_status: Estado actual del filtro
+📊 INFORMATION:
+- /memory_help: Complete help with all commands
+- /memory_stats: Detailed system statistics
+- /memory_status: Current filter status
 
-🔧 UTILIDADES:
-- /memory_cleanup: Analiza duplicados potenciales
-- /memory_backup: Crea información de respaldo
+🔧 UTILITIES:
+- /memory_cleanup: Analyze potential duplicates
+- /memory_backup: Create backup information
 
-EJEMPLOS DE USO:
-- /memory_search "inteligencia artificial": Busca memorias sobre IA
-- /memory_recent 3: Ver últimas 3 memorias
-- /memory_limit 50: Establecer límite de 50 memorias
-- /private_mode on: Activar modo privado temporalmente
+USAGE EXAMPLES:
+- /memory_search "artificial intelligence": Search memories about AI
+- /memory_recent 3: View last 3 memories
+- /memory_limit 50: Set limit of 50 memories
+- /private_mode on: Enable private mode temporarily
 
-MONITOREO:
-- Revisar logs regularmente
-- Monitorear uso de memoria y CPU
-- Ajustar cache_ttl_minutes según patrones de uso
+MONITORING:
+- Review logs regularly
+- Monitor memory and CPU usage
+- Adjust cache_ttl_minutes according to usage patterns
 """
