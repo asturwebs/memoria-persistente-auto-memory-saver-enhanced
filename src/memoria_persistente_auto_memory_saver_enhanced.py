@@ -3156,7 +3156,8 @@ class Filter:
                 logger.error(f"[SECURITY] invalid user_id: {user_id}")
                 raise ValueError("invalid or empty user_id")
 
-            # Sanitize user_id: only allow alphanumeric characters, hyphens and dots | Sanitizar user_id: solo permitir caracteres alfanuméricos, guiones y puntos
+            # Sanitize user_id: only allow alphanumeric characters, hyphens and dots | \
+            # Sanitizar user_id: solo permitir caracteres alfanuméricos, guiones y puntos
             import re
 
             sanitized_user_id = re.sub(r"[^a-zA-Z0-9\-_.]", "", str(user_id).strip())
@@ -3181,7 +3182,8 @@ class Filter:
                 order_by = "created_at DESC"  # Safe fallback | Fallback seguro
                 print(f"[SECURITY] ⚠️ invalid order_by, using safe fallback")
 
-            # Determine effective limit (0 = unlimited, do not convert to 100) | Determinar límite efectivo (0 = ilimitado, no convertir a 100)
+            # Determine effective limit (0 = unlimited, do not convert to 100) | \
+            # Determinar límite efectivo (0 = ilimitado, no convertir a 100)
             if limit is not None:
                 effective_limit = limit
             elif self.valves.max_memories_per_user > 0:
