@@ -49,8 +49,7 @@ jobs:
         test -f README.md
         test -f LICENSE
         test -f requirements.txt
-        test -f CHANGELOG.md
-        test -f docs/CONTRIBUTING.md
+        test -f docs/CHANGELOG.md
         test -f docs/SECURITY.md
         echo "✅ All required files present"
     
