@@ -767,7 +767,9 @@ class Filter:
                     formatted_memories.append(content)
                 except Exception as e:
                     if self.valves.debug_mode:
-                        logger.warning(f"Error formatting memory: {e} | 格式化記憶時出錯: {e}")
+                        logger.warning(
+                            f"Error formatting memory: {e} | 格式化記憶時出錯: {e}"
+                        )
                     continue
 
             if self.valves.debug_mode:
@@ -776,7 +778,9 @@ class Filter:
             return formatted_memories
 
         except Exception as e:
-            logger.error(f"Error getting recent memories: {e} | 取得最近記憶時出錯: {e}")
+            logger.error(
+                f"Error getting recent memories: {e} | 取得最近記憶時出錯: {e}"
+            )
             return []
 
     def _calculate_relevance_score(self, memory_content: str, user_input: str) -> float:
@@ -969,7 +973,9 @@ class Filter:
                     formatted_memories.append(content)
                 except Exception as e:
                     if self.valves.debug_mode:
-                        logger.warning(f"Error formatting relevant memory: {e} | 格式化相關記憶時出錯: {e}")
+                        logger.warning(
+                            f"Error formatting relevant memory: {e} | 格式化相關記憶時出錯: {e}"
+                        )
                     continue
 
             if self.valves.debug_mode:
@@ -984,7 +990,9 @@ class Filter:
             return formatted_memories
 
         except Exception as e:
-            logger.error(f"Error getting relevant memories: {e} | 取得相關記憶時出錯: {e}")
+            logger.error(
+                f"Error getting relevant memories: {e} | 取得相關記憶時出錯: {e}"
+            )
             return []
 
     async def _inject_memories_into_conversation(
