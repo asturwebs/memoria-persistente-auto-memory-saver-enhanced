@@ -58,9 +58,11 @@ auto-memory-saver-enhanced/
 ├── docs/                                                 # Technical documentation
 │   ├── ARCHITECTURE.md
 │   ├── SECURITY.md
-│   └── release_notes_v*.md
-├── README.md
-├── CHANGELOG.md
+│   ├── CHANGELOG.md                                      # Version history
+│   ├── CAMBIOS_SLASH_COMMANDS.md                         # Slash commands changes
+│   ├── GITHUB_ISSUE_3_RESPONSE.md                        # Issue #3 resolution
+│   └── release_notes_v*.md                                # Release notes
+├── README.md                                             # Main documentation
 ├── LICENSE
 └── requirements.txt
 ```
