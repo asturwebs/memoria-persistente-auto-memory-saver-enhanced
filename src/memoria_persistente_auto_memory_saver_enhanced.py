@@ -1060,12 +1060,33 @@ class Filter:
                 and user_valves.show_memory_count
                 and __event_emitter__
             ):
+                # Extract IDs from memories for better feedback
+                memory_ids = []
+                for mem in memories:
+                    if hasattr(mem, "id"):
+                        memory_ids.append(f"ID:{mem.id}")
+                    elif isinstance(mem, str) and "Id:" in mem:
+                        # Extract ID from format "[Id: xxx, Content: ...]"
+                        import re
+                        match = re.search(r'Id:\s*(\w+)', mem)
+                        if match:
+                            memory_ids.append(f"ID:{match.group(1)}")
+                
+                # Format IDs display (limit to first 5 for readability)
+                ids_text = ", ".join(memory_ids[:5])
+                if len(memory_ids) > 5:
+                    ids_text += f" (+{len(memory_ids)-5} más)"
+                
                 memory_type = "recent" if is_first_message else "relevant"
+                description = f"📘 {len(memories)} {memory_type} memories loaded"
+                if memory_ids:
+                    description += f": [{ids_text}]"
+                    
                 await __event_emitter__(
                     {
                         "type": "status",
                         "data": {
-                            "description": f"📘 {len(memories)} {memory_type} memories loaded",
+                            "description": description,
                             "done": True,
                         },
                     }
@@ -1275,6 +1296,9 @@ class Filter:
                                         logger.warning(
                                             f"[SLASH-COMMANDS] ⚠️ Unrecognized command: {last_user_msg}"
                                         )
+                                        # FIX: Treat unrecognized commands as commands - DO NOT save to memory
+                                        self._command_processed_in_inlet = True
+                                        return body
                             except Exception as e:
                                 print(
                                     f"[SLASH-COMMANDS] ❌ Error processing command: {e}"
@@ -1282,12 +1306,18 @@ class Filter:
                                 logger.error(
                                     f"[SLASH-COMMANDS] ❌ Error processing command: {e}"
                                 )
+                                # FIX: On command error, treat as command to avoid saving
+                                self._command_processed_in_inlet = True
+                                return body
 
                 except Exception as e:
                     print(f"[SLASH-COMMANDS] ❌ Error in command detection: {e}")
                     logger.error(
                         f"[SLASH-COMMANDS] ❌ Error in command detection: {e}"
                     )
+                    # FIX: On command detection error, skip command processing but continue with normal flow
+                    # Only set flag if we actually detected a command
+                    pass
 
             # STEP 1: Determine if it's the first message of the session
             is_first_message = self._is_first_message(messages)
@@ -1633,7 +1663,10 @@ class Filter:
                 await __event_emitter__(
                     {
                         "type": "status",
-                        "data": {"description": "Auto saving to memory", "done": False},
+                        "data": {
+                            "description": "Auto saving to memory",
+                            "done": False,
+                        },
                     }
                 )
 
@@ -1643,12 +1676,31 @@ class Filter:
                 user=user,
             )
 
+            # Get the ID of the saved memory for better feedback
+            saved_memory_id = None
+            try:
+                saved_memories = await self.get_processed_memory_strings(user.id)
+                if saved_memories:
+                    # Extract ID from the most recent memory
+                    last_memory = saved_memories[-1]
+                    import re
+                    match = re.search(r'Id:\s*(\w+)', str(last_memory))
+                    if match:
+                        saved_memory_id = match.group(1)
+            except Exception as e:
+                if self.valves.debug_mode:
+                    logger.debug(f"Could not extract saved memory ID: {e}")
+
             if user_valves.show_status and __event_emitter__:
+                description = f"✅ Memory saved"
+                if saved_memory_id:
+                    description += f": ID:{saved_memory_id}"
+                
                 await __event_emitter__(
                     {
                         "type": "status",
                         "data": {
-                            "description": "Memory Saved Automatically",
+                            "description": description,
                             "done": True,
                         },
                     }
