@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Auto Memory Saver Enhanced (Persistent Memory) v2.3.0
+Auto Memory Saver Enhanced (Persistent Memory) v2.4.0
 =====================================================
 
 🚀 HISTORICAL BREAKTHROUGH: Universal AI Behavior Control + 30 Models Tested
@@ -11,17 +11,19 @@ universally, and slash commands work perfectly on 11 excellent models.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub: https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
-Version: 2.3.0 - AI Behavior Control Universal
+Version: 2.4.0 - Slash Command Fix + Visual Feedback
 License: MIT
 Based on: @linbanana Auto Memory Saver original
 
-Modification (linbanana):
-- Documentation updated to bilingual (EN first, then ZH).
-- No code logic changes, behavior preserved for Open-WebUI compatibility.
+🎯 NEW IN v2.4.0:
+✅ Slash Command Filter: Commands never saved to memory (Issue #3 RESOLVED)
+✅ Enhanced Visual Feedback: Memory operations show specific IDs
+✅ Robust Error Handling: Zero command leakage in any scenario
+✅ Professional Documentation: Complete changelog and implementation details
 
-🎯 DUAL FUNCTIONALITY v2.3.0:
+🎯 DUAL FUNCTIONALITY v2.4.0:
 ✅ Automatic Persistent Memory: WORKS ON ALL 30 TESTED MODELS  
-✅ JSON Slash Commands: Works perfectly on 11 excellent models  
+✅ JSON Slash Commands: Works perfectly on 11 excellent models + FILTERED (no save)
 
 🏆 EXCELLENT MODELS (perfect JSON):
 - Claude 3.5 Sonnet (leader), Grok family (4 variants), Gemini family (3 variants)  
@@ -31,7 +33,9 @@ Modification (linbanana):
 - Directive system for consistency across models  
 - Enterprise-safe terminology (removed “mind hacking”)  
 - Critical OpenAI fix (400 error resolved)  
-- Thread safety + SQL injection prevention  
+- Thread safety + SQL injection prevention
+- Slash command filtering with _command_processed_in_inlet flag
+- Memory feedback with specific ID tracking  
 
 📊 TECHNICAL FINDINGS:
 - Claude 4 regression vs Claude 3.5 Sonnet  
