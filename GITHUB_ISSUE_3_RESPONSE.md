@@ -1,4 +1,4 @@
-## ✅ **Bug Fixed - Commands No Longer Stored in Memory**
+# ✅ **Bug Fixed - Commands No Longer Stored in Memory**
 
 **Status**: **RESOLVED** ✅  
 **Fix Version**: **v2.4.0**  
@@ -6,15 +6,16 @@
 
 ---
 
-### 🎯 **Solution Summary**
+## 🎯 **Solution Summary**
 
 The issue where slash commands like `/memory_stats` were being stored in memory has been **completely resolved**. Commands are now properly filtered and **never saved to memory**, regardless of whether they are recognized or not.
 
 ---
 
-### 🔧 **Technical Implementation**
+## 🔧 **Technical Implementation**
 
-#### **Core Fix: Slash Command Filter**
+### **Core Fix: Slash Command Filter**
+
 ```python
 # In inlet() - Lines 1271-1280
 if last_user_msg.startswith("/"):
@@ -29,7 +30,8 @@ if getattr(self, "_command_processed_in_inlet", False):
     return body
 ```
 
-#### **Enhanced Features Added**
+### **Enhanced Features Added**
+
 1. **Visual Feedback with IDs**: `✅ Memory saved: ID:abc123`
 2. **Memory Loading with IDs**: `📘 5 memories loaded: [ID:123, ID:456 (+3 más)]`
 3. **Robust Error Handling**: Commands never leak into memory even on errors
@@ -37,7 +39,7 @@ if getattr(self, "_command_processed_in_inlet", False):
 
 ---
 
-### 📊 **Validation Results**
+## 📊 **Validation Results**
 
 | Metric | Before Fix | After Fix | Improvement |
 |--------|------------|-----------|-------------|
@@ -48,22 +50,24 @@ if getattr(self, "_command_processed_in_inlet", False):
 
 ---
 
-### 🎯 **What Changed**
+## 🎯 **What Changed**
 
-#### **✅ Expected Behavior (Now Working)**
+### **✅ Expected Behavior (Now Working)**
+
 - `/memory_stats` → Shows stats, **NOT saved**
 - `/memories?page=1` → Lists memories, **NOT saved**  
 - `/help` → Shows help, **NOT saved**
 - **ALL slash commands** → Processed, **NOT saved**
 
-#### **❌ Previous Behavior (Fixed)**
+### **❌ Previous Behavior (Fixed)**
+
 - Commands triggered "Memory Saved Automatically"
 - Commands appeared in memory lists
 - Memory pollution with control instructions
 
 ---
 
-### 🚀 **Bonus Improvements**
+## 🚀 **Bonus Improvements**
 
 Beyond fixing the core issue, we've added:
 
@@ -84,9 +88,10 @@ Beyond fixing the core issue, we've added:
 
 ---
 
-### 🧪 **Testing Verification**
+## 🧪 **Testing Verification**
 
 **Comprehensive test suite executed**:
+
 - ✅ 18 different slash commands tested
 - ✅ 0% command save rate confirmed
 - ✅ Memory purity validated at 85%
@@ -95,9 +100,10 @@ Beyond fixing the core issue, we've added:
 
 ---
 
-### 📦 **Installation**
+## 📦 **Installation**
 
 The fix is included in **v2.4.0**. Update to get:
+
 - **Fixed slash command filtering**
 - **Enhanced visual feedback** 
 - **Improved memory management**
@@ -105,7 +111,7 @@ The fix is included in **v2.4.0**. Update to get:
 
 ---
 
-### 🎉 **Impact**
+## 🎉 **Impact**
 
 This fix transforms the user experience from **confusing and polluted** to **clean and intuitive**:
 
