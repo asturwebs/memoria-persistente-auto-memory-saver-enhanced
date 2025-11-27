@@ -5,7 +5,7 @@
 [![OpenWebUI](https://img.shields.io/badge/OpenWebUI-Compatible-green.svg)](https://github.com/open-webui/open-webui)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-red.svg)](https://fastapi.tiangolo.com/)
 [![Pydantic](https://img.shields.io/badge/Pydantic-2.5+-purple.svg)](https://pydantic.dev/)
-[![Version](https://img.shields.io/badge/version-2.3.0-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
+[![Version](https://img.shields.io/badge/version-2.4.0-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
 [![Security Rating](https://img.shields.io/badge/security-A+-brightgreen.svg)](docs/SECURITY.md)
 [![Docker](https://img.shields.io/badge/Docker-Compatible-2496ED?logo=docker&logoColor=white)](https://docker.com)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -29,6 +29,7 @@
 - **v2.1.2 (Security and JSON Format):** Input validation, JSON format with pagination and system improvements
 - **v2.2.0 (Security and Performance):** Thread safety, SQL injection prevention, input sanitization and memory leak protection
 - **v2.3.0 (AI Behavior Control Universal):** Historic testing of 30 AI models, dual functionality (universal memory + selective slash commands), Google/Gemini leadership, enterprise-safe terminology
+- **v2.4.0 (Slash Command Fix + Visual Feedback):** Critical bug fix for slash commands not being saved to memory, enhanced visual feedback with memory IDs, robust error handling, professional documentation
 
 ---
 
