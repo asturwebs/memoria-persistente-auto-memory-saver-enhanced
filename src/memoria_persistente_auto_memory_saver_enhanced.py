@@ -22,69 +22,69 @@ Based on: @linbanana Auto Memory Saver original
 ✅ Professional Documentation: Complete changelog and implementation details
 
 🎯 DUAL FUNCTIONALITY v2.4.0:
-✅ Automatic Persistent Memory: WORKS ON ALL 30 TESTED MODELS  
+✅ Automatic Persistent Memory: WORKS ON ALL 30 TESTED MODELS
 ✅ JSON Slash Commands: Works perfectly on 11 excellent models + FILTERED (no save)
 
 🏆 EXCELLENT MODELS (perfect JSON):
-- Claude 3.5 Sonnet (leader), Grok family (4 variants), Gemini family (3 variants)  
-- GPT-4.1-mini, Gemma family (2 variants) – Google/Gemini dominate with 5/11  
+- Claude 3.5 Sonnet (leader), Grok family (4 variants), Gemini family (3 variants)
+- GPT-4.1-mini, Gemma family (2 variants) – Google/Gemini dominate with 5/11
 
 🔧 AI BEHAVIOR CONTROL:
-- Directive system for consistency across models  
-- Enterprise-safe terminology (removed “mind hacking”)  
-- Critical OpenAI fix (400 error resolved)  
+- Directive system for consistency across models
+- Enterprise-safe terminology (removed “mind hacking”)
+- Critical OpenAI fix (400 error resolved)
 - Thread safety + SQL injection prevention
 - Slash command filtering with _command_processed_in_inlet flag
-- Memory feedback with specific ID tracking  
+- Memory feedback with specific ID tracking
 
 📊 TECHNICAL FINDINGS:
-- Claude 4 regression vs Claude 3.5 Sonnet  
-- Amazon Nova family completely fails  
-- OpenAI fragmentation: mini > full variants  
+- Claude 4 regression vs Claude 3.5 Sonnet
+- Amazon Nova family completely fails
+- OpenAI fragmentation: mini > full variants
 
 For support or collaborations:
-- Email: pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es  
+- Email: pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es
 - GitHub: @AsturWebs
 
 
 中文說明（摘要）
 ================
 
-🚀 歷史性突破：通用 AI 行為控制 + 測試 30 種模型  
-這是一個強大的 OpenWebUI 擴充，經過迄今最完整的相容性測試（30 個 AI 模型）。  
-自動持久記憶可在所有模型上運作，Slash 指令在 11 個優秀模型中表現完美。  
+🚀 歷史性突破：通用 AI 行為控制 + 測試 30 種模型
+這是一個強大的 OpenWebUI 擴充，經過迄今最完整的相容性測試（30 個 AI 模型）。
+自動持久記憶可在所有模型上運作，Slash 指令在 11 個優秀模型中表現完美。
 
-作者：Pedro Luis Cuevas Villarrubia - AsturWebs  
-GitHub：https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced  
-版本：2.3.0 - 通用 AI 行為控制  
-授權：MIT  
-基於：@linbanana Auto Memory Saver 原始版  
+作者：Pedro Luis Cuevas Villarrubia - AsturWebs
+GitHub：https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
+版本：2.3.0 - 通用 AI 行為控制
+授權：MIT
+基於：@linbanana Auto Memory Saver 原始版
 
-linbanana 修改：  
-- 文件翻譯為雙語（英文優先，中文附註）。  
-- 程式邏輯未改動，保持與 Open-WebUI 相容。  
+linbanana 修改：
+- 文件翻譯為雙語（英文優先，中文附註）。
+- 程式邏輯未改動，保持與 Open-WebUI 相容。
 
-🎯 雙重功能 v2.3.0：  
-✅ 自動持久記憶：在所有 30 個測試模型中可用  
-✅ JSON 格式 Slash 指令：在 11 個優秀模型中完美運作  
+🎯 雙重功能 v2.3.0：
+✅ 自動持久記憶：在所有 30 個測試模型中可用
+✅ JSON 格式 Slash 指令：在 11 個優秀模型中完美運作
 
-🏆 優秀模型（JSON 完美）：  
-- Claude 3.5 Sonnet（領先）、Grok 系列（4 個變體）、Gemini 系列（3 個變體）  
-- GPT-4.1-mini、Gemma 系列（2 個變體）– Google/Gemini 系列佔 5/11  
+🏆 優秀模型（JSON 完美）：
+- Claude 3.5 Sonnet（領先）、Grok 系列（4 個變體）、Gemini 系列（3 個變體）
+- GPT-4.1-mini、Gemma 系列（2 個變體）– Google/Gemini 系列佔 5/11
 
-🔧 AI 行為控制：  
-- 跨模型一致性的指令系統  
-- 企業安全術語（移除了 “mind hacking”）  
-- OpenAI 關鍵修正（解決 400 錯誤）  
-- 執行緒安全 + SQL 注入防護  
+🔧 AI 行為控制：
+- 跨模型一致性的指令系統
+- 企業安全術語（移除了 “mind hacking”）
+- OpenAI 關鍵修正（解決 400 錯誤）
+- 執行緒安全 + SQL 注入防護
 
-📊 技術發現：  
-- Claude 4 對比 Claude 3.5 Sonnet 出現回退  
-- Amazon Nova 系列完全失敗  
-- OpenAI 模型分裂：mini > full 版本  
+📊 技術發現：
+- Claude 4 對比 Claude 3.5 Sonnet 出現回退
+- Amazon Nova 系列完全失敗
+- OpenAI 模型分裂：mini > full 版本
 
-支援或合作聯繫：  
-- Email: pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es  
+支援或合作聯繫：
+- Email: pedro@asturwebs.es | pedro@tu-ia.es | pedro@bytia.es
 - GitHub: @AsturWebs
 """
 
@@ -331,7 +331,7 @@ class Filter:
     Main class that handles filtering and memory management in conversations.
     Allows injecting previous memories into new conversations and automatically saving
     assistant responses as memories.
-    
+
     主要類別，負責處理對話中的過濾和記憶管理。
     允許將先前的記憶注入新對話中，並自動保存助理回應作為記憶。
     """
@@ -339,7 +339,7 @@ class Filter:
     class Valves(BaseModel):
         """
         Main valve configuration that controls filter behavior.
-        
+
         主要閥門配置，控制過濾器行為。
         """
 
@@ -438,7 +438,7 @@ class Filter:
     class UserValves(BaseModel):
         """
         User preference configuration for display and behavior.
-        
+
         使用者偏好配置，用於顯示和行為設定。
         """
 
@@ -488,7 +488,7 @@ class Filter:
     def __init__(self):
         """
         Initializes a new filter instance with default configurations.
-        
+
         初始化新的過濾器實例，使用預設配置。
         """
         self.valves = self.Valves()
@@ -630,7 +630,7 @@ class Filter:
     def _is_first_message(self, messages: List[dict]) -> bool:
         """
         Determines if this is the first message of a new chat session.
-        
+
         判斷這是否是新聊天對話的第一則訊息。
 
         Args:
@@ -663,7 +663,7 @@ class Filter:
     async def _get_recent_memories(self, user_id: str, limit: int) -> List[str]:
         """
         Gets the most recent memories of a user, ordered by date.
-        
+
         取得使用者最近的記憶，按日期排序。
 
         Args:
@@ -787,7 +787,7 @@ class Filter:
         """
         Calculates a relevance score between a memory and user input.
         Simplified and more effective algorithm.
-        
+
         計算記憶和使用者輸入之間的相關性分數。
         簡化且更有效的演算法。
 
@@ -839,7 +839,7 @@ class Filter:
     def _calculate_phrase_similarity(self, text1: str, text2: str) -> float:
         """
         Calculates similarity based on common phrases of 2+ words.
-        
+
         根據 2+ 個單詞的共同片語計算相似性。
 
         Args:
@@ -872,7 +872,7 @@ class Filter:
     ) -> List[str]:
         """
         Gets the most relevant memories for user input.
-        
+
         為使用者輸入取得最相關的記憶。
 
         Args:
@@ -940,7 +940,8 @@ class Filter:
 
             if self.valves.debug_mode:
                 logger.debug(
-                    f"Using relevance threshold: {self.valves.relevance_threshold} | 使用相關性闾值: {self.valves.relevance_threshold}"
+                    f"Using relevance threshold: {self.valves.relevance_threshold} | "
+                    f"使用相關性闾值: {self.valves.relevance_threshold}"
                 )
 
             if not relevant_memories:
@@ -1006,33 +1007,33 @@ class Filter:
     ) -> None:
         """
         Builds and injects a `system` message with selected memory items.
-        
+
         Selection policy:
         - For the very first message, prefer recent memories (recency boost).
         - For subsequent messages, prefer relevant memories (keyword overlap / similarity).
         - Enforces `max_memories_to_inject` and `relevance_threshold`.
-        
+
         Args:
             body (dict): OpenWebUI payload to be modified.
             memories (List[MemoryModel]): Candidate memories.
             reason (str): Free-form label for logging (e.g., "first_turn" / "relevance").
-        
+
         Returns:
             None (modifies `body` in place when injection occurs)
-        
+
         中文說明：
         建立並注入含已選記憶的 `system` 訊息。
-        
+
         選取策略：
         - 第一則訊息：偏向最近記憶（近期優先）。
         - 後續訊息：偏向與當前輸入相關的記憶（關鍵字重疊/相似度）。
         - 遵守 `max_memories_to_inject` 與 `relevance_threshold`。
-        
+
         參數：
             body (dict)：將被修改的 OpenWebUI 載荷。
             memories (List[MemoryModel])：候選記憶。
             reason (str)：記錄用途的標籤（如 "first_turn"/"relevance"）。
-        
+
         回傳：
             None（若注入會原地修改 `body`）
         """
@@ -1083,17 +1084,17 @@ class Filter:
                         match = re.search(r'Id:\s*(\w+)', mem)
                         if match:
                             memory_ids.append(f"ID:{match.group(1)}")
-                
+
                 # Format IDs display (limit to first 5 for readability)
                 ids_text = ", ".join(memory_ids[:5])
                 if len(memory_ids) > 5:
                     ids_text += f" (+{len(memory_ids)-5} más)"
-                
+
                 memory_type = "recent" if is_first_message else "relevant"
                 description = f"📘 {len(memories)} {memory_type} memories loaded"
                 if memory_ids:
                     description += f": [{ids_text}]"
-                    
+
                 await __event_emitter__(
                     {
                         "type": "status",
@@ -1126,44 +1127,44 @@ class Filter:
     ) -> dict:
         """
         Injects memory context at the beginning of a turn.
-        
+
         Smart logic:
         - On the first user message of a conversation, inject the most recent X memories
           to preserve continuity (recency boost).
         - On subsequent messages, inject only memories relevant to the current input,
           or none if nothing meets the relevance threshold.
-        
+
         Args:
             body (dict): OpenWebUI request payload (messages/config).
             __request__ (Request): FastAPI Request object.
             __user__ (Any): Current user info (id/valves/etc.).
             __event_emitter__ (Callable|None): Optional status event emitter.
-        
+
         Returns:
             dict: Possibly augmented payload with a `system` message including
                   selected memory items (Top-K) when applicable.
-        
+
         Notes:
             - Memory selection respects `max_memories_to_inject` and `relevance_threshold`.
             - If disabled via valves or user is missing, this is a no-op.
             - Status events are emitted when `show_injection_status=True`.
-        
+
         中文說明：
         在每輪對話開始時注入記憶脈絡。
-        
+
         智能邏輯：
         - 對話第一則使用者訊息：注入最近 X 筆記憶，維持連貫性（近期優先）。
         - 後續訊息：僅注入與當前輸入相關的記憶；若無符合門檻則不注入。
-        
+
         參數：
             body (dict)：OpenWebUI 請求內容（messages/設定）。
             __request__ (Request)：FastAPI Request 物件。
             __user__ (Any)：使用者資訊（id/valves 等）。
             __event_emitter__ (Callable|None)：狀態事件通道。
-        
+
         回傳：
             dict：可能加入一則 `system` 訊息（含 Top-K 記憶）。
-        
+
         備註：
             - 遵守 `max_memories_to_inject` 與 `relevance_threshold`。
             - 若 valves 停用或無使用者資訊，則不動作。
@@ -1290,10 +1291,12 @@ class Filter:
                                                 }
                                             )
 
-                                        # MARK THAT IT WAS A COMMAND TO AVOID SAVING IN OUTLET | MARCAR QUE FUE UN COMANDO PARA EVITAR GUARDADO EN OUTLET
+                                        # MARK THAT IT WAS A COMMAND TO AVOID SAVING IN OUTLET | \
+                                        # MARCAR QUE FUE UN COMANDO PARA EVITAR GUARDADO EN OUTLET
                                         self._command_processed_in_inlet = True
 
-                                        # RETURN IMMEDIATELY - DO NOT CONTINUE WITH MEMORY INJECTION | RETORNAR INMEDIATAMENTE - NO CONTINUAR CON INYECCIÓN DE MEMORIAS
+                                        # RETURN IMMEDIATELY - DO NOT CONTINUE WITH MEMORY INJECTION | \
+                                        # RETORNAR INMEDIATAMENTE - NO CONTINUAR CON INYECCIÓN DE MEMORIAS
                                         print(
                                             f"[SLASH-COMMANDS] 🎯 Command processed, returning response"
                                         )
@@ -1435,7 +1438,7 @@ class Filter:
     ) -> dict:
         """
         Post-generation hook that handles slash commands, auto-save, and quotas.
-        
+
         Responsibilities:
         - Slash commands: handle `/memories`, `/memory_search <q>`, `/forget_all`
           (when `enable_memory_commands=True`). Commands short-circuit normal flow.
@@ -1444,25 +1447,25 @@ class Filter:
           with `similarity_threshold`).
         - Capacity enforcement: if `max_memories_per_user > 0`, constrain growth (e.g., FIFO).
         - Status events: emit progress updates when `show_injection_status=True`.
-        
+
         Args:
             body (dict): OpenWebUI response payload (includes assistant output).
             __request__ (Request): FastAPI Request object (for writes if required).
             __user__ (Any): Current user info (required for memory writes).
             __event_emitter__ (Callable|None): Optional status event emitter.
-        
+
         Returns:
             dict: The (possibly) annotated payload. If a slash command is processed,
                   an assistant message is appended and the function returns early.
-        
+
         Notes:
             - Auto-save respects `min_response_length` and `max_response_length`.
             - Duplicate checks compare normalized text against existing memories.
             - Cache is invalidated on successful writes when `enable_cache=True`.
-        
+
         中文說明：
         在助理回覆產生後執行，負責指令處理、自動儲存與容量管控。
-        
+
         職責：
         - 斜線指令：在 `enable_memory_commands=True` 時處理 `/memories`、
           `/memory_search <q>`、`/forget_all`；處理後會中斷一般流程。
@@ -1470,16 +1473,16 @@ class Filter:
           並套用長度閥值與重複過濾（`filter_duplicates` + `similarity_threshold`）。
         - 容量控管：若 `max_memories_per_user > 0`，限制成長（如 FIFO）。
         - 狀態事件：`show_injection_status=True` 時回報進度。
-        
+
         參數：
             body (dict)：OpenWebUI 回應（含助理輸出）。
             __request__ (Request)：FastAPI Request 物件（必要時寫入記憶）。
             __user__ (Any)：使用者資訊（寫入記憶必要）。
             __event_emitter__ (Callable|None)：狀態事件通道。
-        
+
         回傳：
             dict：可能被附註的回應。若處理了指令，會直接附加助理訊息並結束。
-        
+
         備註：
             - 自動儲存遵守 `min_response_length` 與 `max_response_length`。
             - 重複檢查以正規化文字與既有記憶比對。
@@ -1707,7 +1710,7 @@ class Filter:
                 description = f"✅ Memory saved"
                 if saved_memory_id:
                     description += f": ID:{saved_memory_id}"
-                
+
                 await __event_emitter__(
                     {
                         "type": "status",
@@ -1742,7 +1745,7 @@ class Filter:
     ) -> Optional[str]:
         """
         Processes available memory commands for users.
-        
+
         處理使用者可用的記憶命令。
 
         Args:
@@ -2991,9 +2994,19 @@ class Filter:
             f"• `/memory_add For [situation] the best option is [solution] | Para [situación] la mejor opción es [solución]`\n\n"
         )
 
-        templates += f"💭 **Ideas and Reflections | Ideas y Reflexiones:**\n"
-        templates += f"• `/memory_add An interesting idea: [idea] could be applied to [context] | Una idea interesante: [idea] podría aplicarse a [contexto]`\n"
-        templates += f"• `/memory_add Reflection: [situation] taught me that [lesson] | Reflexión: [situación] me enseñó que [lección]`"
+        templates += (
+            f"💭 **Ideas and Reflections | Ideas y Reflexiones:**\n"
+        )
+
+        templates += (
+            f"• `/memory_add An interesting idea: [idea] could be applied to [context] | "
+            f"Una idea interesante: [idea] podría aplicarse a [contexto]`\n"
+        )
+
+        templates += (
+            f"• `/memory_add Reflection: [situation] taught me that [lesson] | "
+            f"Reflexión: [situación] me enseñó que [lección]`"
+        )
 
         return templates
 
@@ -3077,9 +3090,9 @@ class Filter:
     async def clear_user_memory(self, user_id: str) -> None:
         """
         Deletes all memories of a specific user.
-        
+
         刪除特定使用者的所有記憶。
-        
+
         Args:
             user_id: Unique user identifier | 唯一使用者標識符
         """
@@ -3267,7 +3280,7 @@ class Filter:
     async def get_processed_memory_strings(self, user_id: str) -> List[str]:
         """
         Processes user memories into readable text format.
-        
+
         將使用者記憶處理成可讀的文字格式。
 
         Args:
