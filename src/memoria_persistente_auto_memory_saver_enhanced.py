@@ -90,7 +90,7 @@ linbanana 修改：
 
 
 __author__ = "AsturWebs"
-__version__ = "2.6.1"
+__version__ = "2.6.2"
 __license__ = "MIT"
 
 # Logging configuration
@@ -111,6 +111,10 @@ import uuid
 import threading
 from dataclasses import dataclass, field
 from functools import lru_cache
+
+
+_ADD_MEMORY_DISABLED_FOR_USER: dict[str, bool] = {}
+_ADD_MEMORY_DISABLED_LOCK = threading.Lock()
 from typing import Optional, List, Any, Dict, TypedDict, Union, Callable, Awaitable
 from datetime import datetime, timedelta
 
@@ -1988,11 +1992,29 @@ class Filter:
 
             saved_memory_id = None
             try:
+                add_memory_disabled = False
+                with _ADD_MEMORY_DISABLED_LOCK:
+                    add_memory_disabled = bool(
+                        _ADD_MEMORY_DISABLED_FOR_USER.get(effective_user_id, False)
+                    )
+
+                embedding_fn = None
+                try:
+                    if __request__ is not None and hasattr(__request__, "app"):
+                        embedding_fn = getattr(
+                            getattr(__request__.app, "state", None),
+                            "EMBEDDING_FUNCTION",
+                            None,
+                        )
+                except Exception:
+                    embedding_fn = None
+
                 can_use_openwebui_add = (
-                    __request__ is not None
+                    not add_memory_disabled
+                    and __request__ is not None
                     and hasattr(__request__, "app")
                     and hasattr(getattr(__request__, "app", None), "state")
-                    and hasattr(getattr(getattr(__request__, "app", None), "state", None), "EMBEDDING_FUNCTION")
+                    and callable(embedding_fn)
                 )
 
                 if can_use_openwebui_add:
@@ -2007,6 +2029,16 @@ class Filter:
                 else:
                     raise RuntimeError("OpenWebUI request/app embedding not available")
             except Exception as add_err:
+                err_text = str(add_err)
+                if (
+                    "api/embed" in err_text
+                    or "ClientResponseError" in err_text
+                    or "EMBEDDING_FUNCTION" in err_text
+                    or "Not Found" in err_text
+                ):
+                    with _ADD_MEMORY_DISABLED_LOCK:
+                        _ADD_MEMORY_DISABLED_FOR_USER[effective_user_id] = True
+
                 try:
                     if hasattr(Memories, "insert_new_memory"):
                         saved_memory = Memories.insert_new_memory(effective_user_id, message_content)
