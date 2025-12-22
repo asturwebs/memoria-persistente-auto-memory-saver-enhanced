@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Auto Memory Saver Enhanced (Persistent Memory) v2.6.0
+Auto Memory Saver Enhanced (Persistent Memory) v2.6.2
 =====================================================
 
 🚀 SMART MEMORY: Intelligent Summarization + Semantic Relevance
@@ -11,7 +11,7 @@ semantic relevance.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub: https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
-Version: 2.6.0 - Smart Memory + Intelligent Summarization
+Version: 2.6.2 - Smart Memory + Intelligent Summarization
 License: MIT
 Based on: @linbanana Auto Memory Saver original
 
