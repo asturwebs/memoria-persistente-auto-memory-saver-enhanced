@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.5.0] - 2024-12-22
+
+### 🧹 **Code Cleanup & Production Ready**
+
+#### Removed
+- **Simulated commands removed**: `/memory_pin`, `/memory_unpin`, `/memory_favorite`, `/memory_tag`, `/memory_edit`, `/memory_delete`
+  - These commands only simulated operations without actual functionality
+  - Reduces code complexity by ~230 lines
+
+#### Improved
+- **Professional logging**: Replaced 40+ `print()` statements with `logger.debug()`
+- **Consolidated imports**: Moved `re`, `json`, `hashlib`, `uuid`, `timedelta` to file top
+- **Fixed initialization**: Added `_command_processed_in_inlet` in `__init__()` to prevent `AttributeError`
+- **Corrected documentation**: Fixed `get_raw_existing_memories()` docstring
+- **Fixed typo**: Corrected Chinese character `闾值` → `閾值` (threshold)
+- **Version consistency**: Synchronized version to 2.5.0 across all code and JSON responses
+
+#### Documentation
+- **Simplified README**: Removed marketing language, updated command list
+- **Created release notes v2.5.0**: Complete documentation of changes
+
+---
+
 ## [2.4.0] - 2025-11-27
 
 ### 🐛 **Critical Bug Fix (Issue #3 RESOLVED)**
