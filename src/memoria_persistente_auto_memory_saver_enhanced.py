@@ -447,7 +447,7 @@ class Filter:
         )
 
         summarization_prompt: str = Field(
-            default="Extract ONLY the key facts, decisions, preferences, or learnings from this conversation. Be extremely concise (max 200 chars). Output format: 'Key: [topic] | Facts: [facts]'. If nothing important, respond with 'SKIP'.",
+            default="Summarize this conversation in a natural narrative form (max 2000 chars). Format: '[type] User asked/wanted/mentioned X and assistant explained/provided/suggested Y'. Focus on key facts, decisions, preferences or learnings. If nothing important, respond with 'SKIP'.",
             description="Prompt used for LLM summarization | 用於 LLM 摘要的提示",
         )
 
@@ -1056,20 +1056,38 @@ class Filter:
         # Build summary
         types_str = ", ".join(sorted(detected_types)) if detected_types else "general"
         # v2.6.0 FIX: Increase fallback limit from 150 to 350 for useful content
-        assistant_summary = ". ".join(assistant_key_parts[:3]) if assistant_key_parts else assistant_content[:350]
+        assistant_summary = ". ".join(assistant_key_parts[:3]) if assistant_key_parts else assistant_content[:500]
 
         # v2.6.0 FIX: Increase truncation limits for useful content
-        # Previous limits (100/200) were too short and cut important info
-        if len(user_key) > 150:
-            user_key = user_key[:150] + "..."
-        if len(assistant_summary) > 400:
-            assistant_summary = assistant_summary[:400] + "..."
+        if len(user_key) > 200:
+            user_key = user_key[:200] + "..."
+        if len(assistant_summary) > 600:
+            assistant_summary = assistant_summary[:600] + "..."
 
         # Skip if the summary would be too short/useless
         if len(assistant_summary) < 30:
             return "SKIP"
 
-        summary = f"[{types_str}] P: {user_key} | R: {assistant_summary}"
+        # v2.6.0: Generate NARRATIVE summary instead of P:/R: format
+        # Determine action verb based on detected types
+        if 'instruction' in detected_types:
+            user_action = "preguntó cómo"
+            assistant_action = "explicó"
+        elif 'preference' in detected_types:
+            user_action = "expresó preferencia por"
+            assistant_action = "tomó nota de"
+        elif 'fact' in detected_types:
+            user_action = "preguntó sobre"
+            assistant_action = "informó que"
+        elif 'technical' in detected_types:
+            user_action = "consultó sobre"
+            assistant_action = "proporcionó detalles técnicos:"
+        else:
+            user_action = "mencionó"
+            assistant_action = "respondió:"
+
+        # Build narrative summary
+        summary = f"[{types_str}] Usuario {user_action} {user_key}. Asistente {assistant_action} {assistant_summary}"
 
         return summary
 
