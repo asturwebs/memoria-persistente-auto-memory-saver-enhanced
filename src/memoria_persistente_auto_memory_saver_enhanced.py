@@ -2307,16 +2307,60 @@ class Filter:
             if not processed_memories:
                 return f"📘 {Constants.NO_MEMORIES_MSG}"
 
-            # Search for memories containing the term | 搜尋包含該詞的記憶
+            # v2.6.0: Check if search term looks like a memory ID (8+ hex chars)
+            # If so, search by ID and return FULL content
+            is_id_search = bool(re.match(r'^[a-f0-9]{6,}$', sanitized_search_term.lower()))
+            
+            if is_id_search:
+                # Search for memory by ID - return FULL content
+                for memory in processed_memories:
+                    # Extract ID from format "[Id: xxx, Content: ...]"
+                    id_match = re.search(r'Id:\s*([a-f0-9]+)', memory, re.IGNORECASE)
+                    if id_match and sanitized_search_term.lower() in id_match.group(1).lower():
+                        # Extract content from memory
+                        content_match = re.search(r'Content:\s*(.+)\]$', memory, re.DOTALL)
+                        full_content = content_match.group(1).strip() if content_match else memory
+                        
+                        return json.dumps({
+                            "command": "/memory_search",
+                            "status": "FOUND_BY_ID",
+                            "timestamp": datetime.now().isoformat() + "Z",
+                            "data": {
+                                "memory_id": id_match.group(1),
+                                "full_content": full_content,
+                                "content_length": len(full_content),
+                            },
+                            "metadata": {
+                                "search_type": "by_id",
+                                "user_id": validated_user_id[:8] + "...",
+                            },
+                        }, ensure_ascii=False, indent=2)
+                
+                # ID not found
+                return json.dumps({
+                    "command": "/memory_search",
+                    "status": "ID_NOT_FOUND",
+                    "data": {
+                        "searched_id": sanitized_search_term,
+                        "message": f"No memory found with ID containing '{sanitized_search_term}'",
+                    },
+                }, ensure_ascii=False, indent=2)
+
+            # Standard text search - search for memories containing the term
             matches = []
             for i, memory in enumerate(processed_memories, 1):
                 if sanitized_search_term.lower() in memory.lower():
+                    # Extract ID from memory
+                    id_match = re.search(r'Id:\s*([a-f0-9]+)', memory, re.IGNORECASE)
+                    mem_id = id_match.group(1) if id_match else f"idx_{i}"
+                    
                     display_memory = (
                         memory[:150] + "..." if len(memory) > 150 else memory
                     )
                     matches.append(
                         {
-                            "id": i,
+                            "db_id": mem_id,
+                            "index": i,
                             "preview": display_memory,
                             "relevance": (
                                 "high"
@@ -2340,11 +2384,8 @@ class Filter:
                     },
                     "metadata": {
                         "user_id": validated_user_id[:8] + "...",
-                        "security_level": "validated",
-                        "system": "Auto Memory Saver Enhanced v2.5.0",
+                        "system": "Auto Memory Saver Enhanced v2.6.0",
                     },
-                    "warning": "DO_NOT_INTERPRET_THIS_JSON_RESPONSE",
-                    "instructions": "DISPLAY_RAW_JSON_TO_USER",
                 }
             else:
                 response_data = {
@@ -2356,22 +2397,13 @@ class Filter:
                         "total_memories_searched": len(processed_memories),
                         "matches_found": len(matches),
                         "results_shown": min(len(matches), 10),
-                        "matches": matches[
-                            :10
-                        ],  # Limit to 10 results | Limitar a 10 resultados
+                        "matches": matches[:10],
                     },
-                    "pagination": {
-                        "current_page": 1,
-                        "total_results": len(matches),
-                        "has_more": len(matches) > 10,
-                    },
+                    "usage_note": "Use db_id with /memory_search <id> to see full content",
                     "metadata": {
                         "user_id": validated_user_id[:8] + "...",
-                        "security_level": "validated",
-                        "system": "Auto Memory Saver Enhanced v2.5.0",
+                        "system": "Auto Memory Saver Enhanced v2.6.0",
                     },
-                    "warning": "DO_NOT_INTERPRET_THIS_JSON_RESPONSE",
-                    "instructions": "DISPLAY_RAW_JSON_TO_USER",
                 }
 
             return (
