@@ -1712,6 +1712,21 @@ class Filter:
                 user_content = last_user_message.get("content", "").strip()
                 assistant_content = last_assistant_message.get("content", "").strip()
 
+                # v2.6.0 FIX: Remove model reasoning/thinking XML blocks before saving
+                # These blocks are internal model metadata, not useful for memory
+                reasoning_patterns = [
+                    r'<detalles[^>]*>.*?</detalles>',  # Spanish reasoning blocks
+                    r'<details[^>]*>.*?</details>',    # English reasoning blocks
+                    r'<thinking[^>]*>.*?</thinking>',  # Thinking blocks
+                    r'<resumen[^>]*>.*?</resumen>',    # Summary blocks
+                    r'<summary[^>]*>.*?</summary>',    # Summary blocks EN
+                    r'Pensando durante.*?segundos?\s*',  # "Thinking for X seconds"
+                    r'Thinking for.*?seconds?\s*',     # EN version
+                ]
+                for pattern in reasoning_patterns:
+                    assistant_content = re.sub(pattern, '', assistant_content, flags=re.DOTALL | re.IGNORECASE)
+                assistant_content = assistant_content.strip()
+
                 # PRODUCTION FIX: Additional security - DO NOT save technical commands as memory
                 # NOTE: This filter is redundant with the flag but kept as safety net
                 if user_content.startswith("/"):
