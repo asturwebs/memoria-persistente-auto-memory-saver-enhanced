@@ -1,4 +1,4 @@
-# Persistent Memory (Auto Memory Saver Enhanced)
+﻿# Persistent Memory (Auto Memory Saver Enhanced)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -23,37 +23,78 @@
 4. Copy code from `src/memoria_persistente_auto_memory_saver_enhanced.py`
 5. Save and activate
 
-## Available Commands
+## Comandos Disponibles (Slash Commands)
 
-| Command | Description |
+Gestiona tu memoria persistente directamente desde el chat:
+
+### Gestión Básica
+| Comando | Descripción |
 |---------|-------------|
-| `/memories [page]` | List memories (paginated) |
-| `/memory_search <term>` | Search memories |
-| `/memory_recent [n]` | Last N memories |
-| `/memory_count` | Memory count |
-| `/memory_stats` | Statistics |
-| `/memory_export` | Export memories |
-| `/clear_memories` | Delete all |
-| `/memory_help` | Show all commands |
+| `/memories [página]` | Lista tus memorias guardadas (paginado). |
+| `/memory_search <término>` | Busca memorias específicas por contenido. |
+| `/memory_recent [n]` | Muestra las N memorias más recientes (default: 5). |
+| `/memory_count` | Muestra el número total de memorias guardadas. |
+| `/clear_memories` | **¡Cuidado!** Elimina permanentemente todas tus memorias. |
 
-> **Tip**: Use OpenWebUI native `/add_memory <text>` to add memories manually.
+### Configuración y Estado
+| Comando | Descripción |
+|---------|-------------|
+| `/memory_config` | Muestra la configuración actual de tus Valves. |
+| `/memory_stats` | Muestra estadísticas detalladas de uso y almacenamiento. |
+| `/memory_status` | Verifica el estado operativo del sistema de memoria. |
+| `/private_mode [on/off]` | Activa/desactiva el modo privado (no guarda memorias). |
+| `/memory_limit <n>` | Establece tu límite personal de memorias (0 = ilimitado). |
+| `/memory_prefix <texto>` | Define un prefijo para tus nuevas memorias. |
 
-## Configuration
+### Herramientas Avanzadas
+| Comando | Descripción |
+|---------|-------------|
+| `/memory_export` | Exporta todas tus memorias a un formato de texto. |
+| `/memory_cleanup` | Ejecuta limpieza manual de duplicados y optimización. |
+| `/memory_backup` | Crea una copia de seguridad de tus memorias actuales. |
+| `/memory_restore` | Restaura memorias desde una copia de seguridad interna. |
+| `/memory_analytics` | Análisis profundo de tus patrones de memoria. |
+| `/memory_help` | Muestra esta lista de ayuda. |
 
-Key settings in Valves:
+> **Tip**: Usa el comando nativo de OpenWebUI `/add_memory <texto>` para agregar memorias manualmente.
 
-```python
-enabled: bool = True                    # Enable/disable system
-inject_memories: bool = True            # Inject memories in conversations
-auto_save_responses: bool = True        # Auto-save conversations
-max_memories_to_inject: int = 5         # Max memories per conversation
-max_injection_chars: int = 3500         # Hard cap total injected chars
-max_memories_to_scan: int = 300         # Hard cap scanned memories from DB
-skip_injection_for_casual: bool = True  # Skip injection for greetings/casual
-max_memories_per_user: int = 100        # User limit (0 = unlimited)
-enable_cache: bool = True               # Cache for performance
-debug_mode: bool = False                # Detailed logging
-```
+## Configuración (Valves)
+
+El sistema es altamente configurable a través de **Valves**. Puedes ajustar estos valores desde:
+`Panel de Admin > Funciones > Memoria Persistente > Valves (engranaje)`
+
+### Sistema y Comportamiento (Valves Globales)
+- **enabled**: Activa o desactiva todo el sistema de memoria.
+- **debug_mode**: Activa logs detallados para depuración.
+- **enable_cache**: Usa caché en memoria para mejorar el rendimiento (recomendado).
+- **cache_ttl_minutes**: Tiempo de vida del caché en minutos (default: 60).
+
+### Inyección y Recuperación
+- **inject_memories**: Inyecta memorias relevantes al inicio de nuevas conversaciones.
+- **max_memories_to_inject**: Cantidad máxima de memorias a inyectar (default: 5).
+- **max_memories_to_scan**: Cuantas memorias recientes analizar para relevancia (default: 300).
+- **relevance_threshold**: Nivel mínimo de relevancia (0.0-1.0) para inyectar una memoria (default: 0.05).
+- **skip_injection_for_casual**: Evita gastar tokens en saludos simples (Hola, Buenos días).
+- **max_injection_chars**: Límite duro de caracteres para prevenir contextos gigantes (default: 3500).
+
+### Guardado y Optimización
+- **auto_save_responses**: Guarda automáticamente información útil de las respuestas del asistente.
+- **enable_smart_summarization**: Usa LLM para resumir la conversación antes de guardar (Ahorra espacio).
+- **summarization_prompt**: El prompt usado para resumir conversaciones.
+- **min_content_for_summary**: Mínimo de caracteres para activar el resumen.
+- **filter_duplicates**: Evita guardar memorias idénticas o muy similares.
+- **similarity_threshold**: Sensibilidad para detectar duplicados (0.8 = 80% similar).
+- **auto_cleanup**: Activa limpieza periódica de memorias antiguas (default: False).
+- **max_memories_per_user**: Límite global de memorias por usuario (default: 100).
+
+### Preferencias de Usuario (UserValves)
+Estas opciones pueden ser configuradas individualmente por cada usuario:
+- **show_status**: Muestra indicadores de estado ("Guardando memoria...") en el chat.
+- **show_memory_count**: Indica cuántas memorias se inyectaron al inicio del chat.
+- **show_save_confirmation**: Muestra un mensaje de confirmación cuando se guarda una memoria.
+- **private_mode**: Si está activo, el sistema no guardará nada de lo que hables.
+- **custom_memory_prefix**: Texto que se añadirá al principio de cada memoria nueva.
+- **notify_on_error**: Muestra alertas si ocurre un error en el sistema.
 
 ## AI Compatibility
 
@@ -63,17 +104,17 @@ debug_mode: bool = False                # Detailed logging
 ## Project Structure
 
 ```text
-├── src/
-│   └── memoria_persistente_auto_memory_saver_enhanced.py
-├── docs/
-│   ├── CHANGELOG.md
-│   ├── ARCHITECTURE.md
-│   └── release_notes_v*.md
-├── README.md
-└── requirements.txt
+ src/
+    memoria_persistente_auto_memory_saver_enhanced.py
+ docs/
+    CHANGELOG.md
+    ARCHITECTURE.md
+    release_notes_v*.md
+ README.md
+ requirements.txt
+```
 
 ## Credits
-
 
 - **Enhanced by**: Pedro Luis Cuevas Villarrubia ([@AsturWebs](https://github.com/AsturWebs))
 - **Original concept**: [@linbanana](https://github.com/linbanana)
