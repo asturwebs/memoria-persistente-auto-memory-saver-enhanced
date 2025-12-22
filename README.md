@@ -65,6 +65,7 @@ El sistema es altamente configurable a través de **Valves**. Puedes ajustar est
 
 ### Sistema y Comportamiento (Valves Globales)
 - **enabled**: Activa o desactiva todo el sistema de memoria.
+- **enable_memory_commands**: Activa/desactiva el uso de comandos (slash commands) en el chat.
 - **debug_mode**: Activa logs detallados para depuración.
 - **enable_cache**: Usa caché en memoria para mejorar el rendimiento (recomendado).
 - **cache_ttl_minutes**: Tiempo de vida del caché en minutos (default: 60).
