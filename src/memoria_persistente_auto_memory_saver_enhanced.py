@@ -90,7 +90,7 @@ linbanana 修改：
 
 
 __author__ = "AsturWebs"
-__version__ = "2.6.2"
+__version__ = "2.6.4"
 __license__ = "MIT"
 
 # Logging configuration
@@ -363,6 +363,25 @@ class Filter:
             description="Maximum number of memories to inject per conversation | 每次對話注入的最大記憶數量",
             ge=1,
             le=20,
+        )
+
+        max_injection_chars: int = Field(
+            default=3500,
+            description="Maximum total characters of injected memories (hard cap) | 注入記憶的最大總字元數（硬上限）",
+            ge=500,
+            le=50000,
+        )
+
+        max_memories_to_scan: int = Field(
+            default=300,
+            description="Maximum memories to scan from DB when selecting relevant/recent memories | 選取記憶時最多掃描的記憶數量",
+            ge=20,
+            le=5000,
+        )
+
+        skip_injection_for_casual: bool = Field(
+            default=True,
+            description="Skip memory injection for simple greetings/casual turns to save tokens | 對簡單招呼/閒聊跳過注入以節省 tokens",
         )
 
         # Saving configuration | 儲存配置
@@ -774,7 +793,7 @@ class Filter:
 
             # Get raw memories (EXPLICITLY ordered by descending date) | 取得原始記憶（明確按降序日期排序）
             raw_memories = await self.get_raw_existing_memories(
-                user_id, order_by="created_at DESC"
+                user_id, order_by="created_at DESC", limit=self.valves.max_memories_to_scan
             )
             if not raw_memories:
                 logger.debug("[MEMORY-DEBUG] ⚠️ No memories found for user")
@@ -905,6 +924,73 @@ class Filter:
             )
 
         return min(final_score, 1.0)
+
+    def _is_casual_turn(self, user_text: str) -> bool:
+        if not user_text or not isinstance(user_text, str):
+            return False
+
+        text = user_text.strip()
+        if not text:
+            return False
+
+        casual_patterns = [
+            r'^(hi|hello|hey|hola|你好|嗨|buenas|buenos días|good morning)\b',
+            r'\b(thank|thanks|gracias|謝謝|谢谢)\b',
+            r'^(ok|okay|sure|yes|no|sí|si|vale|好|是|不)\s*$',
+            r'^hola\s*(socia?|amigo|compañero)',
+            r'(cómo estás|how are you|qué tal)',
+        ]
+
+        if any(re.search(p, text, re.IGNORECASE) for p in casual_patterns) and len(text) < 50:
+            return True
+
+        return False
+
+    def _strip_external_memory_system_messages(self, messages: List[dict]) -> List[dict]:
+        if not messages or not isinstance(messages, list):
+            return messages
+
+        removed = 0
+        cleaned: List[dict] = []
+
+        max_total_chars = int(getattr(self.valves, "max_injection_chars", 3500))
+        if max_total_chars < 500:
+            max_total_chars = 500
+
+        for m in messages:
+            if not isinstance(m, dict):
+                cleaned.append(m)
+                continue
+
+            role = m.get("role")
+            content = m.get("content")
+
+            if role != "system" or not isinstance(content, str):
+                cleaned.append(m)
+                continue
+
+            text = content
+
+            # High-confidence signatures of external memory dump
+            if re.search(r"Retrieving\s+stored\s+memories\b", text, re.IGNORECASE):
+                removed += 1
+                continue
+
+            if re.search(r"\b\d+\s+memories\s+loaded\b", text, re.IGNORECASE):
+                removed += 1
+                continue
+
+            # Safety: extremely large 'memory-ish' system message
+            if len(text) > max_total_chars * 3 and re.search(r"\bmemory|memories\b", text, re.IGNORECASE):
+                removed += 1
+                continue
+
+            cleaned.append(m)
+
+        if removed and self.valves.debug_mode:
+            logger.warning(f"[INLET] Stripped {removed} external memory system message(s) to reduce tokens")
+
+        return cleaned
 
     def _calculate_phrase_similarity(self, text1: str, text2: str) -> float:
         """
@@ -1375,8 +1461,37 @@ class Filter:
                     f"{memory_prefix}\n[Memories relevant to current context]\n"
                 )
 
+            max_total_chars = int(getattr(self.valves, "max_injection_chars", 3500))
+            if max_total_chars < 500:
+                max_total_chars = 500
+
+            header_budget = len(context_header)
+            remaining_budget = max_total_chars - header_budget
+            if remaining_budget < 200:
+                return
+
+            candidate_memories = memories[: self.valves.max_memories_to_inject]
+            per_item_cap = max(200, remaining_budget // max(1, len(candidate_memories)))
+
+            selected_memories: List[str] = []
+            used = 0
+            for mem in candidate_memories:
+                mem_text = str(mem)
+                if len(mem_text) > per_item_cap:
+                    mem_text = mem_text[:per_item_cap] + "..."
+
+                add_len = len(mem_text) + 1
+                if used + add_len > remaining_budget:
+                    break
+
+                selected_memories.append(mem_text)
+                used += add_len
+
+            if not selected_memories:
+                return
+
             # Create context message | 建立上下文訊息
-            context_string = context_header + "\n".join(memories)
+            context_string = context_header + "\n".join(selected_memories)
             system_msg = {"role": "system", "content": context_string}
 
             # Insert at the beginning of the conversation
@@ -1391,7 +1506,7 @@ class Filter:
             ):
                 # Extract IDs from memories for better feedback
                 memory_ids = []
-                for mem in memories:
+                for mem in selected_memories:
                     if hasattr(mem, "id"):
                         memory_ids.append(f"ID:{mem.id}")
                     elif isinstance(mem, str) and "Id:" in mem:
@@ -1406,7 +1521,7 @@ class Filter:
                     ids_text += f" (+{len(memory_ids)-5} más)"
 
                 memory_type = "recent" if is_first_message else "relevant"
-                description = f"📘 {len(memories)} {memory_type} memories loaded (AMSE v{__version__})"
+                description = f"📘 {len(selected_memories)} {memory_type} memories loaded (AMSE v{__version__})"
                 if memory_ids:
                     description += f": [{ids_text}]"
 
@@ -1423,7 +1538,7 @@ class Filter:
             if self.valves.debug_mode:
                 memory_type = "recent" if is_first_message else "relevant"
                 logger.info(
-                    f"Injected {len(memories)} {memory_type} memories for user {user_id}"
+                    f"Injected {len(selected_memories)} {memory_type} memories for user {user_id}"
                 )
                 logger.debug(
                     f"Injected context (first 300 chars): {context_string[:300]}..."
@@ -1517,6 +1632,9 @@ class Filter:
         try:
             user_id = __user__["id"]
             messages = body.get("messages", [])
+            if isinstance(messages, list):
+                messages = self._strip_external_memory_system_messages(messages)
+                body["messages"] = messages
 
             logger.debug(f"[INLET] Executing for user: {user_id}")
 
@@ -1626,6 +1744,19 @@ class Filter:
 
             # STEP 2: Get memories according to strategy
             memories_to_inject = []
+
+            user_messages_for_skip = [
+                msg.get("content", "")
+                for msg in messages
+                if isinstance(msg, dict) and msg.get("role") == "user"
+            ]
+            last_user_text = str(user_messages_for_skip[-1]) if user_messages_for_skip else ""
+
+            if (
+                getattr(self.valves, "skip_injection_for_casual", True)
+                and self._is_casual_turn(last_user_text)
+            ):
+                return body
 
             if is_first_message:
                 # STRATEGY 1: First message - Inject most recent memories
