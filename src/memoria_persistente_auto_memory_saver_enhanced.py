@@ -90,7 +90,7 @@ linbanana 修改：
 
 
 __author__ = "AsturWebs"
-__version__ = "2.6.0"
+__version__ = "2.6.1"
 __license__ = "MIT"
 
 # Logging configuration
@@ -526,6 +526,64 @@ class Filter:
             "Memory filter initialized with cache | 記憶過濾器已初始化並帶有快取"
         )
 
+    def _coerce_user_valves(self, raw_user_valves: Any) -> Any:
+        if raw_user_valves is None:
+            return self.UserValves()
+
+        if isinstance(raw_user_valves, dict):
+            try:
+                allowed_keys = set(getattr(self.UserValves, "__fields__", {}).keys())
+                filtered = (
+                    {k: v for k, v in raw_user_valves.items() if k in allowed_keys}
+                    if allowed_keys
+                    else {}
+                )
+                return self.UserValves(**filtered)
+            except Exception:
+                return self.UserValves()
+
+        return raw_user_valves
+
+    def _get_user_display_name(self, __user__: Any, user: Any) -> str:
+        candidate = None
+
+        if isinstance(__user__, dict):
+            candidate = (
+                __user__.get("name")
+                or __user__.get("username")
+                or __user__.get("display_name")
+                or __user__.get("email")
+            )
+
+        if not candidate and user is not None:
+            candidate = (
+                getattr(user, "name", None)
+                or getattr(user, "username", None)
+                or getattr(user, "display_name", None)
+                or getattr(user, "email", None)
+            )
+
+        if isinstance(candidate, str) and "@" in candidate:
+            candidate = candidate.split("@", 1)[0]
+
+        return (
+            candidate.strip()
+            if isinstance(candidate, str) and candidate.strip()
+            else "Usuario"
+        )
+
+    def _get_user_id_value(self, user: Any, fallback_user_id: str) -> str:
+        candidate = None
+        if user is not None:
+            candidate = getattr(user, "id", None)
+            if candidate is None and isinstance(user, dict):
+                candidate = user.get("id")
+
+        if isinstance(candidate, str) and candidate.strip():
+            return candidate.strip()
+
+        return fallback_user_id
+
     # === 🔒 SECURITY AND VALIDATION FUNCTIONS | 安全性和驗證功能 ===
 
     def _sanitize_input(self, input_text: str, max_length: int = 1000) -> str:
@@ -925,7 +983,11 @@ class Filter:
         return min(final_score, 1.0)
 
     async def _summarize_conversation(
-        self, user_content: str, assistant_content: str, __request__=None
+        self,
+        user_content: str,
+        assistant_content: str,
+        __request__=None,
+        user_display_name: str = "Usuario",
     ) -> str:
         """
         v2.6.0: Summarizes conversation before saving using LLM.
@@ -942,7 +1004,11 @@ class Filter:
         Returns:
             str: Summarized or original content | 摘要或原始內容
         """
-        original_content = f"User: {user_content}\n\nAssistant: {assistant_content}"
+        # Keep a consistent narrative fallback (avoid raw Q/A format)
+        original_content = (
+            f"[{user_display_name}] me dijo: {user_content}\n"
+            f"Yo respondí: {assistant_content}"
+        )
 
         # Skip if summarization is disabled or content is too short
         if not self.valves.enable_smart_summarization:
@@ -956,7 +1022,11 @@ class Filter:
         try:
             # Create a simple extractive summary (no external LLM call needed)
             # This extracts key sentences and facts without API dependency
-            summary = self._extract_key_information(user_content, assistant_content)
+            summary = self._extract_key_information(
+                user_content,
+                assistant_content,
+                user_display_name=user_display_name,
+            )
 
             if summary and summary.upper() != "SKIP" and len(summary) > 10:
                 if self.valves.debug_mode:
@@ -973,7 +1043,12 @@ class Filter:
             logger.error(f"Error in summarization: {e}")
             return original_content
 
-    def _extract_key_information(self, user_content: str, assistant_content: str) -> str:
+    def _extract_key_information(
+        self,
+        user_content: str,
+        assistant_content: str,
+        user_display_name: str = "Usuario",
+    ) -> str:
         """
         v2.6.0: Extracts key facts, decisions, and preferences from conversation.
         Uses heuristic-based extraction without external API calls.
@@ -1031,6 +1106,22 @@ class Filter:
                 # User message is a greeting, skip regardless of response length
                 return "SKIP"
 
+        max_total_len = 2000
+        try:
+            max_total_len = int(getattr(self.valves, "max_response_length", 2000))
+        except Exception:
+            max_total_len = 2000
+
+        if max_total_len < 300:
+            max_total_len = 300
+        if max_total_len > 2000:
+            max_total_len = 2000
+
+        max_user_key_len = min(400, max_total_len // 3)
+        max_assistant_len = min(1500, max_total_len - 120 - max_user_key_len)
+        if max_assistant_len < 300:
+            max_assistant_len = 300
+
         # Extract key sentences (first sentence of user + key part of assistant)
         user_key = user_content.split('.')[0].strip() if '.' in user_content else user_content.strip()
 
@@ -1056,13 +1147,17 @@ class Filter:
         # Build summary
         types_str = ", ".join(sorted(detected_types)) if detected_types else "general"
         # v2.6.0 FIX: Increase fallback limit from 150 to 350 for useful content
-        assistant_summary = ". ".join(assistant_key_parts[:3]) if assistant_key_parts else assistant_content[:500]
+        assistant_summary = (
+            ". ".join(assistant_key_parts[:3])
+            if assistant_key_parts
+            else assistant_content[:max_assistant_len]
+        )
 
         # v2.6.0 FIX: Increase truncation limits for useful content
-        if len(user_key) > 200:
-            user_key = user_key[:200] + "..."
-        if len(assistant_summary) > 600:
-            assistant_summary = assistant_summary[:600] + "..."
+        if len(user_key) > max_user_key_len:
+            user_key = user_key[:max_user_key_len] + "..."
+        if len(assistant_summary) > max_assistant_len:
+            assistant_summary = assistant_summary[:max_assistant_len] + "..."
 
         # Skip if the summary would be too short/useless
         if len(assistant_summary) < 30:
@@ -1072,22 +1167,21 @@ class Filter:
         # Determine action verb based on detected types
         if 'instruction' in detected_types:
             user_action = "preguntó cómo"
-            assistant_action = "explicó"
         elif 'preference' in detected_types:
             user_action = "expresó preferencia por"
-            assistant_action = "tomó nota de"
         elif 'fact' in detected_types:
             user_action = "preguntó sobre"
-            assistant_action = "informó que"
         elif 'technical' in detected_types:
             user_action = "consultó sobre"
-            assistant_action = "proporcionó detalles técnicos:"
         else:
             user_action = "mencionó"
-            assistant_action = "respondió:"
 
-        # Build narrative summary
-        summary = f"[{types_str}] Usuario {user_action} {user_key}. Asistente {assistant_action} {assistant_summary}"
+        # Build narrative summary in FIRST PERSON (assistant perspective)
+        # Example: "[technical] Pedro consultó sobre X. Le respondí Y..."
+        summary = (
+            f"[{types_str}] {user_display_name} {user_action} {user_key}. "
+            f"Le respondí: {assistant_summary}"
+        )
 
         return summary
 
@@ -1298,7 +1392,7 @@ class Filter:
                         memory_ids.append(f"ID:{mem.id}")
                     elif isinstance(mem, str) and "Id:" in mem:
                         # Extract ID from format "[Id: xxx, Content: ...]"
-                        match = re.search(r"Id:\s*(\w+)", mem)
+                        match = re.search(r"Id:\s*([^\s,\]]+)", mem)
                         if match:
                             memory_ids.append(f"ID:{match.group(1)}")
 
@@ -1308,7 +1402,7 @@ class Filter:
                     ids_text += f" (+{len(memory_ids)-5} más)"
 
                 memory_type = "recent" if is_first_message else "relevant"
-                description = f"📘 {len(memories)} {memory_type} memories loaded"
+                description = f"📘 {len(memories)} {memory_type} memories loaded (AMSE v{__version__})"
                 if memory_ids:
                     description += f": [{ids_text}]"
 
@@ -1404,7 +1498,7 @@ class Filter:
             return body
 
         # Check user private mode
-        user_valves = __user__.get("valves")
+        user_valves = self._coerce_user_valves(__user__.get("valves"))
         if (
             user_valves
             and hasattr(user_valves, "private_mode")
@@ -1451,9 +1545,7 @@ class Filter:
                                 if not user:
                                     logger.error(f"[SLASH-COMMANDS] User not found: {user_id}")
                                 else:
-                                    user_valves = (
-                                        __user__.get("valves") or self.UserValves()
-                                    )
+                                    user_valves = self._coerce_user_valves(__user__.get("valves"))
 
                                     # Process the command | 處理命令
                                     command_response = (
@@ -1682,7 +1774,7 @@ class Filter:
             return body
 
         # Check user private mode
-        user_valves = __user__.get("valves")
+        user_valves = self._coerce_user_valves(__user__.get("valves"))
         if (
             user_valves
             and hasattr(user_valves, "private_mode")
@@ -1695,15 +1787,17 @@ class Filter:
         try:
 
             try:
-                user = Users.get_user_by_id(__user__["id"])
+                user_id_value = __user__.get("id")
+                if not isinstance(user_id_value, str) or not user_id_value.strip():
+                    logger.error("Invalid user id in __user__")
+                    return body
+
+                user = Users.get_user_by_id(user_id_value)
                 if not user:
                     logger.error(f"Could not find user with ID: {__user__['id']}")
                     return body
 
-                user_valves = __user__.get("valves")
-                if not user_valves:
-                    user_valves = self.UserValves()
-                    logger.debug("Using default configurations for user")
+                user_valves = self._coerce_user_valves(__user__.get("valves"))
             except Exception as e:
                 logger.error(f"Error getting user information: {e}")
                 return body
@@ -1809,8 +1903,12 @@ class Filter:
                         return body
 
                 # v2.6.0: Smart Summarization - extract key information before saving
+                user_display_name = self._get_user_display_name(__user__, user)
                 message_content = await self._summarize_conversation(
-                    user_content, assistant_content, __request__
+                    user_content,
+                    assistant_content,
+                    __request__,
+                    user_display_name=user_display_name,
                 )
 
                 # If summarization returns empty string, skip saving (content not important)
@@ -1847,9 +1945,11 @@ class Filter:
                 )
 
             # v2.6.0: Improved duplicate filtering with normalized hash
+            effective_user_id = self._get_user_id_value(user, user_id_value)
+
             if self.valves.filter_duplicates:
                 try:
-                    existing_memories = await self.get_processed_memory_strings(user.id)
+                    existing_memories = await self.get_processed_memory_strings(effective_user_id)
                     # Normalize content for comparison (remove punctuation, lowercase, collapse spaces)
                     def normalize_for_hash(text: str) -> str:
                         normalized = re.sub(r'[^\w\s]', '', text.lower())
@@ -1880,36 +1980,52 @@ class Filter:
                     {
                         "type": "status",
                         "data": {
-                            "description": "Auto saving to memory",
+                            "description": f"Auto saving to memory (AMSE v{__version__})",
                             "done": False,
                         },
                     }
                 )
 
-            await add_memory(
-                request=__request__,
-                form_data=AddMemoryForm(content=message_content),
-                user=user,
-            )
-
-            # Get the ID of the saved memory for better feedback
             saved_memory_id = None
             try:
-                saved_memories = await self.get_processed_memory_strings(user.id)
-                if saved_memories:
-                    # Extract ID from the most recent memory
-                    last_memory = saved_memories[-1]
-                    match = re.search(r"Id:\s*(\w+)", str(last_memory))
-                    if match:
-                        saved_memory_id = match.group(1)
-            except Exception as e:
-                if self.valves.debug_mode:
-                    logger.debug(f"Could not extract saved memory ID: {e}")
+                can_use_openwebui_add = (
+                    __request__ is not None
+                    and hasattr(__request__, "app")
+                    and hasattr(getattr(__request__, "app", None), "state")
+                    and hasattr(getattr(getattr(__request__, "app", None), "state", None), "EMBEDDING_FUNCTION")
+                )
 
-            if user_valves and hasattr(user_valves, "show_status") and user_valves.show_status and __event_emitter__:
-                description = f"✅ Memory saved"
-                if saved_memory_id:
-                    description += f": ID:{saved_memory_id}"
+                if can_use_openwebui_add:
+                    saved_memory = await add_memory(
+                        request=__request__,
+                        form_data=AddMemoryForm(content=message_content),
+                        user=user,
+                    )
+                    saved_memory_id = getattr(saved_memory, "id", None)
+                    if saved_memory_id is None and isinstance(saved_memory, dict):
+                        saved_memory_id = saved_memory.get("id")
+                else:
+                    raise RuntimeError("OpenWebUI request/app embedding not available")
+            except Exception as add_err:
+                try:
+                    if hasattr(Memories, "insert_new_memory"):
+                        saved_memory = Memories.insert_new_memory(effective_user_id, message_content)
+                        saved_memory_id = getattr(saved_memory, "id", None)
+                        if saved_memory_id is None and isinstance(saved_memory, dict):
+                            saved_memory_id = saved_memory.get("id")
+                    else:
+                        raise add_err
+                except Exception as fallback_err:
+                    raise fallback_err
+
+            if (
+                user_valves
+                and hasattr(user_valves, "show_status")
+                and user_valves.show_status
+                and __event_emitter__
+            ):
+                description = f"✅ Memory saved (AMSE v{__version__})"
+                description += f": ID:{saved_memory_id if saved_memory_id is not None else 'unknown'}"
 
                 await __event_emitter__(
                     {
@@ -1921,12 +2037,16 @@ class Filter:
                     }
                 )
 
-            # Additional memory content printing
-            await self.get_processed_memory_strings(user.id)
+            if self.valves.debug_mode:
+                await self.get_processed_memory_strings(effective_user_id)
 
         except Exception as e:
             logger.error(f"Error auto-saving memory: {str(e)}")
-            if __event_emitter__:
+            if __event_emitter__ and (
+                user_valves is None
+                or not hasattr(user_valves, "notify_on_error")
+                or user_valves.notify_on_error
+            ):
                 await __event_emitter__(
                     {
                         "type": "status",
