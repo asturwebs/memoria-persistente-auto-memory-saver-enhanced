@@ -1019,12 +1019,16 @@ class Filter:
         if not detected_types:
             # Check if it's just casual conversation
             casual_patterns = [
-                r'^(hi|hello|hey|hola|你好|嗨)\b',
+                r'^(hi|hello|hey|hola|你好|嗨|buenas|buenos días|good morning)\b',
                 r'\b(thank|thanks|gracias|謝謝|谢谢)\b',
                 r'^(ok|okay|sure|yes|no|sí|si|好|是|不)\s*$',
+                r'^hola\s*(socia?|amigo|compañero)',  # "Hola Socia/Socio"
+                r'(cómo estás|how are you|qué tal)',  # Greetings
             ]
             is_casual = any(re.search(p, combined_text, re.IGNORECASE) for p in casual_patterns)
-            if is_casual and len(combined_text) < 200:
+            # v2.6.0 FIX: Better casual detection - skip greetings even with long responses
+            if is_casual and len(user_content) < 50:
+                # User message is a greeting, skip regardless of response length
                 return "SKIP"
 
         # Extract key sentences (first sentence of user + key part of assistant)
@@ -1051,15 +1055,21 @@ class Filter:
 
         # Build summary
         types_str = ", ".join(sorted(detected_types)) if detected_types else "general"
-        assistant_summary = ". ".join(assistant_key_parts[:2]) if assistant_key_parts else assistant_content[:150]
+        # v2.6.0 FIX: Increase fallback limit from 150 to 350 for useful content
+        assistant_summary = ". ".join(assistant_key_parts[:3]) if assistant_key_parts else assistant_content[:350]
 
-        # Truncate if still too long
-        if len(user_key) > 100:
-            user_key = user_key[:100] + "..."
-        if len(assistant_summary) > 200:
-            assistant_summary = assistant_summary[:200] + "..."
+        # v2.6.0 FIX: Increase truncation limits for useful content
+        # Previous limits (100/200) were too short and cut important info
+        if len(user_key) > 150:
+            user_key = user_key[:150] + "..."
+        if len(assistant_summary) > 400:
+            assistant_summary = assistant_summary[:400] + "..."
 
-        summary = f"[{types_str}] Q: {user_key} | A: {assistant_summary}"
+        # Skip if the summary would be too short/useless
+        if len(assistant_summary) < 30:
+            return "SKIP"
+
+        summary = f"[{types_str}] P: {user_key} | R: {assistant_summary}"
 
         return summary
 
