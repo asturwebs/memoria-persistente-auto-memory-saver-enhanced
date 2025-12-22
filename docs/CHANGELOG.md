@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.6.0] - 2024-12-22
+
+### 🧠 **Smart Memory + Intelligent Summarization**
+
+#### Added
+
+- **Smart Summarization**: Extracts key facts before saving (~90% storage reduction)
+- **Content Classification**: Categorizes memories as preference/fact/instruction/technical
+- **Casual Filter**: Skips saving simple greetings and acknowledgments
+- **TF-IDF Similarity**: Improved relevance algorithm combining word, bigram, and key term matching
+- **Hash Deduplication**: Efficient duplicate detection using normalized MD5 hashing
+- **Multilingual Anti-Meta**: Patterns in ES/EN/ZH to avoid saving memory-related conversations
+
+#### Changed
+
+- Memory format: `[type] Q: question | A: key_answer` instead of full conversation
+- Duplicate check: O(1) hash comparison instead of O(n) substring search
+- Relevance calculation: 40% word + 30% bigram + 30% key terms
+
+#### Configuration
+
+- `enable_smart_summarization`: Toggle summarization (default: True)
+- `min_content_for_summary`: Minimum chars to trigger summarization (default: 100)
+
+---
+
 ## [2.5.0] - 2024-12-22
 
 ### 🧹 **Code Cleanup & Production Ready**

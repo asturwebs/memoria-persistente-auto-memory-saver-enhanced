@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Auto Memory Saver Enhanced (Persistent Memory) v2.6.0
+Auto Memory Saver Enhanced (Persistent Memory) v2.5.0
 =====================================================
 
-🚀 SMART MEMORY: Intelligent Summarization + Semantic Relevance
-A powerful extension for OpenWebUI that automatically summarizes conversations
-before saving, stores only key information, and retrieves memories based on
-semantic relevance.
+🚀 HISTORICAL BREAKTHROUGH: Universal AI Behavior Control + 30 Models Tested
+A powerful extension for OpenWebUI with the most exhaustive compatibility testing
+ever performed (30 AI models evaluated). Persistent automatic memory works
+universally, and slash commands work perfectly on 11 excellent models.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub: https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
-Version: 2.6.0 - Smart Memory + Intelligent Summarization
+Version: 2.5.0 - Code Cleanup + Production Ready
 License: MIT
 Based on: @linbanana Auto Memory Saver original
 
-🎯 NEW IN v2.6.0:
-✅ Smart Summarization: LLM summarizes conversations before saving (~90% smaller)
-✅ Semantic Relevance: Improved TF-IDF algorithm for memory retrieval
-✅ Hash Deduplication: Efficient duplicate detection with normalized hashing
-✅ Multilingual Filters: Anti-meta patterns in ES/EN/ZH
+🎯 NEW IN v2.5.0:
+✅ Code Cleanup: Removed simulated commands, production-ready code only
+✅ Professional Logging: Replaced print() with logger.debug()
+✅ Optimized Imports: Consolidated at file top
+✅ Fixed Documentation: Corrected docstrings and version consistency
 
-🎯 DUAL FUNCTIONALITY v2.6.0:
+🎯 DUAL FUNCTIONALITY v2.4.0:
 ✅ Automatic Persistent Memory: WORKS ON ALL 30 TESTED MODELS
 ✅ JSON Slash Commands: Works perfectly on 11 excellent models + FILTERED (no save)
 
@@ -90,7 +90,7 @@ linbanana 修改：
 
 
 __author__ = "AsturWebs"
-__version__ = "2.6.0"
+__version__ = "2.5.0"
 __license__ = "MIT"
 
 # Logging configuration
@@ -438,24 +438,6 @@ class Filter:
         debug_mode: bool = Field(
             default=False,
             description="Enables detailed logging for debugging | 啟用詳細日誌以供除錯",
-        )
-
-        # v2.6.0: Smart Memory Configuration | 智能記憶配置
-        enable_smart_summarization: bool = Field(
-            default=True,
-            description="Summarize conversations before saving (more efficient) | 儲存前摘要對話（更有效率）",
-        )
-
-        summarization_prompt: str = Field(
-            default="Extract ONLY the key facts, decisions, preferences, or learnings from this conversation. Be extremely concise (max 200 chars). Output format: 'Key: [topic] | Facts: [facts]'. If nothing important, respond with 'SKIP'.",
-            description="Prompt used for LLM summarization | 用於 LLM 摘要的提示",
-        )
-
-        min_content_for_summary: int = Field(
-            default=100,
-            description="Minimum content length to trigger summarization | 觸發摘要的最小內容長度",
-            ge=50,
-            le=500,
         )
 
     class UserValves(BaseModel):
@@ -874,194 +856,6 @@ class Filter:
         union = bigrams1.union(bigrams2)
 
         return len(intersection) / len(union) if union else 0.0
-
-    def _calculate_content_similarity(self, text1: str, text2: str) -> float:
-        """
-        v2.6.0: Improved TF-IDF-like similarity calculation.
-        Combines word overlap, bigram similarity, and key term matching.
-
-        v2.6.0：改進的 TF-IDF 風格相似度計算。
-        結合單詞重疊、二元組相似度和關鍵詞匹配。
-
-        Args:
-            text1: First text | 第一個文本
-            text2: Second text | 第二個文本
-
-        Returns:
-            float: Similarity score between 0.0 and 1.0 | 0.0 和 1.0 之間的相似度分數
-        """
-        if not text1 or not text2:
-            return 0.0
-
-        # Normalize texts
-        text1_lower = text1.lower()
-        text2_lower = text2.lower()
-
-        # 1. Word-level Jaccard similarity (40%)
-        words1 = set(re.findall(r'\b\w{3,}\b', text1_lower))
-        words2 = set(re.findall(r'\b\w{3,}\b', text2_lower))
-
-        if not words1 or not words2:
-            return 0.0
-
-        word_intersection = words1.intersection(words2)
-        word_union = words1.union(words2)
-        word_similarity = len(word_intersection) / len(word_union) if word_union else 0.0
-
-        # 2. Bigram similarity (30%)
-        bigram_similarity = self._calculate_phrase_similarity(text1_lower, text2_lower)
-
-        # 3. Key term presence (30%) - important nouns/verbs
-        key_terms = [w for w in words1 if len(w) >= 5]  # Longer words are usually more important
-        if key_terms:
-            key_matches = sum(1 for term in key_terms if term in text2_lower)
-            key_similarity = key_matches / len(key_terms)
-        else:
-            key_similarity = word_similarity
-
-        # Combined score
-        final_score = (word_similarity * 0.4) + (bigram_similarity * 0.3) + (key_similarity * 0.3)
-
-        return min(final_score, 1.0)
-
-    async def _summarize_conversation(
-        self, user_content: str, assistant_content: str, __request__=None
-    ) -> str:
-        """
-        v2.6.0: Summarizes conversation before saving using LLM.
-        Returns summarized content or original if summarization fails/disabled.
-
-        v2.6.0：使用 LLM 在儲存前摘要對話。
-        返回摘要內容，如果摘要失敗/禁用則返回原始內容。
-
-        Args:
-            user_content: User's message | 使用者訊息
-            assistant_content: Assistant's response | 助理回應
-            __request__: FastAPI request for potential LLM calls | FastAPI 請求用於潛在的 LLM 調用
-
-        Returns:
-            str: Summarized or original content | 摘要或原始內容
-        """
-        original_content = f"User: {user_content}\n\nAssistant: {assistant_content}"
-
-        # Skip if summarization is disabled or content is too short
-        if not self.valves.enable_smart_summarization:
-            return original_content
-
-        if len(original_content) < self.valves.min_content_for_summary:
-            if self.valves.debug_mode:
-                logger.debug(f"Content too short for summarization ({len(original_content)} chars)")
-            return original_content
-
-        try:
-            # Create a simple extractive summary (no external LLM call needed)
-            # This extracts key sentences and facts without API dependency
-            summary = self._extract_key_information(user_content, assistant_content)
-
-            if summary and summary.upper() != "SKIP" and len(summary) > 10:
-                if self.valves.debug_mode:
-                    logger.debug(f"Summarized: {len(original_content)} → {len(summary)} chars ({100-len(summary)*100//len(original_content)}% reduction)")
-                return summary
-            elif summary and summary.upper() == "SKIP":
-                if self.valves.debug_mode:
-                    logger.debug("Content deemed not important enough to save")
-                return ""  # Signal to skip saving
-            else:
-                return original_content
-
-        except Exception as e:
-            logger.error(f"Error in summarization: {e}")
-            return original_content
-
-    def _extract_key_information(self, user_content: str, assistant_content: str) -> str:
-        """
-        v2.6.0: Extracts key facts, decisions, and preferences from conversation.
-        Uses heuristic-based extraction without external API calls.
-
-        v2.6.0：從對話中提取關鍵事實、決定和偏好。
-        使用基於啟發式的提取，無需外部 API 調用。
-
-        Args:
-            user_content: User's message | 使用者訊息
-            assistant_content: Assistant's response | 助理回應
-
-        Returns:
-            str: Extracted key information or 'SKIP' if nothing important | 提取的關鍵資訊或如果沒有重要內容則為 'SKIP'
-        """
-        # Patterns indicating important information to keep
-        importance_patterns = [
-            # Preferences and decisions
-            (r'\b(prefer|like|want|need|choose|decide|always|never)\b', 'preference'),
-            (r'\b(prefiero|quiero|necesito|siempre|nunca|elijo)\b', 'preference'),
-            (r'\b(喜歡|喜欢|需要|總是|总是|從不|从不)\b', 'preference'),
-            # Facts and definitions
-            (r'\b(is|are|means|defined as|refers to)\b', 'fact'),
-            (r'\b(es|son|significa|se define como)\b', 'fact'),
-            (r'\b(是|意思是|定義為|定义为)\b', 'fact'),
-            # Instructions and how-to
-            (r'\b(how to|steps to|to do this|you can|you should)\b', 'instruction'),
-            (r'\b(cómo|pasos para|para hacer esto|puedes|debes)\b', 'instruction'),
-            (r'\b(如何|步驟|步骤|你可以|你應該|你应该)\b', 'instruction'),
-            # Technical/code related
-            (r'\b(code|function|class|api|config|setting|parameter)\b', 'technical'),
-            (r'\b(código|función|clase|configuración|parámetro)\b', 'technical'),
-            (r'\b(代碼|代码|函數|函数|類|类|配置|參數|参数)\b', 'technical'),
-        ]
-
-        combined_text = f"{user_content} {assistant_content}".lower()
-        detected_types = set()
-
-        for pattern, ptype in importance_patterns:
-            if re.search(pattern, combined_text, re.IGNORECASE):
-                detected_types.add(ptype)
-
-        # If no important patterns detected, skip saving
-        if not detected_types:
-            # Check if it's just casual conversation
-            casual_patterns = [
-                r'^(hi|hello|hey|hola|你好|嗨)\b',
-                r'\b(thank|thanks|gracias|謝謝|谢谢)\b',
-                r'^(ok|okay|sure|yes|no|sí|si|好|是|不)\s*$',
-            ]
-            is_casual = any(re.search(p, combined_text, re.IGNORECASE) for p in casual_patterns)
-            if is_casual and len(combined_text) < 200:
-                return "SKIP"
-
-        # Extract key sentences (first sentence of user + key part of assistant)
-        user_key = user_content.split('.')[0].strip() if '.' in user_content else user_content.strip()
-
-        # For assistant, try to get the most informative part
-        assistant_sentences = re.split(r'[.!?。！？]', assistant_content)
-        assistant_key_parts = []
-
-        for sentence in assistant_sentences[:3]:  # Check first 3 sentences
-            sentence = sentence.strip()
-            if len(sentence) > 20:  # Skip very short sentences
-                # Prioritize sentences with important patterns
-                has_importance = any(re.search(p, sentence, re.IGNORECASE) for p, _ in importance_patterns)
-                if has_importance:
-                    assistant_key_parts.append(sentence)
-
-        if not assistant_key_parts and assistant_sentences:
-            # Fallback to first substantial sentence
-            for s in assistant_sentences:
-                if len(s.strip()) > 30:
-                    assistant_key_parts.append(s.strip())
-                    break
-
-        # Build summary
-        types_str = ", ".join(sorted(detected_types)) if detected_types else "general"
-        assistant_summary = ". ".join(assistant_key_parts[:2]) if assistant_key_parts else assistant_content[:150]
-
-        # Truncate if still too long
-        if len(user_key) > 100:
-            user_key = user_key[:100] + "..."
-        if len(assistant_summary) > 200:
-            assistant_summary = assistant_summary[:200] + "..."
-
-        summary = f"[{types_str}] Q: {user_key} | A: {assistant_summary}"
-
-        return summary
 
     async def _get_relevant_memories(
         self, user_id: str, user_input: str, max_memories: int = 5
@@ -1722,54 +1516,37 @@ class Filter:
                     return body
 
                 # PRODUCTION FIX: DO NOT save conversations about memory (intelligent filter)
-                # v2.6.0: Multilingual patterns (ES/EN/ZH) | 多語言模式（西/英/中）
                 user_content_lower = user_content.lower()
 
-                # Patterns indicating conversation about memory/system - MULTILINGUAL
+                # Patterns indicating conversation about memory/system (Spanish patterns preserved for functionality)
+                # 表示關於記憶/系統對話的模式（為了功能保留西班牙文模式）
                 memory_conversation_patterns = [
-                    # ENGLISH patterns
-                    r"\b(show|display|list|view)\b.*\b(memor(y|ies))\b",
-                    r"\b(next|previous|page)\b.*\b(memor(y|ies))\b",
-                    r"\b(how many|count)\b.*\b(memor(y|ies))\b",
-                    r"\b(search|find|lookup)\b.*\b(memor(y|ies))\b",
-                    r"\b(delete|remove|clear|erase)\b.*\b(memor(y|ies))\b",
-                    r"\b(latest|recent|last)\b.*\b(memor(y|ies))\b",
-                    r"\bmemor(y|ies)\b.*\b(full|complete|entire)\b",
-                    # SPANISH patterns
-                    r"\b(mostrar|ver|enseñar|muestra|enséñame)\b.*\b(memoria|memorias)\b",
+                    r"\b(show|ver|enseñar|muestra|enséñame)\b.*\b(memoria|memorias)\b",
                     r"\b(página|pagina|siguiente|anterior|más|mas)\b.*\b(memoria|memorias)\b",
                     r"\b(cuántas|cuantas|cuántos|cuantos)\b.*\b(memoria|memorias)\b",
                     r"\bmemoria\b.*\b(completa|entera|total|íntegra|integra)\b",
-                    r"\b(buscar|búsqueda|busca)\b.*\b(memoria|memorias)\b",
+                    r"\b(search|búsqueda|busca)\b.*\b(memoria|memorias)\b",
                     r"\b(última|ultimo|reciente|nueva)\b.*\b(memoria|memorias)\b",
-                    r"\b(borrar|eliminar|limpiar)\b.*\b(memoria|memorias)\b",
-                    # CHINESE patterns (simplified + traditional)
-                    r"(顯示|显示|查看|列出).*(記憶|记忆|內存|内存)",
-                    r"(搜尋|搜索|查找).*(記憶|记忆)",
-                    r"(刪除|删除|清除|清空).*(記憶|记忆)",
-                    r"(最近|最新|上一個|上一个).*(記憶|记忆)",
-                    r"(多少|幾個|几个).*(記憶|记忆)",
+                    r"\b(borrar|eliminar|delete)\b.*\b(memoria|memorias)\b",
+                    r"\bmás reciente\b",
+                    r"\bno está completa\b",
+                    r"\bfalta.*\b(parte|asistente|respuesta)\b",
+                    r"\bpuedes.*\b(show|ver|enseñar)\b",
+                    r"\bquiero.*\b(ver|memoria|memorias)\b",
                 ]
 
                 for pattern in memory_conversation_patterns:
-                    if re.search(pattern, user_content_lower, re.IGNORECASE):
+                    if re.search(pattern, user_content_lower):
                         if self.valves.debug_mode:
                             logger.debug(
-                                f"Memory conversation detected (multilingual), NOT saving: {pattern}"
+                                f"Memory conversation detected, NOT saving: {pattern}"
                             )
                         return body
 
-                # v2.6.0: Smart Summarization - extract key information before saving
-                message_content = await self._summarize_conversation(
-                    user_content, assistant_content, __request__
+                # Conversational format
+                message_content = (
+                    f"User: {user_content}\n\nAssistant: {assistant_content}"
                 )
-
-                # If summarization returns empty string, skip saving (content not important)
-                if not message_content:
-                    if self.valves.debug_mode:
-                        logger.debug("Content not important enough to save (smart filter)")
-                    return body
-
             else:
                 # Fallback: only assistant response
                 message_content = last_assistant_message.get("content", "").strip()
@@ -1797,30 +1574,20 @@ class Filter:
                     message_content[: self.valves.max_response_length] + "..."
                 )
 
-            # v2.6.0: Improved duplicate filtering with normalized hash
+            # Check duplicate filtering if enabled
             if self.valves.filter_duplicates:
                 try:
                     existing_memories = await self.get_processed_memory_strings(user.id)
-                    # Normalize content for comparison (remove punctuation, lowercase, collapse spaces)
-                    def normalize_for_hash(text: str) -> str:
-                        normalized = re.sub(r'[^\w\s]', '', text.lower())
-                        normalized = re.sub(r'\s+', ' ', normalized).strip()
-                        return normalized
-
-                    new_hash = hashlib.md5(normalize_for_hash(message_content).encode()).hexdigest()
-
+                    # Simple duplicate verification (could be improved with similarity algorithms)
                     for existing_memory in existing_memories:
-                        existing_hash = hashlib.md5(normalize_for_hash(existing_memory).encode()).hexdigest()
-                        if new_hash == existing_hash:
+                        if (
+                            message_content.lower() in existing_memory.lower()
+                            or existing_memory.lower() in message_content.lower()
+                        ):
                             if self.valves.debug_mode:
-                                logger.debug("Exact duplicate detected (hash match), skipping save")
-                            return body
-
-                        # Also check semantic similarity with TF-IDF-like approach
-                        similarity = self._calculate_content_similarity(message_content, existing_memory)
-                        if similarity >= self.valves.similarity_threshold:
-                            if self.valves.debug_mode:
-                                logger.debug(f"Similar memory exists (similarity: {similarity:.2f}), skipping save")
+                                logger.debug(
+                                    "Similar memory already exists, skipping save"
+                                )
                             return body
                 except Exception as e:
                     if self.valves.debug_mode:
