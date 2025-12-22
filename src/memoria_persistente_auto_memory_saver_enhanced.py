@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Auto Memory Saver Enhanced (Persistent Memory) v2.6.4
+Auto Memory Saver Enhanced (Persistent Memory) v2.6.5
 =====================================================
 
 🚀 SMART MEMORY: Intelligent Summarization + Semantic Relevance
@@ -11,7 +11,7 @@ semantic relevance.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub: https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
-Version: 2.6.4 - Smart Memory + Intelligent Summarization
+Version: 2.6.5 - Smart Memory + Intelligent Summarization
 License: MIT
 Based on: @linbanana Auto Memory Saver original
 
@@ -90,7 +90,7 @@ linbanana 修改：
 
 
 __author__ = "AsturWebs"
-__version__ = "2.6.4"
+__version__ = "2.6.5"
 __license__ = "MIT"
 
 # Logging configuration
@@ -951,11 +951,26 @@ class Filter:
             return messages
 
         removed = 0
+        edited = 0
         cleaned: List[dict] = []
 
         max_total_chars = int(getattr(self.valves, "max_injection_chars", 3500))
         if max_total_chars < 500:
             max_total_chars = 500
+
+        line_only_patterns = [
+            r"^\s*Retrieving\s+stored\s+memories\.?\s*$",
+            r"^\s*\d+\s+memories\s+loaded\s*$",
+        ]
+
+        def strip_noise_lines(text: str) -> str:
+            lines = text.splitlines()
+            kept: List[str] = []
+            for ln in lines:
+                if any(re.match(p, ln, re.IGNORECASE) for p in line_only_patterns):
+                    continue
+                kept.append(ln)
+            return "\n".join(kept).strip()
 
         for m in messages:
             if not isinstance(m, dict):
@@ -965,11 +980,23 @@ class Filter:
             role = m.get("role")
             content = m.get("content")
 
-            if role != "system" or not isinstance(content, str):
+            if not isinstance(content, str):
                 cleaned.append(m)
                 continue
 
             text = content
+
+            # Remove noise lines even if they come as assistant/tool/user messages.
+            stripped = strip_noise_lines(text)
+            if stripped != text:
+                edited += 1
+                if not stripped:
+                    removed += 1
+                    continue
+                m2 = dict(m)
+                m2["content"] = stripped
+                cleaned.append(m2)
+                continue
 
             # High-confidence signatures of external memory dump
             if re.search(r"Retrieving\s+stored\s+memories\b", text, re.IGNORECASE):
@@ -989,6 +1016,9 @@ class Filter:
 
         if removed and self.valves.debug_mode:
             logger.warning(f"[INLET] Stripped {removed} external memory system message(s) to reduce tokens")
+
+        if edited and self.valves.debug_mode:
+            logger.warning(f"[INLET] Edited {edited} message(s) to remove external memory noise lines")
 
         return cleaned
 
@@ -1989,6 +2019,13 @@ class Filter:
                 for pattern in reasoning_patterns:
                     assistant_content = re.sub(pattern, '', assistant_content, flags=re.DOTALL | re.IGNORECASE)
                 assistant_content = assistant_content.strip()
+
+                # v2.6.5 FIX: Do not save casual conversations (greetings, simple acks)
+                # This prevents "Hola" -> "Hola, Pedro" from becoming a permanent memory.
+                if getattr(self.valves, "skip_injection_for_casual", True) and self._is_casual_turn(user_content):
+                    if self.valves.debug_mode:
+                        logger.debug("Casual conversation detected, skipping auto-save to keep DB clean")
+                    return body
 
                 # PRODUCTION FIX: Additional security - DO NOT save technical commands as memory
                 # NOTE: This filter is redundant with the flag but kept as safety net

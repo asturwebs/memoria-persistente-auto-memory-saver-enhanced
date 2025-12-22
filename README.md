@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![OpenWebUI](https://img.shields.io/badge/OpenWebUI-Compatible-green.svg)](https://github.com/open-webui/open-webui)
-[![Version](https://img.shields.io/badge/version-2.6.4-brightgreen.svg)](https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced)
+[![Version](https://img.shields.io/badge/version-2.6.5-brightgreen.svg)](https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced)
 
 **Filter for OpenWebUI** that automatically manages conversation memories. Injects relevant memories and saves conversations for future context.
 

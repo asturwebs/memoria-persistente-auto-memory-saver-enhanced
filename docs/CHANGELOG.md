@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.6.5] - 2025-12-22
+
+### 🧹 **Maintenance & UX Improvements**
+
+#### Fixed
+
+- **Casual Conversation Guardrails**: Applied `skip_injection_for_casual` logic to the *saving* mechanism (`outlet`) as well. Prevents trivial interactions (like "Hola Socia") from cluttering the database.
+
+#### Changed
+
+- **Version Bump**: Updated to v2.6.5.
+
 ## [2.6.4] - 2025-12-22
 
 ### 🚨 **Hotfix: Token Explosion Guardrails (Gemini/OpenWebUI)**
