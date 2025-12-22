@@ -1826,7 +1826,7 @@ class Filter:
                     if self.valves.debug_mode:
                         logger.error(f"Error checking duplicates: {e}")
 
-            if user_valves.show_status and __event_emitter__:
+            if user_valves and hasattr(user_valves, "show_status") and user_valves.show_status and __event_emitter__:
                 await __event_emitter__(
                     {
                         "type": "status",
@@ -1857,7 +1857,7 @@ class Filter:
                 if self.valves.debug_mode:
                     logger.debug(f"Could not extract saved memory ID: {e}")
 
-            if user_valves.show_status and __event_emitter__:
+            if user_valves and hasattr(user_valves, "show_status") and user_valves.show_status and __event_emitter__:
                 description = f"✅ Memory saved"
                 if saved_memory_id:
                     description += f": ID:{saved_memory_id}"
