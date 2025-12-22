@@ -1437,20 +1437,19 @@ class Filter:
                                     if command_response:
                                         logger.debug("[SLASH-COMMANDS] Command processed successfully")
 
-                                        # Replace user message with command response
-                                        body["messages"] = messages[:-1] + [
-                                            {
-                                                "role": "assistant",
-                                                "content": command_response,
-                                            }
-                                        ]
-
-                                        # Notify user if configured
-                                        if (
-                                            __event_emitter__
-                                            and hasattr(user_valves, "show_status")
-                                            and user_valves.show_status
-                                        ):
+                                        # v2.6.0 FIX: Use event emitter to send response directly
+                                        # This avoids "Invalid consecutive assistant message" error
+                                        if __event_emitter__:
+                                            # Send command response as message
+                                            await __event_emitter__(
+                                                {
+                                                    "type": "message",
+                                                    "data": {
+                                                        "content": command_response,
+                                                    },
+                                                }
+                                            )
+                                            # Mark as done
                                             await __event_emitter__(
                                                 {
                                                     "type": "status",
@@ -1460,9 +1459,16 @@ class Filter:
                                                     },
                                                 }
                                             )
+                                        else:
+                                            # Fallback: modify messages (may cause issues)
+                                            body["messages"] = messages[:-1] + [
+                                                {
+                                                    "role": "assistant",
+                                                    "content": command_response,
+                                                }
+                                            ]
 
-                                        # MARK THAT IT WAS A COMMAND TO AVOID SAVING IN OUTLET | \
-                                        # MARCAR QUE FUE UN COMANDO PARA EVITAR GUARDADO EN OUTLET
+                                        # MARK THAT IT WAS A COMMAND TO AVOID SAVING IN OUTLET
                                         self._command_processed_in_inlet = True
 
                                         # RETURN IMMEDIATELY - DO NOT CONTINUE WITH MEMORY INJECTION
