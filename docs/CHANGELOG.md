@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.6.4] - 2025-12-22
+
+### 🚨 **Hotfix: Token Explosion Guardrails (Gemini/OpenWebUI)**
+
+#### Added
+
+- **Hard cap for injection size**: `max_injection_chars` (default: 3500) to bound prompt growth.
+- **Hard cap for DB scan**: `max_memories_to_scan` (default: 300) to avoid scanning thousands of memories.
+- **Skip injection for greetings/casual turns**: `skip_injection_for_casual` (default: True).
+
+#### Fixed
+
+- **Fail-safe stripping of external memory dumps**: removes `system` messages containing patterns like
+  `Retrieving stored memories` / `\d+ memories loaded` to prevent huge prompt injection from external sources.
+
+#### Changed
+
+- **Injection formatting** now truncates per-memory content and enforces a strict total character budget.
+- **Documentation/version consistency**: README + header synchronized to v2.6.4.
+
 ## [2.6.0] - 2024-12-22
 
 ### 🧠 **Smart Memory + Intelligent Summarization**
