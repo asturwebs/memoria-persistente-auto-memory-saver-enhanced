@@ -82,6 +82,8 @@ El sistema es altamente configurable a través de **Valves**. Puedes ajustar est
 - **enable_smart_summarization**: Usa LLM para resumir la conversación antes de guardar (Ahorra espacio).
 - **summarization_prompt**: El prompt usado para resumir conversaciones.
 - **min_content_for_summary**: Mínimo de caracteres para activar el resumen.
+- **min_response_length**: Longitud mínima de la respuesta para ser guardada (default: 10).
+- **max_response_length**: Longitud máxima de la respuesta para ser guardada (default: 2000).
 - **filter_duplicates**: Evita guardar memorias idénticas o muy similares.
 - **similarity_threshold**: Sensibilidad para detectar duplicados (0.8 = 80% similar).
 - **auto_cleanup**: Activa limpieza periódica de memorias antiguas (default: False).
@@ -94,6 +96,8 @@ Estas opciones pueden ser configuradas individualmente por cada usuario:
 - **show_save_confirmation**: Muestra un mensaje de confirmación cuando se guarda una memoria.
 - **private_mode**: Si está activo, el sistema no guardará nada de lo que hables.
 - **custom_memory_prefix**: Texto que se añadirá al principio de cada memoria nueva.
+- **max_personal_memories**: Límite personal de memorias (0 = usa configuración global).
+- **notify_on_cleanup**: Notifica cuando se realiza una limpieza automática de memorias.
 - **notify_on_error**: Muestra alertas si ocurre un error en el sistema.
 
 ## AI Compatibility
