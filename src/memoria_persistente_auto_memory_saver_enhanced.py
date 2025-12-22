@@ -2106,19 +2106,21 @@ class Filter:
             end_idx = min(start_idx + per_page, total_memories)
             page_memories = processed_memories[start_idx:end_idx]
 
-            # Create memory list with deterministic UUIDs and intelligent previews | 使用確定性UUID和智能預覽建立記憶列表
+            # v2.6.0 FIX: Extract REAL database IDs from memory strings
+            # Format is: [Id: {real_id}, Content: {content}]
             memories_list = []
             for i, memory in enumerate(page_memories, start=start_idx + 1):
-                # Generate deterministic UUID using content and position hash
-                content_hash = hashlib.md5(
-                    f"{validated_user_id}_{i}_{memory}".encode()
-                ).hexdigest()
-                memory_uuid = f"{content_hash[:8]}-{content_hash[8:12]}-{content_hash[12:16]}-{content_hash[16:20]}-{content_hash[20:32]}"
+                # Extract real database ID from memory string
+                real_id_match = re.search(r'\[Id:\s*([^,\]]+)', memory)
+                real_db_id = real_id_match.group(1).strip() if real_id_match else f"idx_{i}"
+
+                # Extract actual content (remove the [Id: xxx, Content: ] wrapper)
+                content_match = re.search(r'Content:\s*(.+)\]$', memory, re.DOTALL)
+                actual_content = content_match.group(1).strip() if content_match else memory
 
                 # Intelligent preview (first 100 chars with intelligent cut)
-                preview = memory[:100].strip()
-                if len(memory) > 100:
-                    # Look for last space or period for intelligent cut | 尋找最後一個空格或句號進行智能截斷
+                preview = actual_content[:100].strip()
+                if len(actual_content) > 100:
                     last_space = preview.rfind(" ")
                     last_dot = preview.rfind(".")
                     if last_dot > 80:
@@ -2141,15 +2143,13 @@ class Filter:
 
                 memories_list.append(
                     {
-                        "uuid": memory_uuid,
-                        "id": i,
+                        "db_id": real_db_id,  # REAL database ID - use this for commands
+                        "index": i,  # Sequential index for reference
                         "preview": preview,
                         "type": memory_type,
                         "priority": priority,
-                        "length": len(memory),
-                        "created_at": datetime.now().isoformat() + "Z",  # Simulated
+                        "length": len(actual_content),
                         "tags": ["memory", memory_type],
-                        "relevance_score": round(0.85 + (i * 0.01), 2),  # Simulated
                     }
                 )
 
@@ -2200,17 +2200,13 @@ class Filter:
                     },
                 },
                 "system": {
-                    "version": "Auto Memory Saver Enhanced v2.5.0",
+                    "version": "Auto Memory Saver Enhanced v2.6.0",
                     "build": "enterprise",
                     "environment": "production",
-                    "memory_engine": "BytIA v4.3 Persistent Memory v2.1",
                 },
                 "metadata": {
                     "user_id": validated_user_id[:8] + "...",
-                    "security_level": "validated",
-                    "query_performance": "<2ms",
-                    "cache_status": "hit" if self.valves.enable_cache else "disabled",
-                    "session_id": "active",
+                    "id_type": "db_id is the REAL database ID - use it for all commands",
                 },
                 "navigation": {
                     "next_page": (
@@ -2221,20 +2217,8 @@ class Filter:
                     "previous_page": (
                         f"/memories {current_page - 1}" if current_page > 1 else None
                     ),
-                    "first_page": "/memories 1" if current_page > 1 else None,
-                    "last_page": (
-                        f"/memories {total_pages}"
-                        if current_page < total_pages
-                        else None
-                    ),
                 },
-                "actions": {
-                    "search_memories": "/memory_search <term>",
-                    "add_memory": "/memory_add <text>",
-                    "show_stats": "/memory_stats",
-                    "delete_memory": "/memory_delete <id>",
-                    "edit_memory": "/memory_edit <id> <new_text>",
-                },
+                "usage_note": "Use 'db_id' field for commands. Example: /memory_search uses db_id",
                 "warning": "DO_NOT_INTERPRET_THIS_JSON_RESPONSE",
                 "instructions": "DISPLAY_RAW_JSON_TO_USER",
                 "ai_behavior_control": {
@@ -2495,10 +2479,10 @@ class Filter:
 
     def _cmd_show_help(self) -> str:
         """Shows help with all available commands. | 顯示所有可用命令的幫助。"""
-        help_text = "🆘 **Available Commands (v2.4.0):**\n\n"
+        help_text = "🆘 **Available Commands (v2.6.0):**\n\n"
 
         help_text += "**📚 Memory Management:**\n"
-        help_text += "• `/memories [page]` - List all memories (paginated)\n"
+        help_text += "• `/memories [page]` - List all memories (shows db_id)\n"
         help_text += "• `/clear_memories` - Delete all memories | 刪除所有記憶\n"
         help_text += "• `/memory_count` - Shows number of memories | 顯示記憶數量\n"
         help_text += "• `/memory_search <term>` - Search memories\n"
@@ -2507,30 +2491,25 @@ class Filter:
 
         help_text += "**⚙️ Configuration: | 配置：**\n"
         help_text += "• `/memory_config` - Shows configuration | 顯示配置\n"
-        help_text += "• `/private_mode on|off` - Activate/deactivate private mode | 啟用/停用私人模式\n"
-        help_text += "• `/memory_limit <number>` - Set personal limit | 設定個人限制\n"
-        help_text += "• `/memory_prefix <text>` - Configure custom prefix | 配置自定義前綴\n\n"
+        help_text += "• `/private_mode on|off` - Private mode | 私人模式\n"
+        help_text += "• `/memory_limit <number>` - Set limit | 設定限制\n"
+        help_text += "• `/memory_prefix <text>` - Custom prefix | 自定義前綴\n\n"
 
-        help_text += "**📊 Information and Analysis:**\n"
+        help_text += "**📊 Information:**\n"
         help_text += "• `/memory_help` - Shows this help | 顯示此幫助\n"
         help_text += "• `/memory_stats` - System statistics\n"
         help_text += "• `/memory_status` - Current filter status\n"
-        help_text += "• `/memory_analytics` - Advanced memory analysis\n\n"
+        help_text += "• `/memory_analytics` - Advanced analysis\n\n"
 
         help_text += "**🔧 Utilities:**\n"
-        help_text += "• `/memory_cleanup` - Clean duplicates manually | 手動清理重複\n"
-        help_text += "• `/memory_backup` - Create memory backup\n"
-        help_text += "• `/memory_restore` - Restoration info\n"
-        help_text += "• `/memory_import` - Help for importing memories\n"
-        help_text += "• `/memory_templates` - Common memory templates\n\n"
+        help_text += "• `/memory_cleanup` - Clean duplicates | 清理重複\n"
+        help_text += "• `/memory_backup` - Create backup\n"
+        help_text += "• `/memory_templates` - Memory templates\n\n"
 
         help_text += "💡 **Tips:**\n"
-        help_text += "• Use `/memory_templates` for useful memory ideas\n"
+        help_text += "• `/memories` shows `db_id` - the real database ID\n"
         help_text += "• Use `/memory_search` to find specific memories\n"
-        help_text += "• `/memory_analytics` helps you optimize your memories\n"
-        help_text += "• Memory IDs are shown with `/memories`\n\n"
-
-        help_text += "ℹ️ **Note:** Use OpenWebUI native `/add_memory` to add memories manually."
+        help_text += "• Use OpenWebUI native `/add_memory` to add memories\n"
 
         return help_text
 
