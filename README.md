@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![OpenWebUI](https://img.shields.io/badge/OpenWebUI-Compatible-green.svg)](https://github.com/open-webui/open-webui)
-[![Version](https://img.shields.io/badge/version-2.5.0-brightgreen.svg)](https://github.com/AsturWebs/auto-memory-saver-enhanced)
+[![Version](https://img.shields.io/badge/version-2.6.4-brightgreen.svg)](https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced)
 
 **Filter for OpenWebUI** that automatically manages conversation memories. Injects relevant memories and saves conversations for future context.
 
@@ -47,6 +47,9 @@ enabled: bool = True                    # Enable/disable system
 inject_memories: bool = True            # Inject memories in conversations
 auto_save_responses: bool = True        # Auto-save conversations
 max_memories_to_inject: int = 5         # Max memories per conversation
+max_injection_chars: int = 3500         # Hard cap total injected chars
+max_memories_to_scan: int = 300         # Hard cap scanned memories from DB
+skip_injection_for_casual: bool = True  # Skip injection for greetings/casual
 max_memories_per_user: int = 100        # User limit (0 = unlimited)
 enable_cache: bool = True               # Cache for performance
 debug_mode: bool = False                # Detailed logging
@@ -68,9 +71,9 @@ debug_mode: bool = False                # Detailed logging
 │   └── release_notes_v*.md
 ├── README.md
 └── requirements.txt
-```
 
 ## Credits
+
 
 - **Enhanced by**: Pedro Luis Cuevas Villarrubia ([@AsturWebs](https://github.com/AsturWebs))
 - **Original concept**: [@linbanana](https://github.com/linbanana)

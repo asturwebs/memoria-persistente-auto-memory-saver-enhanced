@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Auto Memory Saver Enhanced (Persistent Memory) v2.6.2
+Auto Memory Saver Enhanced (Persistent Memory) v2.6.4
 =====================================================
 
 🚀 SMART MEMORY: Intelligent Summarization + Semantic Relevance
@@ -11,7 +11,7 @@ semantic relevance.
 
 Autor: Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub: https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
-Version: 2.6.2 - Smart Memory + Intelligent Summarization
+Version: 2.6.4 - Smart Memory + Intelligent Summarization
 License: MIT
 Based on: @linbanana Auto Memory Saver original
 
@@ -56,7 +56,7 @@ For support or collaborations:
 
 作者：Pedro Luis Cuevas Villarrubia - AsturWebs
 GitHub：https://github.com/asturwebs/memoria-persistente-auto-memory-saver-enhanced
-版本：2.5.0 - Code Cleanup + Production Ready
+版本：2.6.4 - Smart Memory + Intelligent Summarization
 授權：MIT
 基於：@linbanana Auto Memory Saver 原始版
 
@@ -64,7 +64,7 @@ linbanana 修改：
 - 文件翻譯為雙語（英文優先，中文附註）。
 - 程式邏輯未改動，保持與 Open-WebUI 相容。
 
-🎯 雙重功能 v2.5.0：
+🎯 雙重功能 v2.6.0：
 ✅ 自動持久記憶：在所有 30 個測試模型中可用
 ✅ JSON 格式 Slash 指令：在 11 個優秀模型中完美運作
 
@@ -2403,7 +2403,7 @@ class Filter:
                         },
                     },
                     "system": {
-                        "version": "Auto Memory Saver Enhanced v2.5.0",
+                        "version": f"Auto Memory Saver Enhanced v{__version__}",
                         "build": "enterprise",
                         "environment": "production",
                     },
@@ -2985,7 +2985,7 @@ class Filter:
                     },
                 },
                 "metadata": {
-                    "version": "Auto Memory Saver Enhanced v2.5.0",
+                    "version": f"Auto Memory Saver Enhanced v{__version__}",
                     "build": "enterprise",
                     "environment": "production",
                     "user_id": user_id[:8] + "...",
