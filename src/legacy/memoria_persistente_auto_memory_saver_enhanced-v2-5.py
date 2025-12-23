@@ -503,7 +503,9 @@ class Filter:
         self._memory_cache = MemoryCache(
             max_size=Constants.CACHE_MAXSIZE, ttl=Constants.CACHE_TTL
         )
-        self._command_processed_in_inlet = False  # Flag to prevent saving slash commands
+        self._command_processed_in_inlet = (
+            False  # Flag to prevent saving slash commands
+        )
         logger.info(
             "Memory filter initialized with cache | 記憶過濾器已初始化並帶有快取"
         )
@@ -700,9 +702,7 @@ class Filter:
                 logger.debug("[MEMORY-DEBUG] ⚠️ No memories found for user")
                 return []
 
-            logger.debug(
-                f"[MEMORY-DEBUG] 📊 Total memories found: {len(raw_memories)}"
-            )
+            logger.debug(f"[MEMORY-DEBUG] 📊 Total memories found: {len(raw_memories)}")
 
             # Inspect first memories to see their structure | 檢查前幾個記憶以查看其結構
             for i, mem in enumerate(raw_memories[:3]):
@@ -1215,7 +1215,9 @@ class Filter:
                             try:
                                 user = Users.get_user_by_id(user_id)
                                 if not user:
-                                    logger.error(f"[SLASH-COMMANDS] User not found: {user_id}")
+                                    logger.error(
+                                        f"[SLASH-COMMANDS] User not found: {user_id}"
+                                    )
                                 else:
                                     user_valves = (
                                         __user__.get("valves") or self.UserValves()
@@ -1229,7 +1231,9 @@ class Filter:
                                     )
 
                                     if command_response:
-                                        logger.debug("[SLASH-COMMANDS] Command processed successfully")
+                                        logger.debug(
+                                            "[SLASH-COMMANDS] Command processed successfully"
+                                        )
 
                                         # Replace user message with command response
                                         body["messages"] = messages[:-1] + [
@@ -1269,7 +1273,9 @@ class Filter:
                                         self._command_processed_in_inlet = True
                                         return body
                             except Exception as e:
-                                logger.error(f"[SLASH-COMMANDS] Error processing command: {e}")
+                                logger.error(
+                                    f"[SLASH-COMMANDS] Error processing command: {e}"
+                                )
                                 # FIX: On command error, treat as command to avoid saving
                                 self._command_processed_in_inlet = True
                                 return body
@@ -2276,7 +2282,9 @@ class Filter:
         help_text += "• `/memory_config` - Shows configuration | 顯示配置\n"
         help_text += "• `/private_mode on|off` - Activate/deactivate private mode | 啟用/停用私人模式\n"
         help_text += "• `/memory_limit <number>` - Set personal limit | 設定個人限制\n"
-        help_text += "• `/memory_prefix <text>` - Configure custom prefix | 配置自定義前綴\n\n"
+        help_text += (
+            "• `/memory_prefix <text>` - Configure custom prefix | 配置自定義前綴\n\n"
+        )
 
         help_text += "**📊 Information and Analysis:**\n"
         help_text += "• `/memory_help` - Shows this help | 顯示此幫助\n"
@@ -2297,7 +2305,9 @@ class Filter:
         help_text += "• `/memory_analytics` helps you optimize your memories\n"
         help_text += "• Memory IDs are shown with `/memories`\n\n"
 
-        help_text += "ℹ️ **Note:** Use OpenWebUI native `/add_memory` to add memories manually."
+        help_text += (
+            "ℹ️ **Note:** Use OpenWebUI native `/add_memory` to add memories manually."
+        )
 
         return help_text
 
@@ -2822,7 +2832,9 @@ class Filter:
                     existing_memories = Memories.get_memories_by_user_id_ordered(
                         user_id=str(user_id), order_by=order_by
                     )
-                    logger.debug("[MEMORY-DEBUG] Memories obtained with ordering from DB")
+                    logger.debug(
+                        "[MEMORY-DEBUG] Memories obtained with ordering from DB"
+                    )
                 else:
                     # Standard method without ordering
                     existing_memories = Memories.get_memories_by_user_id(
@@ -2849,7 +2861,9 @@ class Filter:
                         existing_memories.sort(
                             key=lambda x: getattr(x, "created_at", ""), reverse=True
                         )
-                        logger.debug("[MEMORY-DEBUG] Manual sorting in memory performed")
+                        logger.debug(
+                            "[MEMORY-DEBUG] Manual sorting in memory performed"
+                        )
                     except Exception as sort_error:
                         logger.warning(
                             f"Error sorting memories in memory: {sort_error}"
@@ -2857,9 +2871,7 @@ class Filter:
 
                 # Apply limit (paginate) | Aplicar límite (paginar)
                 existing_memories = existing_memories[:effective_limit]
-                logger.debug(
-                    f"[MEMORY-DEBUG] Limited to {effective_limit} memories"
-                )
+                logger.debug(f"[MEMORY-DEBUG] Limited to {effective_limit} memories")
                 logger.info(
                     f"[MEMORY-DEBUG] 🔒 Memory leak prevention: limited to {effective_limit}"
                 )

@@ -153,8 +153,6 @@ try:
             @staticmethod
             def get_memories_by_user_id(user_id: str) -> list:
                 # BYTIA IMPROVEMENT: Fallback with test data for sorting testing | BYTIA 改進：使用測試數據作為排序測試的回退
-                from datetime import datetime, timedelta
-
                 # Create test memories with different dates to test sorting | 建立不同日期的測試記憶以測試排序
                 test_memories = []
                 base_date = datetime.now()
@@ -544,7 +542,9 @@ class Filter:
         self._memory_cache = MemoryCache(
             max_size=Constants.CACHE_MAXSIZE, ttl=Constants.CACHE_TTL
         )
-        self._command_processed_in_inlet = False  # Flag to prevent saving slash commands
+        self._command_processed_in_inlet = (
+            False  # Flag to prevent saving slash commands
+        )
         logger.info(
             "Memory filter initialized with cache | 記憶過濾器已初始化並帶有快取"
         )
@@ -793,15 +793,15 @@ class Filter:
 
             # Get raw memories (EXPLICITLY ordered by descending date) | 取得原始記憶（明確按降序日期排序）
             raw_memories = await self.get_raw_existing_memories(
-                user_id, order_by="created_at DESC", limit=self.valves.max_memories_to_scan
+                user_id,
+                order_by="created_at DESC",
+                limit=self.valves.max_memories_to_scan,
             )
             if not raw_memories:
                 logger.debug("[MEMORY-DEBUG] ⚠️ No memories found for user")
                 return []
 
-            logger.debug(
-                f"[MEMORY-DEBUG] 📊 Total memories found: {len(raw_memories)}"
-            )
+            logger.debug(f"[MEMORY-DEBUG] 📊 Total memories found: {len(raw_memories)}")
 
             # Inspect first memories to see their structure | 檢查前幾個記憶以查看其結構
             for i, mem in enumerate(raw_memories[:3]):
@@ -934,19 +934,24 @@ class Filter:
             return False
 
         casual_patterns = [
-            r'^(hi|hello|hey|hola|你好|嗨|buenas|buenos días|good morning)\b',
-            r'\b(thank|thanks|gracias|謝謝|谢谢)\b',
-            r'^(ok|okay|sure|yes|no|sí|si|vale|好|是|不)\s*$',
-            r'^hola\s*(socia?|amigo|compañero)',
-            r'(cómo estás|how are you|qué tal)',
+            r"^(hi|hello|hey|hola|你好|嗨|buenas|buenos días|good morning)\b",
+            r"\b(thank|thanks|gracias|謝謝|谢谢)\b",
+            r"^(ok|okay|sure|yes|no|sí|si|vale|好|是|不)\s*$",
+            r"^hola\s*(socia?|amigo|compañero)",
+            r"(cómo estás|how are you|qué tal)",
         ]
 
-        if any(re.search(p, text, re.IGNORECASE) for p in casual_patterns) and len(text) < 50:
+        if (
+            any(re.search(p, text, re.IGNORECASE) for p in casual_patterns)
+            and len(text) < 50
+        ):
             return True
 
         return False
 
-    def _strip_external_memory_system_messages(self, messages: List[dict]) -> List[dict]:
+    def _strip_external_memory_system_messages(
+        self, messages: List[dict]
+    ) -> List[dict]:
         if not messages or not isinstance(messages, list):
             return messages
 
@@ -1008,17 +1013,23 @@ class Filter:
                 continue
 
             # Safety: extremely large 'memory-ish' system message
-            if len(text) > max_total_chars * 3 and re.search(r"\bmemory|memories\b", text, re.IGNORECASE):
+            if len(text) > max_total_chars * 3 and re.search(
+                r"\bmemory|memories\b", text, re.IGNORECASE
+            ):
                 removed += 1
                 continue
 
             cleaned.append(m)
 
         if removed and self.valves.debug_mode:
-            logger.warning(f"[INLET] Stripped {removed} external memory system message(s) to reduce tokens")
+            logger.warning(
+                f"[INLET] Stripped {removed} external memory system message(s) to reduce tokens"
+            )
 
         if edited and self.valves.debug_mode:
-            logger.warning(f"[INLET] Edited {edited} message(s) to remove external memory noise lines")
+            logger.warning(
+                f"[INLET] Edited {edited} message(s) to remove external memory noise lines"
+            )
 
         return cleaned
 
@@ -1076,21 +1087,25 @@ class Filter:
         text2_lower = text2.lower()
 
         # 1. Word-level Jaccard similarity (40%)
-        words1 = set(re.findall(r'\b\w{3,}\b', text1_lower))
-        words2 = set(re.findall(r'\b\w{3,}\b', text2_lower))
+        words1 = set(re.findall(r"\b\w{3,}\b", text1_lower))
+        words2 = set(re.findall(r"\b\w{3,}\b", text2_lower))
 
         if not words1 or not words2:
             return 0.0
 
         word_intersection = words1.intersection(words2)
         word_union = words1.union(words2)
-        word_similarity = len(word_intersection) / len(word_union) if word_union else 0.0
+        word_similarity = (
+            len(word_intersection) / len(word_union) if word_union else 0.0
+        )
 
         # 2. Bigram similarity (30%)
         bigram_similarity = self._calculate_phrase_similarity(text1_lower, text2_lower)
 
         # 3. Key term presence (30%) - important nouns/verbs
-        key_terms = [w for w in words1 if len(w) >= 5]  # Longer words are usually more important
+        key_terms = [
+            w for w in words1 if len(w) >= 5
+        ]  # Longer words are usually more important
         if key_terms:
             key_matches = sum(1 for term in key_terms if term in text2_lower)
             key_similarity = key_matches / len(key_terms)
@@ -1098,7 +1113,9 @@ class Filter:
             key_similarity = word_similarity
 
         # Combined score
-        final_score = (word_similarity * 0.4) + (bigram_similarity * 0.3) + (key_similarity * 0.3)
+        final_score = (
+            (word_similarity * 0.4) + (bigram_similarity * 0.3) + (key_similarity * 0.3)
+        )
 
         return min(final_score, 1.0)
 
@@ -1136,7 +1153,9 @@ class Filter:
 
         if len(original_content) < self.valves.min_content_for_summary:
             if self.valves.debug_mode:
-                logger.debug(f"Content too short for summarization ({len(original_content)} chars)")
+                logger.debug(
+                    f"Content too short for summarization ({len(original_content)} chars)"
+                )
             return original_content
 
         try:
@@ -1150,7 +1169,9 @@ class Filter:
 
             if summary and summary.upper() != "SKIP" and len(summary) > 10:
                 if self.valves.debug_mode:
-                    logger.debug(f"Summarized: {len(original_content)} → {len(summary)} chars ({100-len(summary)*100//len(original_content)}% reduction)")
+                    logger.debug(
+                        f"Summarized: {len(original_content)} → {len(summary)} chars ({100-len(summary)*100//len(original_content)}% reduction)"
+                    )
                 return summary
             elif summary and summary.upper() == "SKIP":
                 if self.valves.debug_mode:
@@ -1186,21 +1207,21 @@ class Filter:
         # Patterns indicating important information to keep
         importance_patterns = [
             # Preferences and decisions
-            (r'\b(prefer|like|want|need|choose|decide|always|never)\b', 'preference'),
-            (r'\b(prefiero|quiero|necesito|siempre|nunca|elijo)\b', 'preference'),
-            (r'\b(喜歡|喜欢|需要|總是|总是|從不|从不)\b', 'preference'),
+            (r"\b(prefer|like|want|need|choose|decide|always|never)\b", "preference"),
+            (r"\b(prefiero|quiero|necesito|siempre|nunca|elijo)\b", "preference"),
+            (r"\b(喜歡|喜欢|需要|總是|总是|從不|从不)\b", "preference"),
             # Facts and definitions
-            (r'\b(is|are|means|defined as|refers to)\b', 'fact'),
-            (r'\b(es|son|significa|se define como)\b', 'fact'),
-            (r'\b(是|意思是|定義為|定义为)\b', 'fact'),
+            (r"\b(is|are|means|defined as|refers to)\b", "fact"),
+            (r"\b(es|son|significa|se define como)\b", "fact"),
+            (r"\b(是|意思是|定義為|定义为)\b", "fact"),
             # Instructions and how-to
-            (r'\b(how to|steps to|to do this|you can|you should)\b', 'instruction'),
-            (r'\b(cómo|pasos para|para hacer esto|puedes|debes)\b', 'instruction'),
-            (r'\b(如何|步驟|步骤|你可以|你應該|你应该)\b', 'instruction'),
+            (r"\b(how to|steps to|to do this|you can|you should)\b", "instruction"),
+            (r"\b(cómo|pasos para|para hacer esto|puedes|debes)\b", "instruction"),
+            (r"\b(如何|步驟|步骤|你可以|你應該|你应该)\b", "instruction"),
             # Technical/code related
-            (r'\b(code|function|class|api|config|setting|parameter)\b', 'technical'),
-            (r'\b(código|función|clase|configuración|parámetro)\b', 'technical'),
-            (r'\b(代碼|代码|函數|函数|類|类|配置|參數|参数)\b', 'technical'),
+            (r"\b(code|function|class|api|config|setting|parameter)\b", "technical"),
+            (r"\b(código|función|clase|configuración|parámetro)\b", "technical"),
+            (r"\b(代碼|代码|函數|函数|類|类|配置|參數|参数)\b", "technical"),
         ]
 
         combined_text = f"{user_content} {assistant_content}".lower()
@@ -1214,13 +1235,15 @@ class Filter:
         if not detected_types:
             # Check if it's just casual conversation
             casual_patterns = [
-                r'^(hi|hello|hey|hola|你好|嗨|buenas|buenos días|good morning)\b',
-                r'\b(thank|thanks|gracias|謝謝|谢谢)\b',
-                r'^(ok|okay|sure|yes|no|sí|si|好|是|不)\s*$',
-                r'^hola\s*(socia?|amigo|compañero)',  # "Hola Socia/Socio"
-                r'(cómo estás|how are you|qué tal)',  # Greetings
+                r"^(hi|hello|hey|hola|你好|嗨|buenas|buenos días|good morning)\b",
+                r"\b(thank|thanks|gracias|謝謝|谢谢)\b",
+                r"^(ok|okay|sure|yes|no|sí|si|好|是|不)\s*$",
+                r"^hola\s*(socia?|amigo|compañero)",  # "Hola Socia/Socio"
+                r"(cómo estás|how are you|qué tal)",  # Greetings
             ]
-            is_casual = any(re.search(p, combined_text, re.IGNORECASE) for p in casual_patterns)
+            is_casual = any(
+                re.search(p, combined_text, re.IGNORECASE) for p in casual_patterns
+            )
             # v2.6.0 FIX: Better casual detection - skip greetings even with long responses
             if is_casual and len(user_content) < 50:
                 # User message is a greeting, skip regardless of response length
@@ -1243,17 +1266,24 @@ class Filter:
             max_assistant_len = 300
 
         # Extract key sentences (first sentence of user + key part of assistant)
-        user_key = user_content.split('.')[0].strip() if '.' in user_content else user_content.strip()
+        user_key = (
+            user_content.split(".")[0].strip()
+            if "." in user_content
+            else user_content.strip()
+        )
 
         # For assistant, try to get the most informative part
-        assistant_sentences = re.split(r'[.!?。！？]', assistant_content)
+        assistant_sentences = re.split(r"[.!?。！？]", assistant_content)
         assistant_key_parts = []
 
         for sentence in assistant_sentences[:3]:  # Check first 3 sentences
             sentence = sentence.strip()
             if len(sentence) > 20:  # Skip very short sentences
                 # Prioritize sentences with important patterns
-                has_importance = any(re.search(p, sentence, re.IGNORECASE) for p, _ in importance_patterns)
+                has_importance = any(
+                    re.search(p, sentence, re.IGNORECASE)
+                    for p, _ in importance_patterns
+                )
                 if has_importance:
                     assistant_key_parts.append(sentence)
 
@@ -1285,13 +1315,13 @@ class Filter:
 
         # v2.6.0: Generate NARRATIVE summary instead of P:/R: format
         # Determine action verb based on detected types
-        if 'instruction' in detected_types:
+        if "instruction" in detected_types:
             user_action = "preguntó cómo"
-        elif 'preference' in detected_types:
+        elif "preference" in detected_types:
             user_action = "expresó preferencia por"
-        elif 'fact' in detected_types:
+        elif "fact" in detected_types:
             user_action = "preguntó sobre"
-        elif 'technical' in detected_types:
+        elif "technical" in detected_types:
             user_action = "consultó sobre"
         else:
             user_action = "mencionó"
@@ -1683,7 +1713,7 @@ class Filter:
                     if user_messages:
                         last_user_msg = user_messages[-1]["content"].strip()
 
-                        logger.debug(f"[SLASH-COMMANDS] Last user message detected")
+                        logger.debug("[SLASH-COMMANDS] Last user message detected")
 
                         # Check if it's a slash command | Verificar si es un slash command
                         if last_user_msg.startswith("/"):
@@ -1695,9 +1725,13 @@ class Filter:
                             try:
                                 user = Users.get_user_by_id(user_id)
                                 if not user:
-                                    logger.error(f"[SLASH-COMMANDS] User not found: {user_id}")
+                                    logger.error(
+                                        f"[SLASH-COMMANDS] User not found: {user_id}"
+                                    )
                                 else:
-                                    user_valves = self._coerce_user_valves(__user__.get("valves"))
+                                    user_valves = self._coerce_user_valves(
+                                        __user__.get("valves")
+                                    )
 
                                     # Process the command | 處理命令
                                     command_response = (
@@ -1707,7 +1741,9 @@ class Filter:
                                     )
 
                                     if command_response:
-                                        logger.debug("[SLASH-COMMANDS] Command processed successfully")
+                                        logger.debug(
+                                            "[SLASH-COMMANDS] Command processed successfully"
+                                        )
 
                                         # v2.6.0 FIX: Use event emitter to send response directly
                                         # This avoids "Invalid consecutive assistant message" error
@@ -1753,7 +1789,9 @@ class Filter:
                                         self._command_processed_in_inlet = True
                                         return body
                             except Exception as e:
-                                logger.error(f"[SLASH-COMMANDS] Error processing command: {e}")
+                                logger.error(
+                                    f"[SLASH-COMMANDS] Error processing command: {e}"
+                                )
                                 # FIX: On command error, treat as command to avoid saving
                                 self._command_processed_in_inlet = True
                                 return body
@@ -1780,12 +1818,13 @@ class Filter:
                 for msg in messages
                 if isinstance(msg, dict) and msg.get("role") == "user"
             ]
-            last_user_text = str(user_messages_for_skip[-1]) if user_messages_for_skip else ""
+            last_user_text = (
+                str(user_messages_for_skip[-1]) if user_messages_for_skip else ""
+            )
 
-            if (
-                getattr(self.valves, "skip_injection_for_casual", True)
-                and self._is_casual_turn(last_user_text)
-            ):
+            if getattr(
+                self.valves, "skip_injection_for_casual", True
+            ) and self._is_casual_turn(last_user_text):
                 return body
 
             if is_first_message:
@@ -2008,23 +2047,29 @@ class Filter:
                 # v2.6.0 FIX: Remove model reasoning/thinking XML blocks before saving
                 # These blocks are internal model metadata, not useful for memory
                 reasoning_patterns = [
-                    r'<detalles[^>]*>.*?</detalles>',  # Spanish reasoning blocks
-                    r'<details[^>]*>.*?</details>',    # English reasoning blocks
-                    r'<thinking[^>]*>.*?</thinking>',  # Thinking blocks
-                    r'<resumen[^>]*>.*?</resumen>',    # Summary blocks
-                    r'<summary[^>]*>.*?</summary>',    # Summary blocks EN
-                    r'Pensando durante.*?segundos?\s*',  # "Thinking for X seconds"
-                    r'Thinking for.*?seconds?\s*',     # EN version
+                    r"<detalles[^>]*>.*?</detalles>",  # Spanish reasoning blocks
+                    r"<details[^>]*>.*?</details>",  # English reasoning blocks
+                    r"<thinking[^>]*>.*?</thinking>",  # Thinking blocks
+                    r"<resumen[^>]*>.*?</resumen>",  # Summary blocks
+                    r"<summary[^>]*>.*?</summary>",  # Summary blocks EN
+                    r"Pensando durante.*?segundos?\s*",  # "Thinking for X seconds"
+                    r"Thinking for.*?seconds?\s*",  # EN version
                 ]
                 for pattern in reasoning_patterns:
-                    assistant_content = re.sub(pattern, '', assistant_content, flags=re.DOTALL | re.IGNORECASE)
+                    assistant_content = re.sub(
+                        pattern, "", assistant_content, flags=re.DOTALL | re.IGNORECASE
+                    )
                 assistant_content = assistant_content.strip()
 
                 # v2.6.5 FIX: Do not save casual conversations (greetings, simple acks)
                 # This prevents "Hola" -> "Hola, Pedro" from becoming a permanent memory.
-                if getattr(self.valves, "skip_injection_for_casual", True) and self._is_casual_turn(user_content):
+                if getattr(
+                    self.valves, "skip_injection_for_casual", True
+                ) and self._is_casual_turn(user_content):
                     if self.valves.debug_mode:
-                        logger.debug("Casual conversation detected, skipping auto-save to keep DB clean")
+                        logger.debug(
+                            "Casual conversation detected, skipping auto-save to keep DB clean"
+                        )
                     return body
 
                 # PRODUCTION FIX: Additional security - DO NOT save technical commands as memory
@@ -2086,7 +2131,9 @@ class Filter:
                 # If summarization returns empty string, skip saving (content not important)
                 if not message_content:
                     if self.valves.debug_mode:
-                        logger.debug("Content not important enough to save (smart filter)")
+                        logger.debug(
+                            "Content not important enough to save (smart filter)"
+                        )
                     return body
 
             else:
@@ -2121,33 +2168,51 @@ class Filter:
 
             if self.valves.filter_duplicates:
                 try:
-                    existing_memories = await self.get_processed_memory_strings(effective_user_id)
+                    existing_memories = await self.get_processed_memory_strings(
+                        effective_user_id
+                    )
+
                     # Normalize content for comparison (remove punctuation, lowercase, collapse spaces)
                     def normalize_for_hash(text: str) -> str:
-                        normalized = re.sub(r'[^\w\s]', '', text.lower())
-                        normalized = re.sub(r'\s+', ' ', normalized).strip()
+                        normalized = re.sub(r"[^\w\s]", "", text.lower())
+                        normalized = re.sub(r"\s+", " ", normalized).strip()
                         return normalized
 
-                    new_hash = hashlib.md5(normalize_for_hash(message_content).encode()).hexdigest()
+                    new_hash = hashlib.md5(
+                        normalize_for_hash(message_content).encode()
+                    ).hexdigest()
 
                     for existing_memory in existing_memories:
-                        existing_hash = hashlib.md5(normalize_for_hash(existing_memory).encode()).hexdigest()
+                        existing_hash = hashlib.md5(
+                            normalize_for_hash(existing_memory).encode()
+                        ).hexdigest()
                         if new_hash == existing_hash:
                             if self.valves.debug_mode:
-                                logger.debug("Exact duplicate detected (hash match), skipping save")
+                                logger.debug(
+                                    "Exact duplicate detected (hash match), skipping save"
+                                )
                             return body
 
                         # Also check semantic similarity with TF-IDF-like approach
-                        similarity = self._calculate_content_similarity(message_content, existing_memory)
+                        similarity = self._calculate_content_similarity(
+                            message_content, existing_memory
+                        )
                         if similarity >= self.valves.similarity_threshold:
                             if self.valves.debug_mode:
-                                logger.debug(f"Similar memory exists (similarity: {similarity:.2f}), skipping save")
+                                logger.debug(
+                                    f"Similar memory exists (similarity: {similarity:.2f}), skipping save"
+                                )
                             return body
                 except Exception as e:
                     if self.valves.debug_mode:
                         logger.error(f"Error checking duplicates: {e}")
 
-            if user_valves and hasattr(user_valves, "show_status") and user_valves.show_status and __event_emitter__:
+            if (
+                user_valves
+                and hasattr(user_valves, "show_status")
+                and user_valves.show_status
+                and __event_emitter__
+            ):
                 await __event_emitter__(
                     {
                         "type": "status",
@@ -2209,7 +2274,9 @@ class Filter:
 
                 try:
                     if hasattr(Memories, "insert_new_memory"):
-                        saved_memory = Memories.insert_new_memory(effective_user_id, message_content)
+                        saved_memory = Memories.insert_new_memory(
+                            effective_user_id, message_content
+                        )
                         saved_memory_id = getattr(saved_memory, "id", None)
                         if saved_memory_id is None and isinstance(saved_memory, dict):
                             saved_memory_id = saved_memory.get("id")
@@ -2480,12 +2547,16 @@ class Filter:
             memories_list = []
             for i, memory in enumerate(page_memories, start=start_idx + 1):
                 # Extract real database ID from memory string
-                real_id_match = re.search(r'\[Id:\s*([^,\]]+)', memory)
-                real_db_id = real_id_match.group(1).strip() if real_id_match else f"idx_{i}"
+                real_id_match = re.search(r"\[Id:\s*([^,\]]+)", memory)
+                real_db_id = (
+                    real_id_match.group(1).strip() if real_id_match else f"idx_{i}"
+                )
 
                 # Extract actual content (remove the [Id: xxx, Content: ] wrapper)
-                content_match = re.search(r'Content:\s*(.+)\]$', memory, re.DOTALL)
-                actual_content = content_match.group(1).strip() if content_match else memory
+                content_match = re.search(r"Content:\s*(.+)\]$", memory, re.DOTALL)
+                actual_content = (
+                    content_match.group(1).strip() if content_match else memory
+                )
 
                 # Intelligent preview (first 100 chars with intelligent cut)
                 preview = actual_content[:100].strip()
@@ -2625,7 +2696,7 @@ class Filter:
             count = len(processed_memories) if processed_memories else 0
             max_limit = self.valves.max_memories_per_user
 
-            response = f"📊 **Memory Counter:**\n"
+            response = "📊 **Memory Counter:**\n"
             response += f"• Current total: {count}\n"
             if max_limit > 0:
                 response += f"• Configured limit: {max_limit}\n"
@@ -2657,51 +2728,68 @@ class Filter:
 
             # v2.6.0: Check if search term looks like a memory ID (8+ hex chars)
             # If so, search by ID and return FULL content
-            is_id_search = bool(re.match(r'^[a-f0-9]{6,}$', sanitized_search_term.lower()))
-            
+            is_id_search = bool(
+                re.match(r"^[a-f0-9]{6,}$", sanitized_search_term.lower())
+            )
+
             if is_id_search:
                 # Search for memory by ID - return FULL content
                 for memory in processed_memories:
                     # Extract ID from format "[Id: xxx, Content: ...]"
-                    id_match = re.search(r'Id:\s*([a-f0-9]+)', memory, re.IGNORECASE)
-                    if id_match and sanitized_search_term.lower() in id_match.group(1).lower():
+                    id_match = re.search(r"Id:\s*([a-f0-9]+)", memory, re.IGNORECASE)
+                    if (
+                        id_match
+                        and sanitized_search_term.lower() in id_match.group(1).lower()
+                    ):
                         # Extract content from memory
-                        content_match = re.search(r'Content:\s*(.+)\]$', memory, re.DOTALL)
-                        full_content = content_match.group(1).strip() if content_match else memory
-                        
-                        return json.dumps({
-                            "command": "/memory_search",
-                            "status": "FOUND_BY_ID",
-                            "timestamp": datetime.now().isoformat() + "Z",
-                            "data": {
-                                "memory_id": id_match.group(1),
-                                "full_content": full_content,
-                                "content_length": len(full_content),
+                        content_match = re.search(
+                            r"Content:\s*(.+)\]$", memory, re.DOTALL
+                        )
+                        full_content = (
+                            content_match.group(1).strip() if content_match else memory
+                        )
+
+                        return json.dumps(
+                            {
+                                "command": "/memory_search",
+                                "status": "FOUND_BY_ID",
+                                "timestamp": datetime.now().isoformat() + "Z",
+                                "data": {
+                                    "memory_id": id_match.group(1),
+                                    "full_content": full_content,
+                                    "content_length": len(full_content),
+                                },
+                                "metadata": {
+                                    "search_type": "by_id",
+                                    "user_id": validated_user_id[:8] + "...",
+                                },
                             },
-                            "metadata": {
-                                "search_type": "by_id",
-                                "user_id": validated_user_id[:8] + "...",
-                            },
-                        }, ensure_ascii=False, indent=2)
-                
+                            ensure_ascii=False,
+                            indent=2,
+                        )
+
                 # ID not found
-                return json.dumps({
-                    "command": "/memory_search",
-                    "status": "ID_NOT_FOUND",
-                    "data": {
-                        "searched_id": sanitized_search_term,
-                        "message": f"No memory found with ID containing '{sanitized_search_term}'",
+                return json.dumps(
+                    {
+                        "command": "/memory_search",
+                        "status": "ID_NOT_FOUND",
+                        "data": {
+                            "searched_id": sanitized_search_term,
+                            "message": f"No memory found with ID containing '{sanitized_search_term}'",
+                        },
                     },
-                }, ensure_ascii=False, indent=2)
+                    ensure_ascii=False,
+                    indent=2,
+                )
 
             # Standard text search - search for memories containing the term
             matches = []
             for i, memory in enumerate(processed_memories, 1):
                 if sanitized_search_term.lower() in memory.lower():
                     # Extract ID from memory
-                    id_match = re.search(r'Id:\s*([a-f0-9]+)', memory, re.IGNORECASE)
+                    id_match = re.search(r"Id:\s*([a-f0-9]+)", memory, re.IGNORECASE)
                     mem_id = id_match.group(1) if id_match else f"idx_{i}"
-                    
+
                     display_memory = (
                         memory[:150] + "..." if len(memory) > 150 else memory
                     )
@@ -3119,7 +3207,7 @@ class Filter:
                 return "✨ **No duplicate memories found.**"
 
             return (
-                f"🧹 **Limpieza de Duplicados:**\n\n"
+                "🧹 **Limpieza de Duplicados:**\n\n"
                 + f"• Memorias originales: {original_count}\n"
                 + f"• Potential duplicates: {potential_duplicates}\n"
                 + f"• Unique memories: {len(unique_memories)}\n\n"
@@ -3138,7 +3226,7 @@ class Filter:
 
             # Create backup information
             backup_info = (
-                f"💾 **Memory Backup Created | Respaldo de Memorias Creado:**\n\n"
+                "💾 **Memory Backup Created | Respaldo de Memorias Creado:**\n\n"
             )
             backup_info += f"• User | Usuario: {user_id}\n"
             backup_info += (
@@ -3182,21 +3270,21 @@ class Filter:
                 :5
             ]
 
-            analytics = f"📊 **Advanced Memory Analysis**\n\n"
-            analytics += f"📈 **General Statistics:**\n"
+            analytics = "📊 **Advanced Memory Analysis**\n\n"
+            analytics += "📈 **General Statistics:**\n"
             analytics += f"• Total memories: {total_memories}\n"
             analytics += f"• Caracteres totales: {total_chars:,}\n"
             analytics += f"• Longitud promedio: {avg_length} caracteres\n\n"
 
             if top_words:
-                analytics += f"🔤 **Most frequent words:**\n"
+                analytics += "🔤 **Most frequent words:**\n"
                 for word, count in top_words:
                     analytics += f"• '{word}': {count} veces\n"
                 analytics += "\n"
 
-            analytics += f"💡 **Recomendaciones:**\n"
+            analytics += "💡 **Recomendaciones:**\n"
             if avg_length < 50:
-                analytics += f"• Consider adding more details to your memories\n"
+                analytics += "• Consider adding more details to your memories\n"
             if total_memories < 10:
                 analytics += f"• Use /memory_add to enrich your knowledge base\n"
 
@@ -3435,7 +3523,9 @@ class Filter:
                     existing_memories = Memories.get_memories_by_user_id_ordered(
                         user_id=str(user_id), order_by=order_by
                     )
-                    logger.debug("[MEMORY-DEBUG] Memories obtained with ordering from DB")
+                    logger.debug(
+                        "[MEMORY-DEBUG] Memories obtained with ordering from DB"
+                    )
                 else:
                     # Standard method without ordering
                     existing_memories = Memories.get_memories_by_user_id(
@@ -3462,7 +3552,9 @@ class Filter:
                         existing_memories.sort(
                             key=lambda x: getattr(x, "created_at", ""), reverse=True
                         )
-                        logger.debug("[MEMORY-DEBUG] Manual sorting in memory performed")
+                        logger.debug(
+                            "[MEMORY-DEBUG] Manual sorting in memory performed"
+                        )
                     except Exception as sort_error:
                         logger.warning(
                             f"Error sorting memories in memory: {sort_error}"
@@ -3470,9 +3562,7 @@ class Filter:
 
                 # Apply limit (paginate) | Aplicar límite (paginar)
                 existing_memories = existing_memories[:effective_limit]
-                logger.debug(
-                    f"[MEMORY-DEBUG] Limited to {effective_limit} memories"
-                )
+                logger.debug(f"[MEMORY-DEBUG] Limited to {effective_limit} memories")
                 logger.info(
                     f"[MEMORY-DEBUG] 🔒 Memory leak prevention: limited to {effective_limit}"
                 )
